@@ -1,0 +1,80 @@
+;; Global appearance configs"
+;;disable welcome screen"
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+
+;; packages configs
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+
+(package-initialize)
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+	(package-refresh-contents)
+	(package-install 'use-package))
+
+(use-package try
+	:ensure t)
+
+(use-package which-key
+	:ensure t 
+	:config
+	(which-key-mode))
+
+
+(setq inhibit-startup-screen t)
+;;disable menu and tool bars"
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+
+;; show paranthasis
+(show-paren-mode 1)
+;;set the default font"
+(set-default-font "Ubuntu Mono-18")
+
+
+;;EVIL mode configs"
+(add-to-list 'load-path "~/.emacs.d/evil")
+(require 'evil)
+(evil-mode 1)
+
+;; experimental english auto-complete configs retreived from https://emacs.stackexchange.com/questions/18304/optimal-settings-for-auto-complete-for-writing-papers-prose-in-natural-languag
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(defun text-mode-hook-setup ()
+  ;; make `company-backends' local is critcal
+  ;; or else, you will have completion in every major mode, that's very annoying!
+  (make-local-variable 'company-backends)
+
+  ;; company-ispell is the plugin to complete words
+  (add-to-list 'company-backends 'company-ispell)
+
+  ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
+  ;;  but I prefer hard code the dictionary path. That's more portable.
+  (setq company-ispell-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
+
+(add-hook 'text-mode-hook 'text-mode-hook-setup)
+
+
+
+;; auto-generated theme 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (wheatgrass)))
+ '(package-selected-packages (quote (which-key try use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
