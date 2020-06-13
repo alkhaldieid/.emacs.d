@@ -44,25 +44,41 @@
 (require 'evil)
 (evil-mode 1)
 
+;; yasnippet configs
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+
+
+;; auto-complete configs
+;;(use-package auto-complete
+;;  :ensure t
+;;  :init
+;;  (progn
+;;    (ac-config-default)
+;;    (global-auto-complete-mode t)
+;;    ))
 ;; experimental english auto-complete configs retreived from https://emacs.stackexchange.com/questions/18304/optimal-settings-for-auto-complete-for-writing-papers-prose-in-natural-languag
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
-
-(defun text-mode-hook-setup ()
-  ;; make `company-backends' local is critcal
-  ;; or else, you will have completion in every major mode, that's very annoying!
-  (make-local-variable 'company-backends)
-
-  ;; company-ispell is the plugin to complete words
-  (add-to-list 'company-backends 'company-ispell)
-
-  ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
-  ;;  but I prefer hard code the dictionary path. That's more portable.
-  (setq company-ispell-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
-
-(add-hook 'text-mode-hook 'text-mode-hook-setup)
-
-
+;;(require 'company)
+;;(add-hook 'after-init-hook 'global-company-mode)
+;;
+;;(defun text-mode-hook-setup ()
+  ;;;; make `company-backends' local is critcal
+  ;;;; or else, you will have completion in every major mode, that's very annoying!
+  ;;(make-local-variable 'company-backends)
+;;
+  ;;;; company-ispell is the plugin to complete words
+  ;;(add-to-list 'company-backends 'company-ispell)
+;;
+  ;;;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
+  ;;;;  but I prefer hard code the dictionary path. That's more portable.
+  ;;(setq company-ispell-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
+;;
+;;(add-hook 'text-mode-hook 'text-mode-hook-setup)
+;;
+;;
 
 ;; auto-generated theme 
 (custom-set-variables
@@ -71,7 +87,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (wheatgrass)))
- '(package-selected-packages (quote (which-key try use-package))))
+ '(package-selected-packages
+   (quote
+    (company auto-complete yasnippet which-key try use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

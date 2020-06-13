@@ -1,3 +1,4 @@
+
 ;; Global appearance configs"
 ;;disable welcome screen"
 
@@ -7,26 +8,54 @@
 ;; You may delete these explanatory comments.
 
 ;; packages configs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;; Packages Managers ;;;;;;;;;;;;;;;;;;;;;;;;;;
+(package-initialize)
 (require 'package)
-(setq package-enable-at-startup nil)
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/"))
-
-(package-initialize)
+;; (setq package-enable-at-startup nil)
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
-	(package-refresh-contents)
 	(package-install 'use-package))
 
-(use-package try
-	:ensure t)
+(package-refresh-contents)
 
-(use-package which-key
-	:ensure t 
-	:config
-	(which-key-mode))
 
+;; Enable evil-leader (has to be enabled before evil-mode)
+
+(unless (package-installed-p 'evil-leader)
+  (package-install 'evil-leader))
+(require 'evil-leader)
+
+;; evil-leader configs
+;; (global-evil-leader-mode 1) Enable evil leader in every buffer where evil is enabled
+(global-evil-leader-mode 1)
+
+;; load the evil-leader key-bindings file
+(load-file "~/.emacs.d/userConfig/keybindings.el")
+;; Enable Evil
+
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+(require 'evil)
+(evil-mode 1)
+
+;; yasnippet configs
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+; auto-complete configs
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+    ))
 
 (setq inhibit-startup-screen t)
 ;;disable menu and tool bars"
@@ -38,40 +67,16 @@
 ;;set the default font"
 (set-default-font "Ubuntu Mono-18")
 
-
-;;EVIL mode configs"
-(add-to-list 'load-path "~/.emacs.d/evil")
-(require 'evil)
-(evil-mode 1)
-
-;; experimental english auto-complete configs retreived from https://emacs.stackexchange.com/questions/18304/optimal-settings-for-auto-complete-for-writing-papers-prose-in-natural-languag
-;;(require 'company)
-;;(add-hook 'after-init-hook 'global-company-mode)
-;;
-;;(defun text-mode-hook-setup ()
-  ;;;; make `company-backends' local is critcal
-  ;;;; or else, you will have completion in every major mode, that's very annoying!
-  ;;(make-local-variable 'company-backends)
-;;
-  ;;;; company-ispell is the plugin to complete words
-  ;;(add-to-list 'company-backends 'company-ispell)
-;;
-  ;;;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
-  ;;;;  but I prefer hard code the dictionary path. That's more portable.
-  ;;(setq company-ispell-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
-;;
-;;(add-hook 'text-mode-hook 'text-mode-hook-setup)
-;;
-;;
-
-;; auto-generated theme 
+;; auto-generated theme
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (wheatgrass)))
- '(package-selected-packages (quote (which-key try use-package))))
+ '(package-selected-packages
+   (quote
+    (evil-leader evil company auto-complete yasnippet which-key try use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
