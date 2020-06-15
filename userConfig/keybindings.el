@@ -16,4 +16,16 @@
  "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
  "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
  "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
- "cfd" '(lambda() (interactive) (find-file "~/.config/directories")))
+ "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+
+ ;; zoom-in and out
+ "=" 'text-scale-increase
+ "-" 'text-scale-decrease
+ ;; org roam
+ "nl" 'org-roam
+ "nf" 'org-roam-find-file
+ "ng" 'org-roam-show-graph
+ "ni" 'org-roam-insert
+ ;; org-roam-bibtex
+ "na" 'orb-note-actions
+ )
