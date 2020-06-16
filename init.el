@@ -79,8 +79,8 @@
 
 ;; loading synonyms
 
-;(setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
-;(setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
+(setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
+(setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
 (load-file "~/.emacs.d/syn/synonyms.el")
 ;(require 'synonyms)
 
