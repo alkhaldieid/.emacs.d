@@ -28,4 +28,5 @@
  "ni" 'org-roam-insert
  ;; org-roam-bibtex
  "na" 'orb-note-actions
+ "ss" 'synonyms
  )
