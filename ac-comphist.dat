@@ -1,36 +1,38 @@
-((("text-scale-decrease" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
-  ("text-scale-increase" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
-  ("load-directory" .
-   [0 0 0 0 0 0 0 1 0 0 0 0 0 0])
-  ("load-path" .
-   [0 0 0 0 0 0 0 1 0])
-  ("load" .
-   [1 0 0 1])
-  ("require" .
-   [0 0 0 0 0 0 1])
-  ("previous-buffer" .
-   [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0])
-  ("Previous" .
-   [0 0 0 0 0 0 0 1])
-  ("for" .
-   [1 0 0])
-  ("its" .
-   [1 0 0])
-  ("global-evil-leader-mode" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("use-package" .
-   [0 0 0 1 0 0 0 0 0 0 0])
-  ("evil" .
+((("synonyms" .
+   [0 0 0 1 0 0 0 0])
+  ("next" .
    [1 0 0 0])
-  ("evil-leader" .
-   [0 0 0 0 0 0 0 0 1 0 0])
-  ("find-file" .
-   [0 0 0 0 0 0 0 0 1])
-  ("lambda" .
-   [0 0 0 0 1 0])
   ("interactive" .
    [0 0 0 0 0 0 1 0 0 0 0])
-  ("next" .
-   [1 0 0 0])))
+  ("lambda" .
+   [0 0 0 0 1 0])
+  ("find-file" .
+   [0 0 0 0 0 0 0 0 1])
+  ("evil-leader" .
+   [0 0 0 0 0 0 0 0 1 0 0])
+  ("evil" .
+   [1 0 0 0])
+  ("use-package" .
+   [0 0 0 1 0 0 0 0 0 0 0])
+  ("global-evil-leader-mode" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("its" .
+   [1 0 0])
+  ("for" .
+   [1 0 0])
+  ("Previous" .
+   [0 0 0 0 0 0 0 1])
+  ("previous-buffer" .
+   [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0])
+  ("require" .
+   [0 0 0 0 0 1 1])
+  ("load" .
+   [2 0 0 2])
+  ("load-path" .
+   [0 0 0 0 0 0 0 1 0])
+  ("load-directory" .
+   [0 0 0 0 0 0 0 1 0 0 0 0 0 0])
+  ("text-scale-increase" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
+  ("text-scale-decrease" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])))

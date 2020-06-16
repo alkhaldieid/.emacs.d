@@ -71,6 +71,23 @@
   :hook (org-roam-mode . org-roam-bibtex-mode)
 )
 
+;; Synonyms
+;; dependancies
+;; thingatpt
+(require 'thingatpt)
+(load-file "~/.emacs.d/syn/misc/thingatpt+.el")
+
+;; loading synonyms
+
+;(setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
+;(setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
+(load-file "~/.emacs.d/syn/synonyms.el")
+;(require 'synonyms)
+
+;(load-file "~/.emacs.d/syn/synonyms.el")
+;(load-file "~/.emacs.d/syn/synonyms.el")
+
+
 (setq inhibit-startup-screen t)
 ;;disable menu and tool bars"
 (menu-bar-mode 0)
@@ -79,7 +96,7 @@
 ;; show paranthasis
 (show-paren-mode 1)
 ;;set the default font"
-(set-default-font "Ubuntu Mono-18")
+(set-default-font "Ubuntu Mono-25")
 
 ;; auto-generated theme
 (custom-set-variables

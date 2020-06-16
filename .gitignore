@@ -2,3 +2,4 @@ auto-save-list/*
 *#
 *~userConfig/.#keybindings.el
 .gitignore~
+.#keybindings.el
