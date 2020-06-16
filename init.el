@@ -82,10 +82,9 @@
 (setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
 (setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
 (load-file "~/.emacs.d/syn/synonyms.el")
-;(require 'synonyms)
 
-;(load-file "~/.emacs.d/syn/synonyms.el")
-;(load-file "~/.emacs.d/syn/synonyms.el")
+;;;; install synosaurus
+(add-to-list 'load-path "~/.emacs.d/syn/synosaurus")
 
 
 (setq inhibit-startup-screen t)
@@ -128,7 +127,7 @@
  '(org-roam-directory "~/doing/orgRoam")
  '(package-selected-packages
    (quote
-    (org-roam-bibtex company-anaconda afternoon-theme cyberpunk-theme spacemacs-theme evil-leader evil company auto-complete yasnippet which-key try use-package)))
+    (synosaurus org-roam-bibtex company-anaconda afternoon-theme cyberpunk-theme spacemacs-theme evil-leader evil company auto-complete yasnippet which-key try use-package)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

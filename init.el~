@@ -56,13 +56,38 @@
     (ac-config-default)
     (global-auto-complete-mode t)
     ))
+;; Org Mode
+;; org-roam
+
 (use-package org-roam
       :ensure t
       :hook
       (after-init . org-roam-mode)
       :custom
       (org-roam-directory "~/doing/orgRoam")
-     )
+      )
+;; org-roam-bibtex
+(use-package org-roam-bibtex
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+)
+
+;; Synonyms
+;; dependancies
+;; thingatpt
+(require 'thingatpt)
+(load-file "~/.emacs.d/syn/misc/thingatpt+.el")
+
+;; loading synonyms
+
+(setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
+(setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
+(load-file "~/.emacs.d/syn/synonyms.el")
+;(require 'synonyms)
+
+;(load-file "~/.emacs.d/syn/synonyms.el")
+;(load-file "~/.emacs.d/syn/synonyms.el")
+
+
 (setq inhibit-startup-screen t)
 ;;disable menu and tool bars"
 (menu-bar-mode 0)
@@ -71,7 +96,7 @@
 ;; show paranthasis
 (show-paren-mode 1)
 ;;set the default font"
-(set-default-font "Ubuntu Mono-18")
+(set-default-font "Ubuntu Mono-25")
 
 ;; auto-generated theme
 (custom-set-variables
@@ -103,7 +128,7 @@
  '(org-roam-directory "~/doing/orgRoam")
  '(package-selected-packages
    (quote
-    (company-anaconda afternoon-theme cyberpunk-theme spacemacs-theme evil-leader evil company auto-complete yasnippet which-key try use-package)))
+    (org-roam-bibtex company-anaconda afternoon-theme cyberpunk-theme spacemacs-theme evil-leader evil company auto-complete yasnippet which-key try use-package)))
  '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

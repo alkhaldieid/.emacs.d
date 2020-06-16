@@ -1,12 +1,12 @@
 ;; set the leader key
-(evil-leader/set-leader "<SPC>") 
+(evil-leader/set-leader "<SPC>")
 ;; use (evil-leader/set-key to bind keys in the leader map
 
 (evil-leader/set-key
  "f" 'find-file
- "d"'(lambda() (interactive) (find-file "~/doing/second")) 
+ "d"'(lambda() (interactive) (find-file "~/doing/second"))
  ;; buffers
- 
+
  "bb" 'switch-to-buffer
  "bk" 'kill-buffer
  "bp" 'previous-buffer
@@ -28,5 +28,9 @@
  "ni" 'org-roam-insert
  ;; org-roam-bibtex
  "na" 'orb-note-actions
+ ;; syn layer  keybindings
  "ss" 'synonyms
+ "sl" 'synosaurus-lookup
+ "sr" 'synosaurus-choose-and-replace
+ "si" 'synosaurus-choose-and-insert
  )
