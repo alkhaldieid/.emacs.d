@@ -5,3 +5,4 @@ auto-save-list/*
 .#keybindings.el
 *.dat
 ac-comphist.dat
+elpa/archives/melpa/archive-contents
