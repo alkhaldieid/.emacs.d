@@ -33,4 +33,7 @@
  "sl" 'synosaurus-lookup
  "sr" 'synosaurus-choose-and-replace
  "si" 'synosaurus-choose-and-insert
+ ;; org-recoll keys
+ "ps" 'org-recoll-search
+ "pu" 'org-recoll-update-index
  )

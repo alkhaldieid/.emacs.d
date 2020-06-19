@@ -70,7 +70,10 @@
 (use-package org-roam-bibtex
   :hook (org-roam-mode . org-roam-bibtex-mode)
 )
-
+;; org-recoll
+(load-file "~/.emacs.d/org-recoll/org-recoll.el")
+(require 'org-recoll)
+;;(load "org-recoll")
 ;; Synonyms
 ;; dependancies
 ;; thingatpt
