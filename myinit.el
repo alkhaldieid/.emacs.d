@@ -229,3 +229,147 @@
   :ensure t
   :config
   (elpy-enable))
+
+(use-package auto-complete
+  :ensure t
+  :config 
+  (ac-config-default)
+)
+
+(use-package org-superstar  ;; Improved version of org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(setq org-startup-indented t)           ;; Indent according to section
+(setq org-startup-with-inline-images t) ;; Display images in-buffer by default
+
+(use-package evil-org
+  :ensure t
+  :after (evil org)
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional calendar))))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(setq org-agenda-custom-commands
+   '(("h" "Daily habits"
+      ((agenda ""))
+      ((org-agenda-show-log t)
+       (org-agenda-ndays 7)
+       (org-agenda-log-mode-items '(state))
+       (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))))))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
+(use-package paredit
+  :ensure t)
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+(define-skeleton latex-skeleton
+"Skeleton for article type latex documents"
+"Preamble:"
+"\\documentclass{article}\n"
+"\\usepackage[utf8]{inputenc}\n"
+"\\usepackage[margin=1 in]{geometry}\n"
+"\\usepackage{graphicx}\n"
+"\\setlength{\\parindent}{4em}\n"
+"\\setlength{\\parskip}{1em}\n"
+"\\renewcommand{\\baselinestretch}{1.5}\n\n"
+"\\author{Matheus Augusto da Silva}\n"
+"\\title{"_"}\n"
+"\\date{\\today}\n\n"
+"\\begin{document}\n"
+"\\maketitle\n\n"
+"\\end{document}\n")
+
+(define-skeleton org-latex-summary
+"Skeleton for summaries "
+"Preamble:"
+"#+LATEX_CLASS: article\n"
+"#+LATEX_CLASS_OPTIONS: [a5paper,landscape,fourcolumn]\n"
+"#+LATEX_COMPILER: lualatex\n"
+"#+LATEX_HEADER: \\input{/home/trajanus/Documents/LaTeX/summaryheader.tex}\n"
+"#+STARTUP: showeverything\n"
+"#+OPTIONS: toc:nil\n"
+"\\begin{multicols*}{4}\n"
+"* "_"\n"
+"\\end{multicols*}\n")
+
+(define-skeleton org-latex-article
+"Skeleton for articles "
+"Preamble:"
+"#+STARTUP: showeverything\n"
+"#+TITLE: TITLE\n"
+"#+AUTHOR: Matheus Augusto da Silva\n"
+"#+DATE: \\today\n"
+"#+LATEX_CLASS: article\n"
+"#+LATEX_CLASS_OPTIONS: [a4paper]\n"
+"#+LATEX_HEADER: \\input{/home/trajanus/Documents/LaTeX/articleheader.tex}\n"
+"#+STARTUP: showeverything\n"
+"#+OPTIONS: toc:nil\n")
+
+(define-skeleton org-wiki-entry
+"Skeleton for articles "
+"Preamble:"
+"#+STARTUP: showeverything\n"
+"#+TITLE: "_"\n"
+"#+AUTHOR: Matheus Augusto da Silva\n"
+"#+STARTUP: showeverything\n"
+"\n"
+"* Index")
+
+(define-skeleton org-wiki-index
+"Skeleton for articles "
+"Preamble:"
+"#+STARTUP: showeverything\n"
+"#+TITLE: "_"\n"
+"#+AUTHOR: Matheus Augusto da Silva\n"
+"#+STARTUP: showeverything\n"
+"\n"
+"* Index\n"
+"\n"
+"** Summaries\n"
+"[[./summaries/summaries.org][Summaries]]"
+)
+
+;; This requires SDCV 
+ ;; This little function looks in a stardict file for words that look like
+ ;; the word under the cursor. I use it when correcting my spelling in french
+(defun dict-search ()
+  (interactive)
+  (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
+  (shell-command (format "export STARDICT_DATA_DIR=/home/trajanus/Documents/Stardict ;sdcv %s | head -5" (thing-at-point 'word))))
+
+(define-key evil-normal-state-map (kbd "ç") 'ispell-word)
+(define-key evil-normal-state-map (kbd "Ç") 'dict-search)
+
+(setq
+ org_notes (concat (getenv "HOME") "Dropbox/org/roam/")
+ zot_bib (concat (getenv "HOME") "Dropbox/mend/library.bib")
+ org-directory org_notes
+ deft-directory org_notes
+ org-roam-directory org_notes
+ )
+(require 'org-ref)
+
+(setq
+      org-ref-completion-library 'org-ref-ivy-cite
+      org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtexy
+      org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
+      org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
+      org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+      org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
+      org-ref-notes-function 'orb-edit-notes
+)

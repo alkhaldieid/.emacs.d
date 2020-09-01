@@ -1,32 +1,6 @@
 
 * TODO Org Mode configs
 ** org-roam, org-ref, org-roam-bibtex
-*** setting variables
-#+BEGIN_SRC emacs-lisp
-
-(setq
- org_notes (concat (getenv "HOME") "/Dropbox/org/roam/")
- zot_bib (concat (getenv "HOME") "/Dropbox/mend/library.bib")
- org-directory org_notes
- deft-directory org_notes
- org-roam-directory org_notes
- )
-#+END_SRC
-*** my org-roam configs
-#+BEGIN_SRC emacs-lisp   
-(use-package org-roam
-  :hook
-  (after-init . org-roam-mode)
-  :custom
-  (org-roam-directory "/home/alkhaldieid/Dropbox/org/roam")
-  :bind (:map org-roam-mode-map
-	  (("C-c n l" . org-roam)
-	   ("C-c n f" . org-roam-find-file)
-	   ("C-c n g" . org-roam-graph-show))
-	  :map org-mode-map
-	  (("C-c n i" . org-roam-insert))
-	  (("C-c n I" . org-roam-insert-immediate))))
-#+END_SRC
 
 #+RESULTS:
 : org-roam-insert-immediate
@@ -331,3 +305,22 @@ keywords :: ${keywords}
 
   ;;;;;;;;;;DEFT config
   (setq deft-directory "~/Dropbox/org/roam")
+
+** my org-roam configs
+#+BEGIN_SRC emacs-lisp   
+;; Load the spacemacs org-roam
+;;(add-to-list 'load-path " ~/.ihsec/space/elpa/develop/org-roam-20200711.2142")
+;;(load "org-roam")
+;; (use-package org-roam
+;;   :hook
+;;   (after-init . org-roam-mode)
+;;   :custom
+;;   (org-roam-directory  org_notes) 
+;;   :bind (:map org-roam-mode-map
+;; 	  (("C-c n l" . org-roam)
+;; 	   ("C-c n f" . org-roam-find-file)
+;; 	   ("C-c n g" . org-roam-graph-show))
+;; 	  :map org-mode-map
+;; 	  (("C-c n i" . org-roam-insert))
+;; 	  (("C-c n I" . org-roam-insert-immediate))))
+#+END_SRC
