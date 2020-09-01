@@ -1,0 +1,349 @@
+;; Remove initial buffer, set index file
+(setq inhibit-startup-message t)
+;; (setq initial-buffer-choice "~/Dropbox/index.org")
+
+;; Hide Scroll bar,menu bar, tool bar
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+
+;; Line numbering
+(global-display-line-numbers-mode)
+(setq display-line-numbers-type 'relative)
+
+;; Display battery for when in full screen mode 
+;; Uncomment in laptops
+;; (display-battery-mode t)
+
+;; Misc stuff
+(fset 'yes-or-no-p 'y-or-n-p)
+(setenv "HOME" "/home/alkhaldieid/")
+(server-start)
+
+(setq initial-scratch-message "Welcome Abu-Saad") ; print a default message in the empty scratch buffer opened at startup
+;; show paranthasis
+(show-paren-mode 1)
+;;set the default font"
+(set-default-font "Ubuntu Mono-25")
+(global-visual-line-mode t)
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+(use-package powerline-evil
+  :ensure t)
+(powerline-evil-vim-theme)
+(powerline-evil-vim-color-theme)
+(use-package evil-commentary
+  :ensure t)
+(evil-commentary-mode)
+
+(use-package dracula-theme
+   :config
+   (load-theme 'dracula t)
+   :ensure t)
+   
+
+(global-hl-line-mode t) ;; This highlights the current line in the buffer
+
+(use-package beacon ;; This applies a beacon effect to the highlighted line
+   :ensure t
+   :config
+   (beacon-mode 1))
+
+(use-package try
+  :ensure t)
+
+(use-package which-key
+  :config 
+    (setq which-key-idle-delay 0.3)
+    (setq which-key-popup-type 'frame)
+    (which-key-mode)
+    (which-key-setup-minibuffer)
+    (set-face-attribute 'which-key-local-map-description-face nil 
+       :weight 'bold)
+  :ensure t)
+
+(use-package helm
+  :init
+    (require 'helm-config)
+    (setq helm-split-window-in-side-p t
+          helm-move-to-line-cycle-in-source t)
+  :config 
+    (helm-mode 1) ;; Most of Emacs prompts become helm-enabled
+    (helm-autoresize-mode 1) ;; Helm resizes according to the number of candidates
+    (global-set-key (kbd "C-x b") 'helm-buffers-list) ;; List buffers ( Emacs way )
+    (define-key evil-ex-map "b" 'helm-buffers-list) ;; List buffers ( Vim way )
+    (global-set-key (kbd "C-x r b") 'helm-bookmarks) ;; Bookmarks menu
+    (global-set-key (kbd "C-x C-f") 'helm-find-files) ;; Finding files with Helm
+    (global-set-key (kbd "M-c") 'helm-calcul-expression) ;; Use Helm for calculations
+    (global-set-key (kbd "C-s") 'helm-occur)  ;; Replaces the default isearch keybinding
+    (global-set-key (kbd "C-h a") 'helm-apropos)  ;; Helmized apropos interface
+    (global-set-key (kbd "M-x") 'helm-M-x)  ;; Improved M-x menu
+    (global-set-key (kbd "M-y") 'helm-show-kill-ring)  ;; Show kill ring, pick something to paste
+  :ensure t)
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") 'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs              (if (executable-find "python") 3 0)
+          treemacs-deferred-git-apply-delay   0.5
+          treemacs-display-in-side-window     t
+          treemacs-file-event-delay           5000
+          treemacs-file-follow-delay          0.2
+          treemacs-follow-after-init          t
+          treemacs-follow-recenter-distance   0.1
+          treemacs-git-command-pipe           ""
+          treemacs-goto-tag-strategy          'refetch-index
+          treemacs-indentation                2
+          treemacs-indentation-string         " "
+          treemacs-is-never-other-window      nil
+          treemacs-max-git-entries            5000
+          treemacs-no-png-images              nil
+          treemacs-no-delete-other-windows    t
+          treemacs-project-follow-cleanup     nil
+          treemacs-persist-file               (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-recenter-after-file-follow nil
+          treemacs-recenter-after-tag-follow  nil
+          treemacs-show-cursor                nil
+          treemacs-show-hidden-files          nil
+          treemacs-silent-filewatch           nil
+          treemacs-silent-refresh             nil
+          treemacs-sorting                    'alphabetic-desc
+          treemacs-space-between-root-nodes   t
+          treemacs-tag-follow-cleanup         t
+          treemacs-tag-follow-delay           1.5
+          treemacs-width                      35)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode t)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null (executable-find "python3"))))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-evil
+  :after treemacs evil
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after treemacs projectile
+  :ensure t)
+
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode))
+
+
+(use-package company-quickhelp
+  :after (company)
+  :hook (company-mode . company-quickhelp-mode)
+  :config
+    (setq company-quickhelp-delay 0.5)
+  :ensure t)
+
+(use-package magit
+  :ensure t)
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+
+(setq
+ org_notes (concat (getenv "HOME") "/Dropbox/org/roam/")
+ zot_bib (concat (getenv "HOME") "/Dropbox/mend/library.bib")
+ org-directory org_notes
+ deft-directory org_notes
+ org-roam-directory org_notes
+ )
+
+(use-package org-roam
+  :hook
+  (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory "/home/alkhaldieid/Dropbox/org/roam")
+  :bind (:map org-roam-mode-map
+	  (("C-c n l" . org-roam)
+	   ("C-c n f" . org-roam-find-file)
+	   ("C-c n g" . org-roam-graph-show))
+	  :map org-mode-map
+	  (("C-c n i" . org-roam-insert))
+	  (("C-c n I" . org-roam-insert-immediate))))
+
+(use-package org-roam-bibtex
+  :after (org-roam)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (setq org-roam-bibtex-preformat-keywords
+        '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+  (setq orb-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "${slug}"
+           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}
+
+- tags ::
+- keywords :: ${keywords}
+
+\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+
+             :unnarrowed t))))
+
+(use-package org-noter
+    :after (:any org pdf-view)
+    :config
+    (setq
+     ;; The WM can handle splits
+     org-noter-notes-window-location 'other-frame
+     ;; Please stop opening frames
+     org-noter-always-create-frame nil
+     ;; I want to see the whole file
+     org-noter-hide-other nil
+     ;; Everything is relative to the main notes file
+     org-noter-notes-search-path (list org_notes)
+     )
+    )
+
+(setq
+ bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/"
+ bibtex-completion-bibliography "/Dropbox/mend/library.bib"
+ bibtex-completion-pdf-field "file"
+ bibtex-completion-notes-template-multiple-files
+ (concat
+  "#+TITLE: ${title}\n"
+  "#+ROAM_KEY: cite:${=key=}\n"
+  "* TODO Notes\n"
+  ":PROPERTIES:\n"
+  ":Custom_ID: ${=key=}\n"
+  ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+  ":AUTHOR: ${author-abbrev}\n"
+  ":JOURNAL: ${journaltitle}\n"
+  ":DATE: ${date}\n"
+  ":YEAR: ${year}\n"
+  ":DOI: ${doi}\n"
+  ":URL: ${url}\n"
+  ":END:\n\n"
+  )
+ )
+ 
+
+(setq
+   bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/notes"
+   bibtex-completion-bibliography "/home/alkhaldieid/Dropbox/mend/library.bib"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-notes-template-multiple-files
+   (concat
+     "#+TITLE: ${title}\n"
+     "#+ROAM_KEY: cite:${=key=}\n"
+     "* TODO Notes\n"
+     ":PROPERTIES:\n"
+     ":Custom_ID: ${=key=}\n"
+     ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+     ":AUTHOR: ${author-abbrev}\n"
+     ":JOURNAL: ${journaltitle}\n"
+     ":DATE: ${date}\n"
+     ":YEAR: ${year}\n"
+     ":DOI: ${doi}\n"
+     ":URL: ${url}\n"
+     ":END:\n\n"
+     )
+)
+(setq
+       org-ref-completion-library 'org-ref-ivy-cite
+       org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
+       org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
+       org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
+       org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+       org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
+       org-ref-notes-function 'orb-edit-notes
+  )
+(setq
+ org-noter-default-notes-file-name '("/home/alkhaldieid/Dropbox/notes.org")
+ org-noter-default-search-path '("/home/alkhaldieid/Dropbox/mend")
+
+ )
+
+
+;;;;;;;;;;DEFT config
+(setq deft-directory "~/Dropbox/org/roam")
+
+(use-package deft
+      :after org
+      :bind
+      ("C-c n d" . deft)
+      :custom
+      (deft-recursive t)
+      (deft-use-filter-string-for-filename t)
+      (deft-default-extension "org")
+      (deft-directory "~/Dropbox/org/roam/"))
+
+;; set the leader key
+(evil-leader/set-leader "<SPC>")
+;; use (evil-leader/set-key to bind keys in the leader map
+
+(evil-leader/set-key
+ "ff" 'find-file
+ "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
+ ;; buffers
+
+ "bb" 'switch-to-buffer
+ "bk" 'kill-buffer
+ "bp" 'previous-buffer
+ "bn" 'next-buffer
+ ;; files
+ ;; cf files
+ "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
+ "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+ "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+ "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+ "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+ ;; zoom-in and out
+ "=" 'text-scale-increase
+ "-" 'text-scale-decrease
+ ;; org roam
+ "nl" 'org-roam
+ "nf" 'org-roam-find-file
+ "ng" 'org-roam-show-graph
+ "ni" 'org-roam-insert
+ ;; org-roam-bibtex
+ "na" 'orb-note-actions
+ ;; syn layer  keybindings
+ "ss" 'synonyms
+ "sl" 'synosaurus-lookup
+ "sr" 'synosaurus-choose-and-replace
+ "si" 'synosaurus-choose-and-insert
+ ;; org-recoll keys
+ "ps" 'org-recoll-search
+ "pu" 'org-recoll-update-index
+ ;; evil-commentry
+;; ";" evil-commentry-line
+ )

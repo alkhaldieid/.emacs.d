@@ -1,4 +1,6 @@
-((("text-scale-decrease" .
+(((":ensure" .
+   [1 0 0 0 0 0 0])
+  ("text-scale-decrease" .
    [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
   ("text-scale-increase" .
    [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0])
@@ -9,7 +11,7 @@
   ("load" .
    [2 0 0 2])
   ("require" .
-   [1 0 0 0 0 1 1])
+   [0 0 0 0 0 1 1])
   ("previous-buffer" .
    [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0])
   ("Previous" .
@@ -36,9 +38,7 @@
    [1 0 0 0])
   ("synonyms" .
    [0 0 1 1 0 0 0 0])
-  ("org-recoll" .
-   [0 0 0 0 0 0 0 0 0 1])
-  ("load-file" .
-   [0 0 0 0 0 0 0 0 1])
-  ("~/.emacs.d/" .
-   [0 0 0 0 0 0 0 0 0 0 1])))
+  (":config" .
+   [1 0 0 0 0 0 0])
+  ("evil-commentry" .
+   [0 0 0 0 0 0 0 0 0 1 0 0 0 0])))

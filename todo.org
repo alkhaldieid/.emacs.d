@@ -1,0 +1,333 @@
+
+* TODO Org Mode configs
+** org-roam, org-ref, org-roam-bibtex
+*** setting variables
+#+BEGIN_SRC emacs-lisp
+
+(setq
+ org_notes (concat (getenv "HOME") "/Dropbox/org/roam/")
+ zot_bib (concat (getenv "HOME") "/Dropbox/mend/library.bib")
+ org-directory org_notes
+ deft-directory org_notes
+ org-roam-directory org_notes
+ )
+#+END_SRC
+*** my org-roam configs
+#+BEGIN_SRC emacs-lisp   
+(use-package org-roam
+  :hook
+  (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory "/home/alkhaldieid/Dropbox/org/roam")
+  :bind (:map org-roam-mode-map
+	  (("C-c n l" . org-roam)
+	   ("C-c n f" . org-roam-find-file)
+	   ("C-c n g" . org-roam-graph-show))
+	  :map org-mode-map
+	  (("C-c n i" . org-roam-insert))
+	  (("C-c n I" . org-roam-insert-immediate))))
+#+END_SRC
+
+#+RESULTS:
+: org-roam-insert-immediate
+
+*** my org-roam-bibtex
+#+BEGIN_SRC emacs-lisp
+(use-package org-roam-bibtex
+  :after (org-roam)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (setq org-roam-bibtex-preformat-keywords
+        '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+  (setq orb-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "${slug}"
+           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}
+
+- tags ::
+- keywords :: ${keywords}
+
+\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+
+             :unnarrowed t))))
+#+END_SRC
+
+#+RESULTS:
+
+*** my org-noter
+#+BEGIN_SRC emacs-lisp
+(use-package org-noter
+    :after (:any org pdf-view)
+    :config
+    (setq
+     ;; The WM can handle splits
+     org-noter-notes-window-location 'other-frame
+     ;; Please stop opening frames
+     org-noter-always-create-frame nil
+     ;; I want to see the whole file
+     org-noter-hide-other nil
+     ;; Everything is relative to the main notes file
+     org-noter-notes-search-path (list org_notes)
+     )
+    )
+#+END_SRC
+
+#+RESULTS:
+
+*** more org-roam + deft + org-ref +
+#+BEGIN_SRC emacs-lisp
+(setq
+ bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/"
+ bibtex-completion-bibliography "/Dropbox/mend/library.bib"
+ bibtex-completion-pdf-field "file"
+ bibtex-completion-notes-template-multiple-files
+ (concat
+  "#+TITLE: ${title}\n"
+  "#+ROAM_KEY: cite:${=key=}\n"
+  "* TODO Notes\n"
+  ":PROPERTIES:\n"
+  ":Custom_ID: ${=key=}\n"
+  ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+  ":AUTHOR: ${author-abbrev}\n"
+  ":JOURNAL: ${journaltitle}\n"
+  ":DATE: ${date}\n"
+  ":YEAR: ${year}\n"
+  ":DOI: ${doi}\n"
+  ":URL: ${url}\n"
+  ":END:\n\n"
+  )
+ )
+ 
+
+(setq
+   bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/notes"
+   bibtex-completion-bibliography "/home/alkhaldieid/Dropbox/mend/library.bib"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-notes-template-multiple-files
+   (concat
+     "#+TITLE: ${title}\n"
+     "#+ROAM_KEY: cite:${=key=}\n"
+     "* TODO Notes\n"
+     ":PROPERTIES:\n"
+     ":Custom_ID: ${=key=}\n"
+     ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+     ":AUTHOR: ${author-abbrev}\n"
+     ":JOURNAL: ${journaltitle}\n"
+     ":DATE: ${date}\n"
+     ":YEAR: ${year}\n"
+     ":DOI: ${doi}\n"
+     ":URL: ${url}\n"
+     ":END:\n\n"
+     )
+)
+(setq
+       org-ref-completion-library 'org-ref-ivy-cite
+       org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
+       org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
+       org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
+       org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+       org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
+       org-ref-notes-function 'orb-edit-notes
+  )
+(setq
+ org-noter-default-notes-file-name '("/home/alkhaldieid/Dropbox/notes.org")
+ org-noter-default-search-path '("/home/alkhaldieid/Dropbox/mend")
+
+ )
+
+
+;;;;;;;;;;DEFT config
+(setq deft-directory "~/Dropbox/org/roam")
+
+#+END_SRC
+
+#+RESULTS:
+: ~/Dropbox/org/roam
+
+*** Deft
+#+BEGIN_SRC emacs-lisp
+(use-package deft
+      :after org
+      :bind
+      ("C-c n d" . deft)
+      :custom
+      (deft-recursive t)
+      (deft-use-filter-string-for-filename t)
+      (deft-default-extension "org")
+      (deft-directory "~/Dropbox/org/roam/"))
+#+END_SRC
+
+#+RESULTS:
+: deft
+
+* ;; org-recoll
+(load-file "~/.emacs.d/org-recoll/org-recoll.el")
+(require 'org-recoll)
+;;(load "org-recoll")
+;; Synonyms
+;; dependancies
+;; thingatpt
+(require 'thingatpt)
+(load-file "~/.emacs.d/syn/misc/thingatpt+.el")
+
+;; loading synonyms
+
+(setq synonyms-file      "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt")
+(setq synonyms-cache-file  "/home/alkhaldieid/.emacs.d/syn/misc/mthesaur.txt.cache")
+(load-file "~/.emacs.d/syn/synonyms.el")
+
+;;;; install synosaurus
+(add-to-list 'load-path "~/.emacs.d/syn/synosaurus")
+
+
+
+
+
+ #+RESULTS:
+
+* spacemacs configs
+** org-roam 
+efconst org-roam-packages
+'(org-roam))
+
+efun org-roam/init-org-roam ()
+(use-package org-roam
+  :hook
+  (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory "/home/alkhaldieid/Dropbox/org/roam")
+  :init
+  (progn
+    (spacemacs/declare-prefix "ar" "org-roam")
+    (spacemacs/set-leader-keys
+     "arl" 'org-roam
+     "art" 'org-roam-dailies-today
+     "arf" 'org-roam-find-file
+     "arg" 'org-roam-graph)
+
+    (spacemacs/declare-prefix-for-mode 'org-mode "mr" "org-roam")
+    (spacemacs/set-leader-keys-for-major-mode 'org-mode
+                                              "rl" 'org-roam
+                                              "rt" 'org-roam-dailies-today
+                                              "rb" 'org-roam-switch-to-buffer
+                                              "rf" 'org-roam-find-file
+                                              "ri" 'org-roam-insert
+                                              "rg" 'org-roam-graph))))
+** org-noter
+efconst org-noter-packages
+'(org-noter))
+
+efun org-noter/init-org-noter ()
+(use-package org-noter
+  :after (:any org pdf-view)
+  :config
+  (setq
+   ;; The WM can handle splits
+   org-noter-notes-window-location 'other-frame
+   ;; Please stop opening frames
+   org-noter-always-create-frame nil
+   ;; I want to see the whole file
+   org-noter-hide-other nil
+   ;; Everything is relative to the main notes file
+   org-noter-notes-search-path (list org_notes)
+   )
+  )
+)
+g_notes (concat (getenv "HOME") "/Dropbox/org/roam/")
+
+** org-roam-bibtex
+efconst org-roam-bibtex-packages
+'(org-roam-bibtex))
+
+efun org-roam-bibtex/init-org-roam-bibtex ()
+(use-package org-roam-bibtex
+  :after (org-roam)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (setq org-roam-bibtex-preformat-keywords
+        '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+  (setq orb-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "${slug}"
+           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}
+
+tags ::
+keywords :: ${keywords}
+
+ ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+
+           :unnarrowed t))))
+)
+
+** .spacemacs roam configs
+*** user-init
+  (setq
+   org_notes (concat (getenv "HOME") "/Dropbox/org/roam/")
+   zot_bib (concat (getenv "HOME") "/Dropbox/mend/library.bib")
+   org-directory org_notes
+   deft-directory org_notes
+   org-roam-directory org_notes
+   )
+  (setq
+   bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/"
+   bibtex-completion-bibliography "/Dropbox/mend/library.bib"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-notes-template-multiple-files
+   (concat
+    "#+TITLE: ${title}\n"
+    "#+ROAM_KEY: cite:${=key=}\n"
+    "* TODO Notes\n"
+    ":PROPERTIES:\n"
+    ":Custom_ID: ${=key=}\n"
+    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+    ":AUTHOR: ${author-abbrev}\n"
+    ":JOURNAL: ${journaltitle}\n"
+    ":DATE: ${date}\n"
+    ":YEAR: ${year}\n"
+    ":DOI: ${doi}\n"
+    ":URL: ${url}\n"
+    ":END:\n\n"
+    )
+   )
+*** user configs
+  (setq
+  bibtex-completion-notes-path "/home/alkhaldieid/Dropbox/org/roam/notes"
+  bibtex-completion-bibliography "/home/alkhaldieid/Dropbox/mend/library.bib"
+  bibtex-completion-pdf-field "file"
+  bibtex-completion-notes-template-multiple-files
+  (concat
+    "#+TITLE: ${title}\n"
+    "#+ROAM_KEY: cite:${=key=}\n"
+    "* TODO Notes\n"
+    ":PROPERTIES:\n"
+    ":Custom_ID: ${=key=}\n"
+    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+    ":AUTHOR: ${author-abbrev}\n"
+    ":JOURNAL: ${journaltitle}\n"
+    ":DATE: ${date}\n"
+    ":YEAR: ${year}\n"
+    ":DOI: ${doi}\n"
+    ":URL: ${url}\n"
+    ":END:\n\n"
+    )
+  )
+  (setq
+         org-ref-completion-library 'org-ref-ivy-cite
+         org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
+         org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
+         org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
+         org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+         org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
+         org-ref-notes-function 'orb-edit-notes
+    )
+  (setq
+   org-noter-default-notes-file-name '("/home/alkhaldieid/Dropbox/notes.org")
+   org-noter-default-search-path '("/home/alkhaldieid/Dropbox/mend")
+
+   )
+
+
+  ;;;;;;;;;;DEFT config
+  (setq deft-directory "~/Dropbox/org/roam")
