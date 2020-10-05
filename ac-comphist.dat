@@ -1,6 +1,4 @@
-((("emacs-lisp" .
-   [1 0 0 0 0 0 0 0 0 0])
-  (":ensure" .
+(((":ensure" .
    [1 0 0 0 0 0 0])
   ("text-scale-decrease" .
    [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
