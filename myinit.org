@@ -1,5 +1,5 @@
 #+STARTUP: overview
-* Interface Tweaks 
+* Interface Tweaks
 ** Startup General Settings
 #+BEGIN_SRC emacs-lisp
 ;; Remove initial buffer, set index file
@@ -15,7 +15,7 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-;; Display battery for when in full screen mode 
+;; Display battery for when in full screen mode
 ;; Uncomment in laptops
 ;; (display-battery-mode t)
 
@@ -24,11 +24,11 @@
 (setenv "HOME" "/home/alkhaldieid/")
 (server-start)
 
-(setq initial-scratch-message "Welcome Abu-Saad") ; print a default message in the empty scratch buffer opened at startup
+;;(setq initial-scratch-message "Welcome Abu-Saad") ; print a default message in the empty scratch buffer opened at startup
 ;; show paranthasis
 (show-paren-mode 1)
 ;;set the default font"
-(set-default-font "Ubuntu Mono-25")
+;;(set-default-font "Ubuntu Mono-25")
 (global-visual-line-mode t)
 
 #+END_SRC
@@ -120,7 +120,7 @@
    :config
    (load-theme 'dracula t)
    :ensure t)
-   
+
 
 (global-hl-line-mode t) ;; This highlights the current line in the buffer
 
@@ -131,7 +131,7 @@
 #+END_SRC
 
 * Packages
-** Try 
+** Try
 #+BEGIN_SRC emacs-lisp
 (use-package try
   :ensure t)
@@ -140,12 +140,12 @@
 ** Which-key
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
-  :config 
+  :config
     (setq which-key-idle-delay 0.3)
     (setq which-key-popup-type 'frame)
     (which-key-mode)
     (which-key-setup-minibuffer)
-    (set-face-attribute 'which-key-local-map-description-face nil 
+    (set-face-attribute 'which-key-local-map-description-face nil
        :weight 'bold)
   :ensure t)
 #+END_SRC
@@ -156,7 +156,7 @@
     (require 'helm-config)
     (setq helm-split-window-in-side-p t
           helm-move-to-line-cycle-in-source t)
-  :config 
+  :config
     (helm-mode 1) ;; Most of Emacs prompts become helm-enabled
     (helm-autoresize-mode 1) ;; Helm resizes according to the number of candidates
     (global-set-key (kbd "C-x b") 'helm-buffers-list) ;; List buffers ( Emacs way )
@@ -276,7 +276,7 @@
   :init
   (global-flycheck-mode t))
 #+END_SRC
-   
+
 ** Elpy
 #+BEGIN_SRC emacs-lisp
 (use-package elpy
@@ -289,7 +289,7 @@
 #+BEGIN_SRC emacs-lisp
 (use-package auto-complete
   :ensure t
-  :config 
+  :config
   (ac-config-default)
 )
 #+END_SRC
@@ -302,7 +302,7 @@
     :ensure t
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-    
+
   (setq org-startup-indented t)           ;; Indent according to section
   (setq org-startup-with-inline-images t) ;; Display images in-buffer by default
 #+END_SRC
@@ -441,7 +441,7 @@ This minor mode for Elisp balances quotes and parenthesis automatically
 
 * Language Related
  #+BEGIN_SRC emacs-lisp
- ;; This requires SDCV 
+ ;; This requires SDCV
  ;; This little function looks in a stardict file for words that look like
  ;; the word under the cursor. I use it when correcting my spelling in french
 (defun dict-search ()
@@ -451,8 +451,8 @@ This minor mode for Elisp balances quotes and parenthesis automatically
 
 (define-key evil-normal-state-map (kbd "ç") 'ispell-word)
 (define-key evil-normal-state-map (kbd "Ç") 'dict-search)
- 
- #+END_SRC 
+
+ #+END_SRC
 
 
 * org stuff
@@ -480,4 +480,3 @@ This minor mode for Elisp balances quotes and parenthesis automatically
 
 
 #+END_SRC
-

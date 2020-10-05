@@ -11,7 +11,7 @@
 (global-display-line-numbers-mode)
 (setq display-line-numbers-type 'relative)
 
-;; Display battery for when in full screen mode 
+;; Display battery for when in full screen mode
 ;; Uncomment in laptops
 ;; (display-battery-mode t)
 
@@ -20,11 +20,11 @@
 (setenv "HOME" "/home/alkhaldieid/")
 (server-start)
 
-(setq initial-scratch-message "Welcome Abu-Saad") ; print a default message in the empty scratch buffer opened at startup
+;;(setq initial-scratch-message "Welcome Abu-Saad") ; print a default message in the empty scratch buffer opened at startup
 ;; show paranthasis
 (show-paren-mode 1)
 ;;set the default font"
-(set-default-font "Ubuntu Mono-25")
+;;(set-default-font "Ubuntu Mono-25")
 (global-visual-line-mode t)
 
 (use-package yasnippet
@@ -96,7 +96,7 @@
    :config
    (load-theme 'dracula t)
    :ensure t)
-   
+
 
 (global-hl-line-mode t) ;; This highlights the current line in the buffer
 
@@ -109,12 +109,12 @@
   :ensure t)
 
 (use-package which-key
-  :config 
+  :config
     (setq which-key-idle-delay 0.3)
     (setq which-key-popup-type 'frame)
     (which-key-mode)
     (which-key-setup-minibuffer)
-    (set-face-attribute 'which-key-local-map-description-face nil 
+    (set-face-attribute 'which-key-local-map-description-face nil
        :weight 'bold)
   :ensure t)
 
@@ -123,7 +123,7 @@
     (require 'helm-config)
     (setq helm-split-window-in-side-p t
           helm-move-to-line-cycle-in-source t)
-  :config 
+  :config
     (helm-mode 1) ;; Most of Emacs prompts become helm-enabled
     (helm-autoresize-mode 1) ;; Helm resizes according to the number of candidates
     (global-set-key (kbd "C-x b") 'helm-buffers-list) ;; List buffers ( Emacs way )
@@ -232,7 +232,7 @@
 
 (use-package auto-complete
   :ensure t
-  :config 
+  :config
   (ac-config-default)
 )
 
@@ -344,7 +344,7 @@
 "[[./summaries/summaries.org][Summaries]]"
 )
 
-;; This requires SDCV 
+;; This requires SDCV
  ;; This little function looks in a stardict file for words that look like
  ;; the word under the cursor. I use it when correcting my spelling in french
 (defun dict-search ()
