@@ -9,8 +9,8 @@
 ;; packages configs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;; Packages Managers ;;;;;;;;;;;;;;;;;;;;;;;;;;
-(package-initialize)
 (require 'package)
+
 (add-to-list 'package-archives
 	     '("melpa" . "https://melpa.org/packages/"))
 ;; (setq package-enable-at-startup nil)
@@ -19,9 +19,10 @@
 (unless (package-installed-p 'use-package)
 	(package-install 'use-package))
 
-(package-refresh-contents)
+(package-initialize)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;; Evil Stuff ;;;;;;;;;;;
 ;; Enable evil-leader (has to be enabled before evil-mode)
 
 (unless (package-installed-p 'evil-leader)
@@ -32,12 +33,14 @@
 ;; (global-evil-leader-mode 1) Enable evil leader in every buffer where evil is enabled
 (global-evil-leader-mode 1)
 
-(use-package org
-  :ensure t)
+
 (unless (package-installed-p 'evil)
   (package-install 'evil))
 (require 'evil)
 (evil-mode 1)
+
+(use-package org
+  :ensure t)
 
 (org-babel-load-file "/home/alkhaldieid/.emacs.d/myinit.org")
 (custom-set-variables

@@ -1,0 +1,26 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/alkhaldieid/" . ".emacs.d/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/alkhaldieid/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "myinit.org"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/alkhaldieid/.emacs.d/" (24401 45159 510916 388000) ".cache/" "projectile-bookmarks.eld" "ac-comphist.dat" "myinit.el~" "init.el" "org-recoll/" "../" "snippets/" ".git/" "synonyms.el" "myinit.org~" "init.el~" "transient/" "todo.org" "./" ".gitignore" "url/" "myinit.el" "auto-save-list/" "syn/" "myinit.org" "elpa/" "userConfig/" "network-security.data" "misc/")
+
+ ("/home/alkhaldieid/" (24401 45150 402989 855000) ".steampath" "pic-full-200613-2315-58.png" ".vim_back/" "pic-full-200610-1423-48.png" ".profile" ".emacs.d/" ".cache/" ".vim/" "pic-window-200512-0220-05.png" "papers/" "emax_bak/" "notes/" ".config/" "Downloads/" "miraclecast/" ".dwm/" ".pki/" "doing/" ".texlive2019/" "node_modules/" ".mplayer/" "go/" ".ihsec/" "external.pkgs" "doing_backup/" "pic-full-200512-0216-10.png" ".viminfo" "pic-window-200512-0219-48.png" "PycharmProjects/" "junk" ".sc-iminfo" "screencast-200512-0220-27.mkv" "pic-full-200526-1116-24.png" "Documents/" "ext_packages/" ".npm/" "junk_20200830_124933_VyJ5dZ.png" "pic-full-200603-2119-01.png" ".fzf.bash" "pic-full-200626-1855-46.png" "pic-full-200830-1248-46.png" "pic-selected-200525-1301-37.png" "emacs_bakk/" ".calcurse/" "snap/" ".orhc-bibtex-cache" ".doom.d/" "pic-full-200530-1334-08.png" "pic-selected-200508-1349-15.png" ".recoll-papers/" ".bash_history" "#junk#" ".gitconfig" "Music/" "Steam/" ".vscode/" "apikey" ".bashrc" ".ipython/" ".shared_cfg/" ".keras/" ".ipynb_checkpoints/" "pic-full-200530-1334-09.png" ".asoundrc" ".conda/" ".recoll/" "st/" ".steam/" "info.py" ".yarn/" ".w3m/" "pic-full-200627-0228-21.png" ".gnupg/" ".ideavimrc" "pic-full-200529-1812-16.png" "pic-full-200526-0927-38.png" "package-lock.json" ".ssh/" ".tldr/" ".sudo_as_admin_successful" "spacemaccs_bak" "org/" ".thunderbird/" "vs.py" "pic-full-200512-0216-42.png" ".pytest_cache/" "i3config" ".oracle_jre_usage/" "mozilla.pdf" "pic-full-200527-1122-56.png" "grub.config" ".workshop/" ".fastai/" ".PyCharm2019.3/" ".xprofile" "pic-selected-200512-0218-19.png" "pic-full-200613-1614-50.png" ".tmux.conf" "pic-selected-200524-2021-50.png" ".fzf.zsh" "doom.d_bak/" "pic-window-200512-0219-58.png" ".pulse-cookie" ".cheat/" ".mozilla/" ".gem/" ".subversion/" "auto/" "README.md" ".aspell.en.pws" "pic-selected-200524-2037-31.png" ".pylint.d/" "pic-selected-200512-0218-51.png" ".python_history" "#.zprofile#" "pic-full-200526-1752-12.png" ".dbus/" ".Xauthority" "pic-full-200615-1705-09.png" ".zprofile" "pic-full-200613-1614-49.png" "ssh.notes" ".bash_logout" "vc/" ".gitignore" ".wget-hsts" "rolling-rhino/" ".selected_editor" ".spacemacs" ".octave_hist" ".intellimacs/" ".aspell.en.prepl" ".jupyter/" ".astropy/" ".fzf/" ".bro" "pic-window-200512-0219-33.png" "pic-full-200524-2037-26.png" "pic-full-200604-1749-57.png" "vimwiki/" ".cfg/" ".dreamchess/" ".elfeed/" ".java/" ".nvm/" "pic-full-200615-1705-08.png" "pic-full-200611-2030-50.png" "pic-full-200526-1121-33.png" "Dropbox/" ".steampid" "pic-full-200508-1337-59.png" ".matlab/" ".fgfs/" ".insert-shebang.log" ".spacemacs.env" "anaconda3/" "pic-full-200712-2035-30.png" "Videos/" "BROWSE" ".surf/" "myOrg" "LICENSE" ".mono/" "pic-full-200708-1805-04.png" ".anaconda/" ".local/" "Desktop/" ".nvimlog" "pic-selected-200508-1338-37.png" ".nv/" "sk" "mpv-shot0001.jpg" "java_error_in_PYCHARM_68449.log" "pic-selected-200508-1355-31.png" ".dotfiles.git/" ".virtualenvs/" "automatcoco" ".cask/" ".xinputrc" "connect" ".fonts/" "pic-full-200621-0859-20.png" ".gconf/" ".dropbox-dist/" ".dropbox/" ".gnome/" "repos/" ".larbs.commands.swp" "video-200512-0220-36.mkv" "test_rsync/" ".xinitrc" "pic-window-200512-0219-23.png" "junk.org" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
