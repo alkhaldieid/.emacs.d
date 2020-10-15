@@ -32,6 +32,9 @@
 
 #+END_SRC
 
+#+RESULTS:
+: t
+
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
 (use-package powerline-evil
@@ -43,6 +46,9 @@
 (evil-commentary-mode)
 
 #+END_SRC
+
+#+RESULTS:
+: t
 
 * Theming & Aesthethic
 #+BEGIN_SRC emacs-lisp
@@ -59,6 +65,9 @@
    :config
    (beacon-mode 1))
 #+END_SRC
+
+#+RESULTS:
+: t
 
 * Packages
 ** Try
@@ -224,7 +233,6 @@
 )
 #+END_SRC
 
-
 * yasnippet configs
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -257,7 +265,10 @@
 ;; use (evil-leader/set-key to bind keys in the leader map
 
 (evil-leader/set-key
+ "<SPC> " 'helm-M-x
  "ff" 'find-file
+ "fs" 'save-buffer
+ 
  "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
  ;; buffers
 
@@ -265,6 +276,21 @@
  "bk" 'kill-buffer
  "bp" 'previous-buffer
  "bn" 'next-buffer
+ ;; windows
+ "wl" 'evil-window-right
+ "wh" 'evil-window-left
+ "wk" 'evil-window-up
+ "wj" 'evil-window-down
+ ;; workspaces
+ "lw1" 'eyebrowse-switch-to-window-config-1
+ "lw2" 'eyebrowse-switch-to-window-config-2
+ "lw3" 'eyebrowse-switch-to-window-config-3
+ "lw4" 'eyebrowse-switch-to-window-config-4
+ "lw5" 'eyebrowse-switch-to-window-config-5
+ "lw6" 'eyebrowse-switch-to-window-config-6
+ "lw7" 'eyebrowse-switch-to-window-config-7
+ "lw8" 'eyebrowse-switch-to-window-config-8
+ "lw9" 'eyebrowse-switch-to-window-config-9
  ;; files
  ;; cf files
  "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
@@ -272,6 +298,7 @@
  "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
  "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
  "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+ "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
  ;; zoom-in and out
  "=" 'text-scale-increase
  "-" 'text-scale-decrease
@@ -294,6 +321,9 @@
 ;; ";" evil-commentry-line
  )
  #+END_SRC
+
+ #+RESULTS:
+
 * Org Mode Stuff
 ** Aesthetics, customizations
 #+BEGIN_SRC emacs-lisp
@@ -356,7 +386,6 @@ This minor mode for Elisp balances quotes and parenthesis automatically
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
   (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 #+END_SRC
-
 
 * Skeletons
 ** Latex
@@ -443,15 +472,19 @@ This minor mode for Elisp balances quotes and parenthesis automatically
  ;; This requires SDCV
  ;; This little function looks in a stardict file for words that look like
  ;; the word under the cursor. I use it when correcting my spelling in french
+(use-package unicode-fonts :ensure t)
 (defun dict-search ()
   (interactive)
   (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
-  (shell-command (format "export STARDICT_DATA_DIR=/home/trajanus/Documents/Stardict ;sdcv %s | head -5" (thing-at-point 'word))))
+  (shell-command (format "export STARDICT_DATA_DIR=/home/alkhaldieid/Documents/Stardict ;sdcv -0  %s | sed -n 6p" (thing-at-point 'word))))
 
-(define-key evil-normal-state-map (kbd "ç") 'ispell-word)
-(define-key evil-normal-state-map (kbd "Ç") 'dict-search)
+(define-key evil-normal-state-map (kbd "t") 'ispell-word)
+(define-key evil-normal-state-map (kbd "T") 'dict-search)
 
  #+END_SRC
+
+ #+RESULTS:
+ : dict-search
 
 * spacemacs compatiblity
 ** deft
@@ -575,18 +608,6 @@ This minor mode for Elisp balances quotes and parenthesis automatically
             org-noter-default-notes-file-name '(concat dropbox_dir "/notes.org")
             org-noter-default-search-path  '(concat dropbox_dir "/mend"))
 
-      ;; (add-to-list 'org-capture-templates
-      ;;             '("P" "Protocol" entry ; key, name, type
-      ;;               (file+headline +org-capture-notes-file "Inbox") ; target
-      ;;               "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?"
-      ;;               :prepend t ; properties
-      ;;               :kill-buffer t))
-      ;; (add-to-list 'org-capture-templates
-      ;;             '("L" "Protocol Link" entry
-      ;;               (file+headline +org-capture-notes-file "Inbox")
-      ;;               "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
-      ;;               :prepend t
-      ;;               :kill-buffer t))
   )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
@@ -694,3 +715,10 @@ same directory as the org-buffer and insert a link to this file."
 
 
 #+END_SRC
+* testing emacs-lisp
+#+BEGIN_SRC emacs-lisp
+(print (font-family-list))
+#+END_SRC
+
+#+RESULTS:
+| Noto Sans Canadian Aboriginal | Noto Sans Devanagari UI | Noto Sans Gurmukhi | Noto Sans Tamil | Noto Sans Devanagari | Noto Sans Display | Noto Sans Arabic | Noto Sans Canadian Aboriginal | Noto Serif Bengali | Noto Sans Bengali | Noto Sans Malayalam | Sharjah | Noto Sans Canadian Aboriginal | Standard Symbols PS | Noto Sans Gurmukhi | Noto Sans Hebrew | Noto Sans Lepcha | Terafik | Noto Sans Kannada | Noto Sans Thaana | Noto Serif Devanagari | Noto Sans Myanmar | Noto Sans Ogham | Noto Serif Tamil | Noto Sans Devanagari | Noto Sans Devanagari | Noto Sans Thai | Noto Sans Canadian Aboriginal | Noto Serif Dogra | Noto Sans Tamil | Noto Serif Bengali | Noto Sans Display | Noto Sans Thai UI | DejaVu Math TeX Gyre | Noto Sans Devanagari UI | URW Gothic | Noto Sans Buginese | Noto Sans Devanagari UI | Noto Sans Tai Le | Noto Sans Devanagari | Noto Sans Devanagari UI | Noto Sans Anatolian Hieroglyphs | AlHor | Sindbad | Noto Naskh Arabic | Essays1743 | Noto Serif | Noto Sans Kayah Li | Noto Serif Khmer | Noto Sans Tai Tham | Noto Sans Display | Noto Sans Symbols | AlArabiya | Noto Sans Tifinagh | Noto Sans Psalter Pahlavi | Noto Serif Sinhala | Noto Serif Malayalam | Noto Sans Thaana | Electron | Noto Serif Tamil | Linux Libertine Mono O | Noto Music | Noto Serif Malayalam | Noto Sans Gurmukhi UI | Andale Mono | Noto Sans Sinhala | Noto Sans Cherokee | Noto Sans Mongolian | Trebuchet MS | Noto Serif Kannada | Noto Sans Sinhala | Noto Sans Old South Arabian | Noto Serif Gurmukhi | AlYarmook | Noto Sans Brahmi | Noto Sans Bengali UI | Noto Serif Lao | Noto Sans Adlam | Noto Sans Tamil Supplement | Nimbus Roman | Titr | Noto Sans Chakma | Noto Sans Tirhuta | Elham | Noto Sans Malayalam | Webdings | Noto Sans Canadian Aboriginal | Noto Serif Gujarati | Noto Sans Cherokee | Noto Sans Tamil UI | KacstQurn | Noto Serif Sinhala | Noto Sans Thai UI | Linux Libertine Display O | Source Code Pro | Gentium Plus | Noto Sans Javanese | Noto Serif Thai | Noto Sans Telugu | Noto Sans Syriac | Noto Sans Lao UI | Noto Serif Lao | Noto Sans Multani | Noto Sans Myanmar UI | DejaVu Sans Mono | Arial Black | Noto Sans Shavian | Noto Sans Telugu UI | Mothanna | Noto Serif Georgian | Noto Serif Kannada | Noto Sans Oriya UI | Noto Sans Malayalam UI | KacstBook | KacstLetter | Kayrawan | Noto Serif Georgian | Noto Serif Georgian | Noto Sans Mandaic | Noto Sans Bengali | Cantarell | Noto Sans Telugu UI | Noto Sans Sinhala UI | Verdana | Mothanna | Noto Sans Kharoshthi | Noto Serif Georgian | KacstDigital | AlManzomah | Noto Sans Tamil | KacstTitleL | Noto Sans Old Sogdian | Noto Serif Gujarati | Thabit | Noto Serif Gujarati | Noto Sans Myanmar | Noto Sans Sinhala UI | Noto Sans Old Persian | Mothanna | Noto Sans Tamil UI | Noto Sans Old Hungarian | Koodak | Noto Sans Cham | Nada | Noto Sans Telugu UI | Noto Sans Gurmukhi | Linux Libertine Initials | Noto Serif Gurmukhi | Noto Sans Arabic UI | Noto Serif Lao | Noto Serif Bengali | Noto Sans Bhaiksuki | Noto Sans Thai UI | Noto Sans Tamil UI | Cantarell | Noto Sans Deseret | Noto Sans Runic | Cantarell | Noto Serif Kannada | Nimbus Sans | Gentium Plus Compact | Thabit | Noto Serif Devanagari | Noto Sans Gurmukhi UI | Noto Sans Hebrew | Noto Sans Khojki | Noto Sans Buhid | Noto Sans Armenian | Noto Serif Telugu | Noto Sans Devanagari UI | Noto Serif Telugu | Noto Sans Malayalam UI | Metal | Noto Sans Sinhala | Noto Serif Display | Noto Sans Malayalam UI | Noto Serif Tamil Slanted | Noto Sans Tai Viet | Noto Sans Kannada | Noto Sans Hanifi Rohingya | Noto Serif Tibetan | Noto Sans Khmer UI | Noto Sans | Noto Sans | Noto Sans Inscriptional Parthian | Noto Serif Khmer | Source Code Pro | Amiri Quran | Noto Sans Ethiopic | Noto Sans Mayan Numerals | Noto Sans Lao UI | Noto Sans Georgian | FreeSerif | Linux Libertine Initials O | Times New Roman | Nimbus Mono PS | Granada | Noto Sans Hatran | Noto Serif Sinhala | Noto Kufi Arabic | Noto Sans Telugu UI | Noto Sans Bengali UI | Noto Sans Tagalog | Noto Sans Georgian | Noto Serif Tamil Slanted | Noto Sans Malayalam | Noto Sans Syriac | Noto Serif Myanmar | Noto Sans Osage | Noto Sans Gurmukhi UI | Noto Sans Thai | DejaVu Sans | Noto Sans Tamil | Noto Sans Batak | KacstOffice | Noto Sans Glagolitic | Nesf2 | Petra | Noto Sans Malayalam | Nice | Nimbus Sans Narrow | Noto Sans Khmer UI | Noto Serif Myanmar | Noto Sans Myanmar UI | Noto Sans Old North Arabian | Noto Sans Cham | Noto Sans Oriya | URW Bookman | Source Code Pro | Noto Sans Khmer | Noto Serif Gurmukhi | Noto Sans Thai | Furat | Noto Sans Georgian | Noto Serif Malayalam | Noto Sans Mahajani | DejaVu Sans | Noto Sans Telugu | Noto Sans | Noto Serif | Noto Serif Tamil Slanted | DejaVu Serif | Noto Sans Linear A | Noto Sans Linear B | Noto Sans Bengali UI | Noto Serif Thai | Noto Sans Cham | Noto Sans Gothic | Dimnah | KacstArt | Noto Sans Lydian | Noto Serif Tibetan | Noto Serif Gujarati | Shado | Noto Sans Tibetan | Noto Sans Siddham | Noto Sans Mono | Noto Sans Myanmar UI | Noto Sans Ol Chiki | Noto Sans Display | Noto Sans Georgian | Noto Sans Tamil UI | Noto Sans Mono | Noto Sans Mono | Noto Serif | Noto Serif Bengali | Noto Sans Arabic | Noto Sans Modi | Source Code Pro | Noto Sans Lao UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Sans Sora Sompeng | Noto Sans Myanmar | Noto Sans Khmer UI | Noto Sans Meetei Mayek | Noto Sans Gujarati UI | Hani | Noto Sans Cypriot | KacstOne | Noto Serif Thai | Noto Serif Tamil | Noto Serif Gujarati | Noto Sans Miao | Noto Sans Gurmukhi UI | Tholoth | Comic Sans MS | DejaVu Sans | Salem | Noto Sans Pahawh Hmong | Noto Sans Ugaritic | Noto Sans Lao | Noto Sans Marchen | C059 | Noto Sans Cherokee | Noto Serif Thai | Liberation Mono | Noto Sans Arabic | Noto Sans Mro | Noto Sans Thai | Noto Sans PhagsPa | Noto Sans Imperial Aramaic | Noto Sans Symbols | Noto Sans Tamil UI | Noto Sans Telugu | Noto Sans Khmer UI | Noto Serif Kannada | Noto Sans Lao | Hor | Noto Sans Kannada UI | Noto Sans Bengali | Noto Sans Adlam Unjoined | Noto Serif Lao | Noto Sans Telugu | Noto Sans Arabic | Noto Serif Hebrew | Noto Serif Gurmukhi | Noto Sans Lao | Noto Sans Meroitic | Noto Serif Khmer | Thabit | Noto Sans Display | Haramain | Linux Biolinum O | Noto Sans Khmer | Linux Libertine Mono | Noto Sans Bengali | Noto Sans Gujarati | Noto Sans Malayalam UI | Noto Sans Cham | AlBattar | Noto Sans Malayalam UI | Noto Sans Lao | Noto Sans Egyptian Hieroglyphs | Noto Sans Kannada UI | Noto Sans Bassa Vah | Jet | Noto Serif Hebrew | Noto Sans Bengali UI | Noto Sans Manichaean | Noto Sans Ethiopic | Noto Sans Indic Siyaq Numbers | Noto Sans Armenian | Noto Sans | Noto Sans Grantha | Noto Sans Arabic UI | Noto Sans Kannada UI | Noto Serif Ethiopic | Noto Sans Armenian | Noto Serif Balinese | Rasheeq | Noto Sans Duployan | Ouhod | Noto Sans Thaana | Noto Serif Ethiopic | Noto Serif Malayalam | Z003 | Noto Sans Symbols | Noto Serif Myanmar | Noto Sans Arabic UI | Noto Sans Bengali UI | Noto Sans Old Italic | KacstPen | Noto Sans Arabic | Noto Serif Armenian | Noto Sans Bengali | Noto Serif Ethiopic | Noto Sans Lisu | Noto Sans Thai | Noto Sans Khmer | Noto Sans Thaana | Noto Sans Kaithi | Noto Serif Hebrew | D050000L | Noto Sans Math | Noto Naskh Arabic UI | KacstDecorative | Linux Biolinum Keyboard O | Noto Sans Tagbanwa | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Myanmar | Noto Serif Ethiopic | Noto Sans Vai | Noto Serif Sinhala | Liberation Serif | Linux Biolinum | Noto Serif Armenian | Ostorah | Noto Sans NKo | Noto Serif Devanagari | Noto Sans Lao | Noto Sans New Tai Lue | Noto Serif Georgian | Amiri Quran Colored | Linux Libertine O | Homa | Noto Sans Syloti Nagri | Noto Sans Ethiopic | Mashq | Noto Serif Malayalam | Noto Serif Devanagari | Noto Sans Sinhala UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Serif Lao | Noto Sans | Noto Serif Khmer | Noto Sans Samaritan | Noto Sans Thaana | Noto Sans Gurmukhi UI | Noto Serif Tamil Slanted | Noto Sans Newa | KacstPoster | Noto Serif Telugu | Noto Sans Carian | Noto Kufi Arabic | Cantarell | Liberation Sans | Nazli | Noto Sans Bamum | Noto Serif Thai | Noto Sans Takri | Noto Serif Tamil Slanted | Noto Sans Nabataean | Noto Sans Hebrew | Noto Serif | Noto Sans Avestan | Noto Serif Myanmar | Noto Sans Cuneiform | Nagham | Noto Serif Hebrew | FreeSans | Noto Sans Kannada | Source Code Variable | Noto Sans Khmer UI | Noto Sans Armenian | Noto Sans Elbasan | Graph | Noto Sans Armenian | Noto Sans Old Turkic | Noto Sans Ethiopic | Georgia | Noto Color Emoji | Noto Sans Limbu | Source Code Pro | Noto Serif Tangut | Noto Sans Myanmar UI | KacstNaskh | Noto Sans Tamil | Noto Sans Sharada | Noto Serif Myanmar | Noto Sans Hebrew | Noto Sans Osmanya | Noto Sans Sinhala UI | Noto Sans Sinhala | Linux Libertine | Noto Serif Hebrew | Noto Serif Display | Noto Sans Palmyrene | Noto Serif Ahom | Noto Serif Kannada | Noto Sans Lycian | Source Code Pro | Noto Sans Yi | Noto Sans Telugu UI | KacstFarsi | Noto Kufi Arabic | Noto Sans Caucasian Albanian | Noto Serif | Noto Sans Mono | Arial | Noto Sans Kannada UI | Noto Sans Georgian | Noto Sans Pau Cin Hau | Noto Sans Saurashtra | Japan | Linux Biolinum Keyboard | Noto Sans Khmer | Noto Sans Old Permic | Noto Sans Sinhala UI | Noto Serif Armenian | Noto Sans Lao UI | Courier New | Noto Sans Warang Citi | Noto Sans Myanmar UI | KacstTitle | P052 | Noto Sans Syriac | Noto Serif Sinhala | Noto Serif Ethiopic | Naqsh | Tarablus | Noto Sans Telugu | Noto Sans Thai UI | Noto Sans Coptic | Noto Sans Gurmukhi | DejaVu Serif | Noto Sans Rejang | Noto Serif Bengali | Noto Sans Gurmukhi | Noto Sans Cherokee | Noto Sans Devanagari | Noto Sans Symbols2 | Mashq | Noto Sans Malayalam | Linux Libertine Display | Noto Serif Devanagari | Noto Serif Khmer | Noto Sans Mono | Noto Serif Display | Noto Sans Thai UI | Khalid | Noto Serif Display | Arab | Noto Serif Telugu | Noto Sans Kannada UI | Noto Serif Tamil | KacstScreen | Noto Nastaliq Urdu | Noto Sans Ethiopic | Noto Sans Cham | Noto Serif Gurmukhi | Noto Serif Tibetan | Impact | Cortoba | Noto Sans Kannada | Noto Serif Telugu | FreeMono | Noto Sans Lao UI | Rehan | Amiri | Noto Sans Kannada | Noto Sans Hebrew | Noto Sans Hanunoo | Noto Sans Inscriptional Pahlavi | Noto Sans Khmer | Thabit | Noto Sans Phoenician | Noto Sans Sundanese | Roya | Noto Serif Tamil | Noto Sans Myanmar | Noto Sans Khudawadi | Noto Serif Display | Noto Sans Cherokee | Noto Sans Mende Kikakui | Ubuntu Arabic | Noto Sans Sinhala | fixed | Noto Sans Canadian Aboriginal | Noto Sans Devanagari UI | Noto Sans Gurmukhi | Noto Sans Tamil | Noto Sans Devanagari | Noto Sans Display | Noto Sans Arabic | Noto Sans Canadian Aboriginal | Noto Serif Bengali | Noto Sans Bengali | Noto Sans Malayalam | Sharjah | Noto Sans Canadian Aboriginal | Standard Symbols PS | Noto Sans Gurmukhi | Noto Sans Hebrew | Noto Sans Lepcha | Terafik | Noto Sans Kannada | Noto Sans Thaana | Noto Serif Devanagari | Noto Sans Myanmar | Noto Sans Ogham | Noto Serif Tamil | Noto Sans Devanagari | Noto Sans Devanagari | Noto Sans Thai | Noto Sans Canadian Aboriginal | Noto Serif Dogra | Noto Sans Tamil | Noto Serif Bengali | Noto Sans Display | Noto Sans Thai UI | DejaVu Math TeX Gyre | Noto Sans Devanagari UI | URW Gothic | Noto Sans Buginese | Noto Sans Devanagari UI | Noto Sans Tai Le | Noto Sans Devanagari | Noto Sans Devanagari UI | Noto Sans Anatolian Hieroglyphs | AlHor | Sindbad | Noto Naskh Arabic | Essays1743 | Noto Serif | Noto Sans Kayah Li | Noto Serif Khmer | Noto Sans Tai Tham | Noto Sans Display | Noto Sans Symbols | AlArabiya | Noto Sans Tifinagh | Noto Sans Psalter Pahlavi | Noto Serif Sinhala | Noto Serif Malayalam | Noto Sans Thaana | Electron | Noto Serif Tamil | Linux Libertine Mono O | Noto Music | Noto Serif Malayalam | Noto Sans Gurmukhi UI | Andale Mono | Noto Sans Sinhala | Noto Sans Cherokee | Noto Sans Mongolian | Trebuchet MS | Noto Serif Kannada | Noto Sans Sinhala | Noto Sans Old South Arabian | Noto Serif Gurmukhi | AlYarmook | Noto Sans Brahmi | Noto Sans Bengali UI | Noto Serif Lao | Noto Sans Adlam | Noto Sans Tamil Supplement | Nimbus Roman | Titr | Noto Sans Chakma | Noto Sans Tirhuta | Elham | Noto Sans Malayalam | Webdings | Noto Sans Canadian Aboriginal | Noto Serif Gujarati | Noto Sans Cherokee | Noto Sans Tamil UI | KacstQurn | Noto Serif Sinhala | Noto Sans Thai UI | Linux Libertine Display O | Source Code Pro | Gentium Plus | Noto Sans Javanese | Noto Serif Thai | Noto Sans Telugu | Noto Sans Syriac | Noto Sans Lao UI | Noto Serif Lao | Noto Sans Multani | Noto Sans Myanmar UI | DejaVu Sans Mono | Arial Black | Noto Sans Shavian | Noto Sans Telugu UI | Mothanna | Noto Serif Georgian | Noto Serif Kannada | Noto Sans Oriya UI | Noto Sans Malayalam UI | KacstBook | KacstLetter | Kayrawan | Noto Serif Georgian | Noto Serif Georgian | Noto Sans Mandaic | Noto Sans Bengali | Cantarell | Noto Sans Telugu UI | Noto Sans Sinhala UI | Verdana | Mothanna | Noto Sans Kharoshthi | Noto Serif Georgian | KacstDigital | AlManzomah | Noto Sans Tamil | KacstTitleL | Noto Sans Old Sogdian | Noto Serif Gujarati | Thabit | Noto Serif Gujarati | Noto Sans Myanmar | Noto Sans Sinhala UI | Noto Sans Old Persian | Mothanna | Noto Sans Tamil UI | Noto Sans Old Hungarian | Koodak | Noto Sans Cham | Nada | Noto Sans Telugu UI | Noto Sans Gurmukhi | Linux Libertine Initials | Noto Serif Gurmukhi | Noto Sans Arabic UI | Noto Serif Lao | Noto Serif Bengali | Noto Sans Bhaiksuki | Noto Sans Thai UI | Noto Sans Tamil UI | Cantarell | Noto Sans Deseret | Noto Sans Runic | Cantarell | Noto Serif Kannada | Nimbus Sans | Gentium Plus Compact | Thabit | Noto Serif Devanagari | Noto Sans Gurmukhi UI | Noto Sans Hebrew | Noto Sans Khojki | Noto Sans Buhid | Noto Sans Armenian | Noto Serif Telugu | Noto Sans Devanagari UI | Noto Serif Telugu | Noto Sans Malayalam UI | Metal | Noto Sans Sinhala | Noto Serif Display | Noto Sans Malayalam UI | Noto Serif Tamil Slanted | Noto Sans Tai Viet | Noto Sans Kannada | Noto Sans Hanifi Rohingya | Noto Serif Tibetan | Noto Sans Khmer UI | Noto Sans | Noto Sans | Noto Sans Inscriptional Parthian | Noto Serif Khmer | Source Code Pro | Amiri Quran | Noto Sans Ethiopic | Noto Sans Mayan Numerals | Noto Sans Lao UI | Noto Sans Georgian | FreeSerif | Linux Libertine Initials O | Times New Roman | Nimbus Mono PS | Granada | Noto Sans Hatran | Noto Serif Sinhala | Noto Kufi Arabic | Noto Sans Telugu UI | Noto Sans Bengali UI | Noto Sans Tagalog | Noto Sans Georgian | Noto Serif Tamil Slanted | Noto Sans Malayalam | Noto Sans Syriac | Noto Serif Myanmar | Noto Sans Osage | Noto Sans Gurmukhi UI | Noto Sans Thai | DejaVu Sans | Noto Sans Tamil | Noto Sans Batak | KacstOffice | Noto Sans Glagolitic | Nesf2 | Petra | Noto Sans Malayalam | Nice | Nimbus Sans Narrow | Noto Sans Khmer UI | Noto Serif Myanmar | Noto Sans Myanmar UI | Noto Sans Old North Arabian | Noto Sans Cham | Noto Sans Oriya | URW Bookman | Source Code Pro | Noto Sans Khmer | Noto Serif Gurmukhi | Noto Sans Thai | Furat | Noto Sans Georgian | Noto Serif Malayalam | Noto Sans Mahajani | DejaVu Sans | Noto Sans Telugu | Noto Sans | Noto Serif | Noto Serif Tamil Slanted | DejaVu Serif | Noto Sans Linear A | Noto Sans Linear B | Noto Sans Bengali UI | Noto Serif Thai | Noto Sans Cham | Noto Sans Gothic | Dimnah | KacstArt | Noto Sans Lydian | Noto Serif Tibetan | Noto Serif Gujarati | Shado | Noto Sans Tibetan | Noto Sans Siddham | Noto Sans Mono | Noto Sans Myanmar UI | Noto Sans Ol Chiki | Noto Sans Display | Noto Sans Georgian | Noto Sans Tamil UI | Noto Sans Mono | Noto Sans Mono | Noto Serif | Noto Serif Bengali | Noto Sans Arabic | Noto Sans Modi | Source Code Pro | Noto Sans Lao UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Sans Sora Sompeng | Noto Sans Myanmar | Noto Sans Khmer UI | Noto Sans Meetei Mayek | Noto Sans Gujarati UI | Hani | Noto Sans Cypriot | KacstOne | Noto Serif Thai | Noto Serif Tamil | Noto Serif Gujarati | Noto Sans Miao | Noto Sans Gurmukhi UI | Tholoth | Comic Sans MS | DejaVu Sans | Salem | Noto Sans Pahawh Hmong | Noto Sans Ugaritic | Noto Sans Lao | Noto Sans Marchen | C059 | Noto Sans Cherokee | Noto Serif Thai | Liberation Mono | Noto Sans Arabic | Noto Sans Mro | Noto Sans Thai | Noto Sans PhagsPa | Noto Sans Imperial Aramaic | Noto Sans Symbols | Noto Sans Tamil UI | Noto Sans Telugu | Noto Sans Khmer UI | Noto Serif Kannada | Noto Sans Lao | Hor | Noto Sans Kannada UI | Noto Sans Bengali | Noto Sans Adlam Unjoined | Noto Serif Lao | Noto Sans Telugu | Noto Sans Arabic | Noto Serif Hebrew | Noto Serif Gurmukhi | Noto Sans Lao | Noto Sans Meroitic | Noto Serif Khmer | Thabit | Noto Sans Display | Haramain | Linux Biolinum O | Noto Sans Khmer | Linux Libertine Mono | Noto Sans Bengali | Noto Sans Gujarati | Noto Sans Malayalam UI | Noto Sans Cham | AlBattar | Noto Sans Malayalam UI | Noto Sans Lao | Noto Sans Egyptian Hieroglyphs | Noto Sans Kannada UI | Noto Sans Bassa Vah | Jet | Noto Serif Hebrew | Noto Sans Bengali UI | Noto Sans Manichaean | Noto Sans Ethiopic | Noto Sans Indic Siyaq Numbers | Noto Sans Armenian | Noto Sans | Noto Sans Grantha | Noto Sans Arabic UI | Noto Sans Kannada UI | Noto Serif Ethiopic | Noto Sans Armenian | Noto Serif Balinese | Rasheeq | Noto Sans Duployan | Ouhod | Noto Sans Thaana | Noto Serif Ethiopic | Noto Serif Malayalam | Z003 | Noto Sans Symbols | Noto Serif Myanmar | Noto Sans Arabic UI | Noto Sans Bengali UI | Noto Sans Old Italic | KacstPen | Noto Sans Arabic | Noto Serif Armenian | Noto Sans Bengali | Noto Serif Ethiopic | Noto Sans Lisu | Noto Sans Thai | Noto Sans Khmer | Noto Sans Thaana | Noto Sans Kaithi | Noto Serif Hebrew | D050000L | Noto Sans Math | Noto Naskh Arabic UI | KacstDecorative | Linux Biolinum Keyboard O | Noto Sans Tagbanwa | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Myanmar | Noto Serif Ethiopic | Noto Sans Vai | Noto Serif Sinhala | Liberation Serif | Linux Biolinum | Noto Serif Armenian | Ostorah | Noto Sans NKo | Noto Serif Devanagari | Noto Sans Lao | Noto Sans New Tai Lue | Noto Serif Georgian | Amiri Quran Colored | Linux Libertine O | Homa | Noto Sans Syloti Nagri | Noto Sans Ethiopic | Mashq | Noto Serif Malayalam | Noto Serif Devanagari | Noto Sans Sinhala UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Serif Lao | Noto Sans | Noto Serif Khmer | Noto Sans Samaritan | Noto Sans Thaana | Noto Sans Gurmukhi UI | Noto Serif Tamil Slanted | Noto Sans Newa | KacstPoster | Noto Serif Telugu | Noto Sans Carian | Noto Kufi Arabic | Cantarell | Liberation Sans | Nazli | Noto Sans Bamum | Noto Serif Thai | Noto Sans Takri | Noto Serif Tamil Slanted | Noto Sans Nabataean | Noto Sans Hebrew | Noto Serif | Noto Sans Avestan | Noto Serif Myanmar | Noto Sans Cuneiform | Nagham | Noto Serif Hebrew | FreeSans | Noto Sans Kannada | Source Code Variable | Noto Sans Khmer UI | Noto Sans Armenian | Noto Sans Elbasan | Graph | Noto Sans Armenian | Noto Sans Old Turkic | Noto Sans Ethiopic | Georgia | Noto Color Emoji | Noto Sans Limbu | Source Code Pro | Noto Serif Tangut | Noto Sans Myanmar UI | KacstNaskh | Noto Sans Tamil | Noto Sans Sharada | Noto Serif Myanmar | Noto Sans Hebrew | Noto Sans Osmanya | Noto Sans Sinhala UI | Noto Sans Sinhala | Linux Libertine | Noto Serif Hebrew | Noto Serif Display | Noto Sans Palmyrene | Noto Serif Ahom | Noto Serif Kannada | Noto Sans Lycian | Source Code Pro | Noto Sans Yi | Noto Sans Telugu UI | KacstFarsi | Noto Kufi Arabic | Noto Sans Caucasian Albanian | Noto Serif | Noto Sans Mono | Arial | Noto Sans Kannada UI | Noto Sans Georgian | Noto Sans Pau Cin Hau | Noto Sans Saurashtra | Japan | Linux Biolinum Keyboard | Noto Sans Khmer | Noto Sans Old Permic | Noto Sans Sinhala UI | Noto Serif Armenian | Noto Sans Lao UI | Courier New | Noto Sans Warang Citi | Noto Sans Myanmar UI | KacstTitle | P052 | Noto Sans Syriac | Noto Serif Sinhala | Noto Serif Ethiopic | Naqsh | Tarablus | Noto Sans Telugu | Noto Sans Thai UI | Noto Sans Coptic | Noto Sans Gurmukhi | DejaVu Serif | Noto Sans Rejang | Noto Serif Bengali | Noto Sans Gurmukhi | Noto Sans Cherokee | Noto Sans Devanagari | Noto Sans Symbols2 | Mashq | Noto Sans Malayalam | Linux Libertine Display | Noto Serif Devanagari | Noto Serif Khmer | Noto Sans Mono | Noto Serif Display | Noto Sans Thai UI | Khalid | Noto Serif Display | Arab | Noto Serif Telugu | Noto Sans Kannada UI | Noto Serif Tamil | KacstScreen | Noto Nastaliq Urdu | Noto Sans Ethiopic | Noto Sans Cham | Noto Serif Gurmukhi | Noto Serif Tibetan | Impact | Cortoba | Noto Sans Kannada | Noto Serif Telugu | FreeMono | Noto Sans Lao UI | Rehan | Amiri | Noto Sans Kannada | Noto Sans Hebrew | Noto Sans Hanunoo | Noto Sans Inscriptional Pahlavi | Noto Sans Khmer | Thabit | Noto Sans Phoenician | Noto Sans Sundanese | Roya | Noto Serif Tamil | Noto Sans Myanmar | Noto Sans Khudawadi | Noto Serif Display | Noto Sans Cherokee | Noto Sans Mende Kikakui | Ubuntu Arabic | Noto Sans Sinhala |

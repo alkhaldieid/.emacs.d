@@ -346,13 +346,14 @@
 ;; This requires SDCV
  ;; This little function looks in a stardict file for words that look like
  ;; the word under the cursor. I use it when correcting my spelling in french
+(use-package unicode-fonts :ensure t)
 (defun dict-search ()
   (interactive)
   (add-hook 'comint-output-filter-functions 'comint-watch-for-password-prompt)
-  (shell-command (format "export STARDICT_DATA_DIR=/home/trajanus/Documents/Stardict ;sdcv %s | head -5" (thing-at-point 'word))))
+  (shell-command (format "export STARDICT_DATA_DIR=/home/alkhaldieid/Documents/Stardict ;sdcv -0  %s | sed -n 6p" (thing-at-point 'word))))
 
-(define-key evil-normal-state-map (kbd "ç") 'ispell-word)
-(define-key evil-normal-state-map (kbd "Ç") 'dict-search)
+(define-key evil-normal-state-map (kbd "t") 'ispell-word)
+(define-key evil-normal-state-map (kbd "T") 'dict-search)
 
 (use-package deft
   :commands deft
@@ -577,3 +578,5 @@ same directory as the org-buffer and insert a link to this file."
   (setq company-minimum-prefix-length 3
        company-idle-delay 0.05)
 ;;;;;;;;;;;;;
+
+(print (font-family-list))
