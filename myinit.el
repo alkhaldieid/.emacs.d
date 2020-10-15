@@ -146,19 +146,6 @@
   :after treemacs projectile
   :ensure t)
 
-(use-package company
-  :ensure t
-  :config
-  (global-company-mode))
-
-
-(use-package company-quickhelp
-  :after (company)
-  :hook (company-mode . company-quickhelp-mode)
-  :config
-    (setq company-quickhelp-delay 0.5)
-  :ensure t)
-
 (use-package magit
   :ensure t)
 
@@ -167,16 +154,39 @@
   :init
   (global-flycheck-mode t))
 
-(use-package elpy
-  :ensure t
-  :config
-  (elpy-enable))
-
 (use-package auto-complete
   :ensure t
   :config
   (ac-config-default)
 )
+
+(use-package python-mode)
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+
+(use-package py-autopep8)
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopop8-enable-on-save)  
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode))
+  
+(use-package company-quickhelp
+  :after (company)
+  :hook (company-mode . company-quickhelp-mode)
+  :config
+    (setq company-quickhelp-delay 0.5)
+  :ensure t)
 
 (use-package yasnippet
   :ensure t
@@ -198,7 +208,10 @@
 ;; use (evil-leader/set-key to bind keys in the leader map
 
 (evil-leader/set-key
+ "<SPC> " 'helm-M-x
  "ff" 'find-file
+ "fs" 'save-buffer
+
  "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
  ;; buffers
 
@@ -206,6 +219,21 @@
  "bk" 'kill-buffer
  "bp" 'previous-buffer
  "bn" 'next-buffer
+ ;; windows
+ "wl" 'evil-window-right
+ "wh" 'evil-window-left
+ "wk" 'evil-window-up
+ "wj" 'evil-window-down
+ ;; workspaces
+ "lw1" 'eyebrowse-switch-to-window-config-1
+ "lw2" 'eyebrowse-switch-to-window-config-2
+ "lw3" 'eyebrowse-switch-to-window-config-3
+ "lw4" 'eyebrowse-switch-to-window-config-4
+ "lw5" 'eyebrowse-switch-to-window-config-5
+ "lw6" 'eyebrowse-switch-to-window-config-6
+ "lw7" 'eyebrowse-switch-to-window-config-7
+ "lw8" 'eyebrowse-switch-to-window-config-8
+ "lw9" 'eyebrowse-switch-to-window-config-9
  ;; files
  ;; cf files
  "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
@@ -213,6 +241,7 @@
  "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
  "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
  "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+ "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
  ;; zoom-in and out
  "=" 'text-scale-increase
  "-" 'text-scale-decrease
@@ -462,18 +491,6 @@
             org-noter-default-notes-file-name '(concat dropbox_dir "/notes.org")
             org-noter-default-search-path  '(concat dropbox_dir "/mend"))
 
-      ;; (add-to-list 'org-capture-templates
-      ;;             '("P" "Protocol" entry ; key, name, type
-      ;;               (file+headline +org-capture-notes-file "Inbox") ; target
-      ;;               "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?"
-      ;;               :prepend t ; properties
-      ;;               :kill-buffer t))
-      ;; (add-to-list 'org-capture-templates
-      ;;             '("L" "Protocol Link" entry
-      ;;               (file+headline +org-capture-notes-file "Inbox")
-      ;;               "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
-      ;;               :prepend t
-      ;;               :kill-buffer t))
   )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
@@ -514,7 +531,7 @@
       (setq org-latex-pdf-process
             '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
 
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;; My functions ;;;;;;;;;;;;;;;;;;
   (defun my-org-screenshot ()
     "Take a screenshot into a time stamped unique-named file in the

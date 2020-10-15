@@ -53,7 +53,7 @@
  '(describe-char-unidata-list
    '(name old-name general-category canonical-combining-class bidi-class decomposition decimal-digit-value digit-value numeric-value mirrored iso-10646-comment uppercase lowercase))
  '(package-selected-packages
-   '(engine-mode unicode-fonts eyebrowse org-ref helm-company org-noter magit company-quickhelp treemacs-projectile treemacs-evil treemacs helm beacon dracula-theme powerline-evil yasnippet which-key use-package try synosaurus spacemacs-theme org-roam-bibtex evil-leader evil-commentary cyberpunk-theme company-anaconda auto-complete afternoon-theme)))
+   '(company-jedi ein conda better-defaults engine-mode unicode-fonts eyebrowse org-ref helm-company org-noter magit company-quickhelp treemacs-projectile treemacs-evil treemacs helm beacon dracula-theme powerline-evil yasnippet which-key use-package try synosaurus spacemacs-theme org-roam-bibtex evil-leader evil-commentary cyberpunk-theme company-anaconda auto-complete afternoon-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

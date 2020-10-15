@@ -181,25 +181,6 @@
 
 #+RESULTS:
 
-** Company for Auto completion
-#+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :config
-  (global-company-mode))
-
-
-(use-package company-quickhelp
-  :after (company)
-  :hook (company-mode . company-quickhelp-mode)
-  :config
-    (setq company-quickhelp-delay 0.5)
-  :ensure t)
-#+END_SRC
-
-#+RESULTS:
-| company-quickhelp-mode | company-mode-set-explicitly |
-
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
@@ -216,13 +197,6 @@
   (global-flycheck-mode t))
 #+END_SRC
 
-** Elpy
-#+BEGIN_SRC emacs-lisp
-(use-package elpy
-  :ensure t
-  :config
-  (elpy-enable))
-#+END_SRC
 
 ** Auto-Complete
 #+BEGIN_SRC emacs-lisp
@@ -233,6 +207,43 @@
 )
 #+END_SRC
 
+* Python
+** Elpy
+
+#+BEGIN_SRC emacs-lisp
+(use-package python-mode)
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+
+(use-package py-autopep8)
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopop8-enable-on-save)  
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+
+
+#+END_SRC
+** Company for Auto completion
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode))
+  
+(use-package company-quickhelp
+  :after (company)
+  :hook (company-mode . company-quickhelp-mode)
+  :config
+    (setq company-quickhelp-delay 0.5)
+  :ensure t)
+#+END_SRC
 * yasnippet configs
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -268,7 +279,7 @@
  "<SPC> " 'helm-M-x
  "ff" 'find-file
  "fs" 'save-buffer
- 
+
  "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
  ;; buffers
 
@@ -648,7 +659,7 @@ This minor mode for Elisp balances quotes and parenthesis automatically
       (setq org-latex-pdf-process
             '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
 
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;; My functions ;;;;;;;;;;;;;;;;;;
   (defun my-org-screenshot ()
     "Take a screenshot into a time stamped unique-named file in the
@@ -711,7 +722,7 @@ same directory as the org-buffer and insert a link to this file."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (setq company-minimum-prefix-length 3
        company-idle-delay 0.05)
-;;;;;;;;;;;;; 
+;;;;;;;;;;;;;
 
 
 #+END_SRC
