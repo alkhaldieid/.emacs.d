@@ -1,12 +1,81 @@
 ;;; -*- coding: utf-8 -*-
-(("/home/alkhaldieid/.emacs.d/.cache/recentf" . 195)
- ("/home/alkhaldieid/.spacemacs" . 17442)
- ("/home/alkhaldieid/.ihsec/spacemacs/.cache/.custom-settings" . 271)
- ("/home/alkhaldieid/.emacs.d/.cache/layouts/persp-auto-save" . 1472)
- ("/home/alkhaldieid/.ihsec/mybuild/"
-  (dired-filename . "/home/alkhaldieid/.ihsec/mybuild/init.el"))
- ("/home/alkhaldieid/.ihsec/mybuild/init.el" . 1333)
- ("/home/alkhaldieid/.emacs.d/" . 2435)
- ("/home/alkhaldieid/.emacs.d/init.el" . 1926)
- ("/home/alkhaldieid/doing/main_org/main.org" . 10)
- ("/home/alkhaldieid/repos/hosts/updateHostsFile.py" . 43))
+(("/home/alkhaldieid/.spacemacs" . 36632)
+ ("/home/alkhaldieid/.emacs.d/.cache/layouts/persp-auto-save" . 2837)
+ ("/home/alkhaldieid/.emacs.d/.cache/recentf" . 24946)
+ ("/home/alkhaldieid/Dropbox/org/notes/org-mode.org" . 5576)
+ ("/home/alkhaldieid/.orhc-bibtex-cache" . 824789)
+ ("/home/alkhaldieid/repos/cv/"
+  (dired-filename . "/home/alkhaldieid/repos/cv/.."))
+ ("/home/alkhaldieid/repos/"
+  (dired-filename . "/home/alkhaldieid/repos/.."))
+ ("/home/"
+  (dired-filename . "/home/alkhaldieid"))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Cache/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Cache/0a675430f6cb64fe_0"))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/js/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/js/.."))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/wasm/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/wasm/.."))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/Code Cache/.."))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/Default/.."))
+ ("/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/Brave-Browser/.."))
+ ("/home/alkhaldieid/.cache/BraveSoftware/"
+  (dired-filename . "/home/alkhaldieid/.cache/BraveSoftware/.."))
+ ("/home/alkhaldieid/.cache/torbrowser/download/"
+  (dired-filename . "/home/alkhaldieid/.cache/torbrowser/download/.."))
+ ("/home/alkhaldieid/.cache/torbrowser/"
+  (dired-filename . "/home/alkhaldieid/.cache/torbrowser/.."))
+ ("/home/alkhaldieid/.cache/mu/xapian/"
+  (dired-filename . "/home/alkhaldieid/.cache/mu/xapian/.."))
+ ("/home/alkhaldieid/.cache/mu/"
+  (dired-filename . "/home/alkhaldieid/.cache/mu/.."))
+ ("/home/alkhaldieid/.cache/mu/mu.log" . 335673)
+ ("/home/alkhaldieid/.cache/"
+  (dired-filename . "/home/alkhaldieid/.cache/.."))
+ ("/home/alkhaldieid/"
+  (dired-filename . "/home/alkhaldieid/.ihsec"))
+ ("/home/alkhaldieid/.ihsec/"
+  (dired-filename . "/home/alkhaldieid/.ihsec/myb"))
+ ("/home/alkhaldieid/.ihsec/myb/"
+  (dired-filename . "/home/alkhaldieid/.ihsec/myb/myinit.org"))
+ ("/home/alkhaldieid/.ihsec/myb/myinit.org" . 22464)
+ ("/home/alkhaldieid/Dropbox/org/roam/claesen2015.org" . 105)
+ ("/home/alkhaldieid/Dropbox/org/roam/20201019171718-orgmode.org" . 104)
+ ("/home/alkhaldieid/Dropbox/second_final/paper.org" . 242)
+ ("/home/alkhaldieid/Dropbox/org/agenda/research.org" . 5939)
+ ("/home/alkhaldieid/Dropbox/org/roam/daily/2020-12-04.org" . 999)
+ ("/home/alkhaldieid/Dropbox/org/agenda/diet.org" . 4198)
+ ("/home/alkhaldieid/Dropbox/org/roam/2020-10-15.org" . 81)
+ ("/home/alkhaldieid/Downloads/output.org" . 267763)
+ ("/home/alkhaldieid/Downloads/Org Mode - Organize Your Life In Plain Text!.html" . 391211)
+ ("/home/alkhaldieid/Dropbox/org/agenda/routine.org" . 126)
+ ("/home/alkhaldieid/Dropbox/org/agenda/salah.org" . 1278)
+ ("/home/alkhaldieid/Dropbox/org/roam/20201009145734-how_to_write_a_good_academic_paper.org" . 15547)
+ ("/home/alkhaldieid/Dropbox/org/roam/2020-10-27.org" . 622)
+ ("/home/alkhaldieid/Dropbox/org/roam/2020-11-03.org" . 189)
+ ("/home/alkhaldieid/Dropbox/org/roam/2020-11-08.org" . 620)
+ ("/home/alkhaldieid/Dropbox/shared/elfeeddb/index" . 630)
+ ("/home/alkhaldieid/Dropbox/.spacemacs" . 61930)
+ ("/home/alkhaldieid/Dropbox/mend/library.bib" . 329171)
+ ("/home/alkhaldieid/Dropbox/org/roam/daily/2020-12-11.org" . 19)
+ ("/home/alkhaldieid/Dropbox/second_final/ieee/ieee/open.tex" . 354)
+ ("/home/alkhaldieid/Dropbox/org/roam/daily/2020-12-10.org" . 21)
+ ("/home/alkhaldieid/repos/cv/cv.tex" . 8115)
+ ("/home/alkhaldieid/repos/salahorg/salah.py" . 4630)
+ ("/home/alkhaldieid/Dropbox/org/agenda/newpaperideas.org" . 19)
+ ("/home/alkhaldieid/repos/salahorg/data/Toledo Prayer Times.csv" . 1167)
+ ("/home/alkhaldieid/repos/salahorg/data/2020_12.csv" . 124)
+ ("/home/alkhaldieid/Dropbox/second_final/"
+  (dired-filename . "/home/alkhaldieid/Dropbox/second_final/ieee"))
+ ("/home/alkhaldieid/Dropbox/second_final/ieee/"
+  (dired-filename . "/home/alkhaldieid/Dropbox/second_final/ieee/ieee"))
+ ("/home/alkhaldieid/Dropbox/second_final/ieee/ieee/"
+  (dired-filename . "/home/alkhaldieid/Dropbox/second_final/ieee/ieee/open.tex"))
+ ("/home/alkhaldieid/Dropbox/"
+  (dired-filename . "/home/alkhaldieid/Dropbox/second_final"))
+ ("/home/alkhaldieid/.mbsyncrc" . 1112)
+ ("/home/alkhaldieid/Dropbox/second_final/revisions/"
+  (dired-filename . "/home/alkhaldieid/Dropbox/second_final/revisions/..")))
