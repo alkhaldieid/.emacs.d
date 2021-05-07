@@ -26,6 +26,91 @@
 ;;(set-default-font "Ubuntu Mono-25")
 (global-visual-line-mode t)
 
+(use-package org-superstar  ;; Improved version of org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(setq org-startup-indented t)           ;; Indent according to section
+(setq org-startup-with-inline-images t) ;; Display images in-buffer by default
+
+(use-package evil-org
+  :ensure t
+  :after (evil org)
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional calendar))))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(use-package org-projectile
+:ensure t)       
+(setq org-agenda-custom-commands
+   '(("h" "Daily habits"
+      ((agenda ""))
+      ((org-agenda-show-log t)
+       (org-agenda-ndays 7)
+       (org-agenda-log-mode-items '(state))
+       (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))))))
+(setq org-todo-keywords
+    (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
+
+(setq org-todo-keyword-faces
+    (quote (("TODO" :foreground "red" :weight bold)
+            ("NEXT" :foreground "blue" :weight bold)
+            ("DONE" :foreground "forest green" :weight bold)
+            ("TBC" :foreground "forest green" :weight bold)
+            ("WAITING" :foreground "orange" :weight bold)
+            ("HOLD" :foreground "magenta" :weight bold)
+            ("CANCELLED" :foreground "forest green" :weight bold)
+            ("email" :foreground "forest green" :weight bold)
+            ("PHONE" :foreground "forest green" :weight bold))))
+(setq org-use-fast-todo-selection t)
+
+;; capturing templates
+(setq org-capture-templates
+    '(("n" "New Idea" entry (file "~/Dropbox/org/agenda/newpaperideas.org")
+        "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+    ("f" "Fancy" entry (file "~/Dropbox/org/roam/20201017010543-fancy.org")
+        "* %? :fancy: \n%t" :clock-in nil :clock-resume nil)
+    ("p" "research" entry (file "~/Dropbox/org/agenda/research.org")
+        "* %? :research:todo: \n%t" :clock-in nil :clock-resume nil)
+    ("a" "alias" entry (file "~/.config/aliasrc")
+        "* %? \n" )
+    ("c" "coding goal" entry (file "~/Dropbox/org/agenda/coding.org")
+        "* %? :goal: \n%t" :clock-in nil :clock-resume nil)
+    ("t" "TODO item" entry (file "~/Dropbox/org/agenda/TODOs.org")
+        "* %? :goal: \n%t" :clock-in nil :clock-resume nil)
+    ("r" "to be refiled" entry (file "~/Dropbox/org/agenda/refile.org")
+        "* %? :misc: \n%t" :clock-in nil :clock-resume nil)))
+(global-set-key (kbd "<f5>") 'org-capture)
+(global-set-key (kbd "<f12>") 'org-agenda)
+
+
+;; The following setting is different from the document so that you
+;; can override the document org-agenda-files by setting your
+;; org-agenda-files in the variable org-user-agenda-files
+;;
+(if (boundp 'org-user-agenda-files)
+    (setq org-agenda-files org-user-agenda-files)
+(setq org-agenda-files (quote ("~/Dropbox/org/roam/daily"
+                                "~/Dropbox/org/agenda/"
+                                ))))
+
+(with-eval-after-load 'org-agenda
+(require 'org-projectile)
+(mapcar #'(lambda (file)
+            (when (file-exists-p file)
+                (push file org-agenda-files)))
+        (org-projectile-todo-files)))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
 (use-package powerline-evil
   :ensure t)
 (powerline-evil-vim-theme)
@@ -160,6 +245,10 @@
   (ac-config-default)
 )
 
+(use-package evil-nerd-commenter
+  :ensure t
+)
+
 (use-package python-mode)
 
 (use-package elpy
@@ -209,10 +298,11 @@
 
 (evil-leader/set-key
  "<SPC> " 'helm-M-x
- "ff" 'find-file
  "fs" 'save-buffer
+ "ff" 'find-file
 
- "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
+
+ "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
  ;; buffers
 
  "bb" 'switch-to-buffer
@@ -224,6 +314,10 @@
  "wh" 'evil-window-left
  "wk" 'evil-window-up
  "wj" 'evil-window-down
+ "wd" 'evil-window-delete
+ "wv" 'evil-window-vsplit
+ "ws" 'evil-window-split
+
  ;; workspaces
  "lw1" 'eyebrowse-switch-to-window-config-1
  "lw2" 'eyebrowse-switch-to-window-config-2
@@ -242,9 +336,21 @@
  "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
  "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
  "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+
+ ;; evil-nerd-commenter
+ "ci" 'evilnc-comment-or-uncomment-lines
+ "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+ "cc" 'evilnc-copy-and-comment-lines
+ "cp" 'evilnc-comment-or-uncomment-paragraphs
+ "cr" 'comment-or-uncomment-region
+ "cv" 'evilnc-toggle-invert-comment-line-by-line
+ "."  'evilnc-copy-and-comment-operator
+ "//" 'evilnc-comment-operator ; if you prefer backslash key
+
  ;; zoom-in and out
  "=" 'text-scale-increase
  "-" 'text-scale-decrease
+
  ;; org roam
  "nl" 'org-roam
  "nf" 'org-roam-find-file
@@ -263,37 +369,6 @@
  ;; evil-commentry
 ;; ";" evil-commentry-line
  )
-
-(use-package org-superstar  ;; Improved version of org-bullets
-  :ensure t
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-(setq org-startup-indented t)           ;; Indent according to section
-(setq org-startup-with-inline-images t) ;; Display images in-buffer by default
-
-(use-package evil-org
-  :ensure t
-  :after (evil org)
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects additional calendar))))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-
-(setq org-agenda-custom-commands
-   '(("h" "Daily habits"
-      ((agenda ""))
-      ((org-agenda-show-log t)
-       (org-agenda-ndays 7)
-       (org-agenda-log-mode-items '(state))
-       (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))))))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)))
 
 (use-package paredit
   :ensure t)
@@ -340,11 +415,11 @@
 "Preamble:"
 "#+STARTUP: showeverything\n"
 "#+TITLE: TITLE\n"
-"#+AUTHOR: Matheus Augusto da Silva\n"
+"#+AUTHOR: Eid Alkhaldi\n"
 "#+DATE: \\today\n"
 "#+LATEX_CLASS: article\n"
 "#+LATEX_CLASS_OPTIONS: [a4paper]\n"
-"#+LATEX_HEADER: \\input{/home/trajanus/Documents/LaTeX/articleheader.tex}\n"
+"#+LATEX_HEADER: \\input{/home/alkhaldieid/Dropbox/LaTeX/articleheader.tex}\n"
 "#+STARTUP: showeverything\n"
 "#+OPTIONS: toc:nil\n")
 
@@ -553,10 +628,6 @@ same directory as the org-buffer and insert a link to this file."
 ;;;;;;;;;;;;;;; Organizational stuff ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; following this guy
-  (setq org-agenda-files (list org_notes))
-                           ;; (concat agenda_dir "/personal.org")
-                           ;; (concat agenda_dir "/coding.org")
-                           ;; )
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
@@ -596,4 +667,33 @@ same directory as the org-buffer and insert a link to this file."
        company-idle-delay 0.05)
 ;;;;;;;;;;;;;
 
-(print (font-family-list))
+; https://cestlaz.github.io/posts/using-emacs-24-capture-2/
+; Bind Key to: emacsclient -ne "(make-capture-frame)"
+
+(defadvice org-capture-finalize 
+    (after delete-capture-frame activate)
+  "Advise capture-finalize to close the frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(defadvice org-capture-destroy
+    (after delete-capture-frame activate)
+  "Advise capture-destroy to close the frame"
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(use-package noflet
+   :ensure t )
+(defun make-capture-frame ()
+  "Create a new frame and run org-capture."
+  (interactive)
+  (make-frame '((name . "capture")))
+  (select-frame-by-name "capture")
+  (delete-other-windows)
+  (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+          (org-capture)))
+
+(add-to-list 'load-path "~/repos/org-reveal/")
+
+   
+(setq org-reveal-root "file:///home/alkhaldieid/repos/reveal.js")

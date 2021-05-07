@@ -35,6 +35,110 @@
 #+RESULTS:
 : t
 
+* Org Mode Stuff
+** Aesthetics, customizations
+#+BEGIN_SRC emacs-lisp
+  (use-package org-superstar  ;; Improved version of org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+  (setq org-startup-indented t)           ;; Indent according to section
+  (setq org-startup-with-inline-images t) ;; Display images in-buffer by default
+#+END_SRC
+
+** Evil-org for evil-mode integration
+This is very fancy, it treats org-mode elements (i.e. sections, source blocks, tables)
+as regular text objects ( 'ae' object ). Additionally, it allows reordering stuff using
+M-j, M-k, M-l and M-h instead of the regular M-<arrow keys>.
+Operators that deal with indentation ( < and > ) also indent headers.
+#+BEGIN_SRC emacs-lisp
+(use-package evil-org
+  :ensure t
+  :after (evil org)
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(navigation insert textobjects additional calendar))))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+#+END_SRC
+
+** Org-agenda
+#+BEGIN_SRC emacs-lisp
+(use-package org-projectile
+:ensure t)       
+(setq org-agenda-custom-commands
+   '(("h" "Daily habits"
+      ((agenda ""))
+      ((org-agenda-show-log t)
+       (org-agenda-ndays 7)
+       (org-agenda-log-mode-items '(state))
+       (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))))))
+(setq org-todo-keywords
+    (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+            (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
+
+(setq org-todo-keyword-faces
+    (quote (("TODO" :foreground "red" :weight bold)
+            ("NEXT" :foreground "blue" :weight bold)
+            ("DONE" :foreground "forest green" :weight bold)
+            ("TBC" :foreground "forest green" :weight bold)
+            ("WAITING" :foreground "orange" :weight bold)
+            ("HOLD" :foreground "magenta" :weight bold)
+            ("CANCELLED" :foreground "forest green" :weight bold)
+            ("email" :foreground "forest green" :weight bold)
+            ("PHONE" :foreground "forest green" :weight bold))))
+(setq org-use-fast-todo-selection t)
+
+;; capturing templates
+(setq org-capture-templates
+    '(("n" "New Idea" entry (file "~/Dropbox/org/agenda/newpaperideas.org")
+        "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+    ("f" "Fancy" entry (file "~/Dropbox/org/roam/20201017010543-fancy.org")
+        "* %? :fancy: \n%t" :clock-in nil :clock-resume nil)
+    ("p" "research" entry (file "~/Dropbox/org/agenda/research.org")
+        "* %? :research:todo: \n%t" :clock-in nil :clock-resume nil)
+    ("a" "alias" entry (file "~/.config/aliasrc")
+        "* %? \n" )
+    ("c" "coding goal" entry (file "~/Dropbox/org/agenda/coding.org")
+        "* %? :goal: \n%t" :clock-in nil :clock-resume nil)
+    ("t" "TODO item" entry (file "~/Dropbox/org/agenda/TODOs.org")
+        "* %? :goal: \n%t" :clock-in nil :clock-resume nil)
+    ("r" "to be refiled" entry (file "~/Dropbox/org/agenda/refile.org")
+        "* %? :misc: \n%t" :clock-in nil :clock-resume nil)))
+(global-set-key (kbd "<f5>") 'org-capture)
+(global-set-key (kbd "<f12>") 'org-agenda)
+
+
+;; The following setting is different from the document so that you
+;; can override the document org-agenda-files by setting your
+;; org-agenda-files in the variable org-user-agenda-files
+;;
+(if (boundp 'org-user-agenda-files)
+    (setq org-agenda-files org-user-agenda-files)
+(setq org-agenda-files (quote ("~/Dropbox/org/roam/daily"
+                                "~/Dropbox/org/agenda/"
+                                ))))
+
+(with-eval-after-load 'org-agenda
+(require 'org-projectile)
+(mapcar #'(lambda (file)
+            (when (file-exists-p file)
+                (push file org-agenda-files)))
+        (org-projectile-todo-files)))
+#+END_SRC
+
+#+RESULTS:
+
+** Org-babel
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+#+END_SRC
+
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
 (use-package powerline-evil
@@ -69,7 +173,7 @@
 #+RESULTS:
 : t
 
-* Packages
+* MISC Packages
 ** Try
 #+BEGIN_SRC emacs-lisp
 (use-package try
@@ -197,7 +301,6 @@
   (global-flycheck-mode t))
 #+END_SRC
 
-
 ** Auto-Complete
 #+BEGIN_SRC emacs-lisp
 (use-package auto-complete
@@ -207,6 +310,12 @@
 )
 #+END_SRC
 
+** evil-nerd-commentor
+#+BEGIN_SRC emacs-lisp
+(use-package evil-nerd-commenter
+  :ensure t
+)
+#+END_SRC
 * Python
 ** Elpy
 
@@ -271,117 +380,86 @@
 * Evil Leader Keybindings
 #+BEGIN_SRC emacs-lisp
 
-;; set the leader key
-(evil-leader/set-leader "<SPC>")
-;; use (evil-leader/set-key to bind keys in the leader map
+  ;; set the leader key
+  (evil-leader/set-leader "<SPC>")
+  ;; use (evil-leader/set-key to bind keys in the leader map
 
-(evil-leader/set-key
- "<SPC> " 'helm-M-x
- "ff" 'find-file
- "fs" 'save-buffer
+  (evil-leader/set-key
+   "<SPC> " 'helm-M-x
+   "fs" 'save-buffer
+   "ff" 'find-file
+ 
 
- "d"'(lambda() (interactive) (find-file "~/Dropbox/second"))
- ;; buffers
+   "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
+   ;; buffers
 
- "bb" 'switch-to-buffer
- "bk" 'kill-buffer
- "bp" 'previous-buffer
- "bn" 'next-buffer
- ;; windows
- "wl" 'evil-window-right
- "wh" 'evil-window-left
- "wk" 'evil-window-up
- "wj" 'evil-window-down
- ;; workspaces
- "lw1" 'eyebrowse-switch-to-window-config-1
- "lw2" 'eyebrowse-switch-to-window-config-2
- "lw3" 'eyebrowse-switch-to-window-config-3
- "lw4" 'eyebrowse-switch-to-window-config-4
- "lw5" 'eyebrowse-switch-to-window-config-5
- "lw6" 'eyebrowse-switch-to-window-config-6
- "lw7" 'eyebrowse-switch-to-window-config-7
- "lw8" 'eyebrowse-switch-to-window-config-8
- "lw9" 'eyebrowse-switch-to-window-config-9
- ;; files
- ;; cf files
- "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
- "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
- "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
- "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
- "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
- "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
- ;; zoom-in and out
- "=" 'text-scale-increase
- "-" 'text-scale-decrease
- ;; org roam
- "nl" 'org-roam
- "nf" 'org-roam-find-file
- "ng" 'org-roam-show-graph
- "ni" 'org-roam-insert
- ;; org-roam-bibtex
- "na" 'orb-note-actions
- ;; syn layer  keybindings
- "ss" 'synonyms
- "sl" 'synosaurus-lookup
- "sr" 'synosaurus-choose-and-replace
- "si" 'synosaurus-choose-and-insert
- ;; org-recoll keys
- "ps" 'org-recoll-search
- "pu" 'org-recoll-update-index
- ;; evil-commentry
-;; ";" evil-commentry-line
- )
+   "bb" 'switch-to-buffer
+   "bk" 'kill-buffer
+   "bp" 'previous-buffer
+   "bn" 'next-buffer
+   ;; windows
+   "wl" 'evil-window-right
+   "wh" 'evil-window-left
+   "wk" 'evil-window-up
+   "wj" 'evil-window-down
+   "wd" 'evil-window-delete
+   "wv" 'evil-window-vsplit
+   "ws" 'evil-window-split
+ 
+   ;; workspaces
+   "lw1" 'eyebrowse-switch-to-window-config-1
+   "lw2" 'eyebrowse-switch-to-window-config-2
+   "lw3" 'eyebrowse-switch-to-window-config-3
+   "lw4" 'eyebrowse-switch-to-window-config-4
+   "lw5" 'eyebrowse-switch-to-window-config-5
+   "lw6" 'eyebrowse-switch-to-window-config-6
+   "lw7" 'eyebrowse-switch-to-window-config-7
+   "lw8" 'eyebrowse-switch-to-window-config-8
+   "lw9" 'eyebrowse-switch-to-window-config-9
+   ;; files
+   ;; cf files
+   "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
+   "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+   "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+   "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+   "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+   "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+   
+   ;; evil-nerd-commenter
+   "ci" 'evilnc-comment-or-uncomment-lines
+   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+   "cc" 'evilnc-copy-and-comment-lines
+   "cp" 'evilnc-comment-or-uncomment-paragraphs
+   "cr" 'comment-or-uncomment-region
+   "cv" 'evilnc-toggle-invert-comment-line-by-line
+   "."  'evilnc-copy-and-comment-operator
+   "//" 'evilnc-comment-operator ; if you prefer backslash key
+   
+   ;; zoom-in and out
+   "=" 'text-scale-increase
+   "-" 'text-scale-decrease
+   
+   ;; org roam
+   "nl" 'org-roam
+   "nf" 'org-roam-find-file
+   "ng" 'org-roam-show-graph
+   "ni" 'org-roam-insert
+   ;; org-roam-bibtex
+   "na" 'orb-note-actions
+   ;; syn layer  keybindings
+   "ss" 'synonyms
+   "sl" 'synosaurus-lookup
+   "sr" 'synosaurus-choose-and-replace
+   "si" 'synosaurus-choose-and-insert
+   ;; org-recoll keys
+   "ps" 'org-recoll-search
+   "pu" 'org-recoll-update-index
+   ;; evil-commentry
+  ;; ";" evil-commentry-line
+   )
  #+END_SRC
 
  #+RESULTS:
-
-* Org Mode Stuff
-** Aesthetics, customizations
-#+BEGIN_SRC emacs-lisp
-  (use-package org-superstar  ;; Improved version of org-bullets
-    :ensure t
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-  (setq org-startup-indented t)           ;; Indent according to section
-  (setq org-startup-with-inline-images t) ;; Display images in-buffer by default
-#+END_SRC
-
-** Evil-org for evil-mode integration
-This is very fancy, it treats org-mode elements (i.e. sections, source blocks, tables)
-as regular text objects ( 'ae' object ). Additionally, it allows reordering stuff using
-M-j, M-k, M-l and M-h instead of the regular M-<arrow keys>.
-Operators that deal with indentation ( < and > ) also indent headers.
-#+BEGIN_SRC emacs-lisp
-(use-package evil-org
-  :ensure t
-  :after (evil org)
-  :config
-  (add-hook 'org-mode-hook 'evil-org-mode)
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme '(navigation insert textobjects additional calendar))))
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
-#+END_SRC
-
-** Org-agenda
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-custom-commands
-   '(("h" "Daily habits"
-      ((agenda ""))
-      ((org-agenda-show-log t)
-       (org-agenda-ndays 7)
-       (org-agenda-log-mode-items '(state))
-       (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))))))
-#+END_SRC
-
-** Org-babel
-#+BEGIN_SRC emacs-lisp
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((python . t)))
-#+END_SRC
 
 * Elisp Stuff
 ** ParEdit mode
@@ -441,11 +519,11 @@ This minor mode for Elisp balances quotes and parenthesis automatically
 "Preamble:"
 "#+STARTUP: showeverything\n"
 "#+TITLE: TITLE\n"
-"#+AUTHOR: Matheus Augusto da Silva\n"
+"#+AUTHOR: Eid Alkhaldi\n"
 "#+DATE: \\today\n"
 "#+LATEX_CLASS: article\n"
 "#+LATEX_CLASS_OPTIONS: [a4paper]\n"
-"#+LATEX_HEADER: \\input{/home/trajanus/Documents/LaTeX/articleheader.tex}\n"
+"#+LATEX_HEADER: \\input{/home/alkhaldieid/Dropbox/LaTeX/articleheader.tex}\n"
 "#+STARTUP: showeverything\n"
 "#+OPTIONS: toc:nil\n")
 #+END_SRC
@@ -537,7 +615,6 @@ This minor mode for Elisp balances quotes and parenthesis automatically
 #+RESULTS:
 
 * org stuff
-
 ** setting variables
 #+BEGIN_SRC emacs-lisp
 (setq
@@ -681,10 +758,6 @@ same directory as the org-buffer and insert a link to this file."
 ;;;;;;;;;;;;;;; Organizational stuff ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; following this guy
-  (setq org-agenda-files (list org_notes))
-                           ;; (concat agenda_dir "/personal.org")
-                           ;; (concat agenda_dir "/coding.org")
-                           ;; )
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
                 (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
@@ -726,10 +799,56 @@ same directory as the org-buffer and insert a link to this file."
 
 
 #+END_SRC
-* testing emacs-lisp
+
+#+RESULTS:
+: 0.05
+
+* org-capture
 #+BEGIN_SRC emacs-lisp
-(print (font-family-list))
+
+ ; https://cestlaz.github.io/posts/using-emacs-24-capture-2/
+ ; Bind Key to: emacsclient -ne "(make-capture-frame)"
+ 
+ (defadvice org-capture-finalize 
+     (after delete-capture-frame activate)
+   "Advise capture-finalize to close the frame"
+   (if (equal "capture" (frame-parameter nil 'name))
+       (delete-frame)))
+ 
+ (defadvice org-capture-destroy
+     (after delete-capture-frame activate)
+   "Advise capture-destroy to close the frame"
+   (if (equal "capture" (frame-parameter nil 'name))
+       (delete-frame)))
+
+ (use-package noflet
+    :ensure t )
+ (defun make-capture-frame ()
+   "Create a new frame and run org-capture."
+   (interactive)
+   (make-frame '((name . "capture")))
+   (select-frame-by-name "capture")
+   (delete-other-windows)
+   (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+           (org-capture)))
 #+END_SRC
 
 #+RESULTS:
-| Noto Sans Canadian Aboriginal | Noto Sans Devanagari UI | Noto Sans Gurmukhi | Noto Sans Tamil | Noto Sans Devanagari | Noto Sans Display | Noto Sans Arabic | Noto Sans Canadian Aboriginal | Noto Serif Bengali | Noto Sans Bengali | Noto Sans Malayalam | Sharjah | Noto Sans Canadian Aboriginal | Standard Symbols PS | Noto Sans Gurmukhi | Noto Sans Hebrew | Noto Sans Lepcha | Terafik | Noto Sans Kannada | Noto Sans Thaana | Noto Serif Devanagari | Noto Sans Myanmar | Noto Sans Ogham | Noto Serif Tamil | Noto Sans Devanagari | Noto Sans Devanagari | Noto Sans Thai | Noto Sans Canadian Aboriginal | Noto Serif Dogra | Noto Sans Tamil | Noto Serif Bengali | Noto Sans Display | Noto Sans Thai UI | DejaVu Math TeX Gyre | Noto Sans Devanagari UI | URW Gothic | Noto Sans Buginese | Noto Sans Devanagari UI | Noto Sans Tai Le | Noto Sans Devanagari | Noto Sans Devanagari UI | Noto Sans Anatolian Hieroglyphs | AlHor | Sindbad | Noto Naskh Arabic | Essays1743 | Noto Serif | Noto Sans Kayah Li | Noto Serif Khmer | Noto Sans Tai Tham | Noto Sans Display | Noto Sans Symbols | AlArabiya | Noto Sans Tifinagh | Noto Sans Psalter Pahlavi | Noto Serif Sinhala | Noto Serif Malayalam | Noto Sans Thaana | Electron | Noto Serif Tamil | Linux Libertine Mono O | Noto Music | Noto Serif Malayalam | Noto Sans Gurmukhi UI | Andale Mono | Noto Sans Sinhala | Noto Sans Cherokee | Noto Sans Mongolian | Trebuchet MS | Noto Serif Kannada | Noto Sans Sinhala | Noto Sans Old South Arabian | Noto Serif Gurmukhi | AlYarmook | Noto Sans Brahmi | Noto Sans Bengali UI | Noto Serif Lao | Noto Sans Adlam | Noto Sans Tamil Supplement | Nimbus Roman | Titr | Noto Sans Chakma | Noto Sans Tirhuta | Elham | Noto Sans Malayalam | Webdings | Noto Sans Canadian Aboriginal | Noto Serif Gujarati | Noto Sans Cherokee | Noto Sans Tamil UI | KacstQurn | Noto Serif Sinhala | Noto Sans Thai UI | Linux Libertine Display O | Source Code Pro | Gentium Plus | Noto Sans Javanese | Noto Serif Thai | Noto Sans Telugu | Noto Sans Syriac | Noto Sans Lao UI | Noto Serif Lao | Noto Sans Multani | Noto Sans Myanmar UI | DejaVu Sans Mono | Arial Black | Noto Sans Shavian | Noto Sans Telugu UI | Mothanna | Noto Serif Georgian | Noto Serif Kannada | Noto Sans Oriya UI | Noto Sans Malayalam UI | KacstBook | KacstLetter | Kayrawan | Noto Serif Georgian | Noto Serif Georgian | Noto Sans Mandaic | Noto Sans Bengali | Cantarell | Noto Sans Telugu UI | Noto Sans Sinhala UI | Verdana | Mothanna | Noto Sans Kharoshthi | Noto Serif Georgian | KacstDigital | AlManzomah | Noto Sans Tamil | KacstTitleL | Noto Sans Old Sogdian | Noto Serif Gujarati | Thabit | Noto Serif Gujarati | Noto Sans Myanmar | Noto Sans Sinhala UI | Noto Sans Old Persian | Mothanna | Noto Sans Tamil UI | Noto Sans Old Hungarian | Koodak | Noto Sans Cham | Nada | Noto Sans Telugu UI | Noto Sans Gurmukhi | Linux Libertine Initials | Noto Serif Gurmukhi | Noto Sans Arabic UI | Noto Serif Lao | Noto Serif Bengali | Noto Sans Bhaiksuki | Noto Sans Thai UI | Noto Sans Tamil UI | Cantarell | Noto Sans Deseret | Noto Sans Runic | Cantarell | Noto Serif Kannada | Nimbus Sans | Gentium Plus Compact | Thabit | Noto Serif Devanagari | Noto Sans Gurmukhi UI | Noto Sans Hebrew | Noto Sans Khojki | Noto Sans Buhid | Noto Sans Armenian | Noto Serif Telugu | Noto Sans Devanagari UI | Noto Serif Telugu | Noto Sans Malayalam UI | Metal | Noto Sans Sinhala | Noto Serif Display | Noto Sans Malayalam UI | Noto Serif Tamil Slanted | Noto Sans Tai Viet | Noto Sans Kannada | Noto Sans Hanifi Rohingya | Noto Serif Tibetan | Noto Sans Khmer UI | Noto Sans | Noto Sans | Noto Sans Inscriptional Parthian | Noto Serif Khmer | Source Code Pro | Amiri Quran | Noto Sans Ethiopic | Noto Sans Mayan Numerals | Noto Sans Lao UI | Noto Sans Georgian | FreeSerif | Linux Libertine Initials O | Times New Roman | Nimbus Mono PS | Granada | Noto Sans Hatran | Noto Serif Sinhala | Noto Kufi Arabic | Noto Sans Telugu UI | Noto Sans Bengali UI | Noto Sans Tagalog | Noto Sans Georgian | Noto Serif Tamil Slanted | Noto Sans Malayalam | Noto Sans Syriac | Noto Serif Myanmar | Noto Sans Osage | Noto Sans Gurmukhi UI | Noto Sans Thai | DejaVu Sans | Noto Sans Tamil | Noto Sans Batak | KacstOffice | Noto Sans Glagolitic | Nesf2 | Petra | Noto Sans Malayalam | Nice | Nimbus Sans Narrow | Noto Sans Khmer UI | Noto Serif Myanmar | Noto Sans Myanmar UI | Noto Sans Old North Arabian | Noto Sans Cham | Noto Sans Oriya | URW Bookman | Source Code Pro | Noto Sans Khmer | Noto Serif Gurmukhi | Noto Sans Thai | Furat | Noto Sans Georgian | Noto Serif Malayalam | Noto Sans Mahajani | DejaVu Sans | Noto Sans Telugu | Noto Sans | Noto Serif | Noto Serif Tamil Slanted | DejaVu Serif | Noto Sans Linear A | Noto Sans Linear B | Noto Sans Bengali UI | Noto Serif Thai | Noto Sans Cham | Noto Sans Gothic | Dimnah | KacstArt | Noto Sans Lydian | Noto Serif Tibetan | Noto Serif Gujarati | Shado | Noto Sans Tibetan | Noto Sans Siddham | Noto Sans Mono | Noto Sans Myanmar UI | Noto Sans Ol Chiki | Noto Sans Display | Noto Sans Georgian | Noto Sans Tamil UI | Noto Sans Mono | Noto Sans Mono | Noto Serif | Noto Serif Bengali | Noto Sans Arabic | Noto Sans Modi | Source Code Pro | Noto Sans Lao UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Sans Sora Sompeng | Noto Sans Myanmar | Noto Sans Khmer UI | Noto Sans Meetei Mayek | Noto Sans Gujarati UI | Hani | Noto Sans Cypriot | KacstOne | Noto Serif Thai | Noto Serif Tamil | Noto Serif Gujarati | Noto Sans Miao | Noto Sans Gurmukhi UI | Tholoth | Comic Sans MS | DejaVu Sans | Salem | Noto Sans Pahawh Hmong | Noto Sans Ugaritic | Noto Sans Lao | Noto Sans Marchen | C059 | Noto Sans Cherokee | Noto Serif Thai | Liberation Mono | Noto Sans Arabic | Noto Sans Mro | Noto Sans Thai | Noto Sans PhagsPa | Noto Sans Imperial Aramaic | Noto Sans Symbols | Noto Sans Tamil UI | Noto Sans Telugu | Noto Sans Khmer UI | Noto Serif Kannada | Noto Sans Lao | Hor | Noto Sans Kannada UI | Noto Sans Bengali | Noto Sans Adlam Unjoined | Noto Serif Lao | Noto Sans Telugu | Noto Sans Arabic | Noto Serif Hebrew | Noto Serif Gurmukhi | Noto Sans Lao | Noto Sans Meroitic | Noto Serif Khmer | Thabit | Noto Sans Display | Haramain | Linux Biolinum O | Noto Sans Khmer | Linux Libertine Mono | Noto Sans Bengali | Noto Sans Gujarati | Noto Sans Malayalam UI | Noto Sans Cham | AlBattar | Noto Sans Malayalam UI | Noto Sans Lao | Noto Sans Egyptian Hieroglyphs | Noto Sans Kannada UI | Noto Sans Bassa Vah | Jet | Noto Serif Hebrew | Noto Sans Bengali UI | Noto Sans Manichaean | Noto Sans Ethiopic | Noto Sans Indic Siyaq Numbers | Noto Sans Armenian | Noto Sans | Noto Sans Grantha | Noto Sans Arabic UI | Noto Sans Kannada UI | Noto Serif Ethiopic | Noto Sans Armenian | Noto Serif Balinese | Rasheeq | Noto Sans Duployan | Ouhod | Noto Sans Thaana | Noto Serif Ethiopic | Noto Serif Malayalam | Z003 | Noto Sans Symbols | Noto Serif Myanmar | Noto Sans Arabic UI | Noto Sans Bengali UI | Noto Sans Old Italic | KacstPen | Noto Sans Arabic | Noto Serif Armenian | Noto Sans Bengali | Noto Serif Ethiopic | Noto Sans Lisu | Noto Sans Thai | Noto Sans Khmer | Noto Sans Thaana | Noto Sans Kaithi | Noto Serif Hebrew | D050000L | Noto Sans Math | Noto Naskh Arabic UI | KacstDecorative | Linux Biolinum Keyboard O | Noto Sans Tagbanwa | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Myanmar | Noto Serif Ethiopic | Noto Sans Vai | Noto Serif Sinhala | Liberation Serif | Linux Biolinum | Noto Serif Armenian | Ostorah | Noto Sans NKo | Noto Serif Devanagari | Noto Sans Lao | Noto Sans New Tai Lue | Noto Serif Georgian | Amiri Quran Colored | Linux Libertine O | Homa | Noto Sans Syloti Nagri | Noto Sans Ethiopic | Mashq | Noto Serif Malayalam | Noto Serif Devanagari | Noto Sans Sinhala UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Serif Lao | Noto Sans | Noto Serif Khmer | Noto Sans Samaritan | Noto Sans Thaana | Noto Sans Gurmukhi UI | Noto Serif Tamil Slanted | Noto Sans Newa | KacstPoster | Noto Serif Telugu | Noto Sans Carian | Noto Kufi Arabic | Cantarell | Liberation Sans | Nazli | Noto Sans Bamum | Noto Serif Thai | Noto Sans Takri | Noto Serif Tamil Slanted | Noto Sans Nabataean | Noto Sans Hebrew | Noto Serif | Noto Sans Avestan | Noto Serif Myanmar | Noto Sans Cuneiform | Nagham | Noto Serif Hebrew | FreeSans | Noto Sans Kannada | Source Code Variable | Noto Sans Khmer UI | Noto Sans Armenian | Noto Sans Elbasan | Graph | Noto Sans Armenian | Noto Sans Old Turkic | Noto Sans Ethiopic | Georgia | Noto Color Emoji | Noto Sans Limbu | Source Code Pro | Noto Serif Tangut | Noto Sans Myanmar UI | KacstNaskh | Noto Sans Tamil | Noto Sans Sharada | Noto Serif Myanmar | Noto Sans Hebrew | Noto Sans Osmanya | Noto Sans Sinhala UI | Noto Sans Sinhala | Linux Libertine | Noto Serif Hebrew | Noto Serif Display | Noto Sans Palmyrene | Noto Serif Ahom | Noto Serif Kannada | Noto Sans Lycian | Source Code Pro | Noto Sans Yi | Noto Sans Telugu UI | KacstFarsi | Noto Kufi Arabic | Noto Sans Caucasian Albanian | Noto Serif | Noto Sans Mono | Arial | Noto Sans Kannada UI | Noto Sans Georgian | Noto Sans Pau Cin Hau | Noto Sans Saurashtra | Japan | Linux Biolinum Keyboard | Noto Sans Khmer | Noto Sans Old Permic | Noto Sans Sinhala UI | Noto Serif Armenian | Noto Sans Lao UI | Courier New | Noto Sans Warang Citi | Noto Sans Myanmar UI | KacstTitle | P052 | Noto Sans Syriac | Noto Serif Sinhala | Noto Serif Ethiopic | Naqsh | Tarablus | Noto Sans Telugu | Noto Sans Thai UI | Noto Sans Coptic | Noto Sans Gurmukhi | DejaVu Serif | Noto Sans Rejang | Noto Serif Bengali | Noto Sans Gurmukhi | Noto Sans Cherokee | Noto Sans Devanagari | Noto Sans Symbols2 | Mashq | Noto Sans Malayalam | Linux Libertine Display | Noto Serif Devanagari | Noto Serif Khmer | Noto Sans Mono | Noto Serif Display | Noto Sans Thai UI | Khalid | Noto Serif Display | Arab | Noto Serif Telugu | Noto Sans Kannada UI | Noto Serif Tamil | KacstScreen | Noto Nastaliq Urdu | Noto Sans Ethiopic | Noto Sans Cham | Noto Serif Gurmukhi | Noto Serif Tibetan | Impact | Cortoba | Noto Sans Kannada | Noto Serif Telugu | FreeMono | Noto Sans Lao UI | Rehan | Amiri | Noto Sans Kannada | Noto Sans Hebrew | Noto Sans Hanunoo | Noto Sans Inscriptional Pahlavi | Noto Sans Khmer | Thabit | Noto Sans Phoenician | Noto Sans Sundanese | Roya | Noto Serif Tamil | Noto Sans Myanmar | Noto Sans Khudawadi | Noto Serif Display | Noto Sans Cherokee | Noto Sans Mende Kikakui | Ubuntu Arabic | Noto Sans Sinhala | fixed | Noto Sans Canadian Aboriginal | Noto Sans Devanagari UI | Noto Sans Gurmukhi | Noto Sans Tamil | Noto Sans Devanagari | Noto Sans Display | Noto Sans Arabic | Noto Sans Canadian Aboriginal | Noto Serif Bengali | Noto Sans Bengali | Noto Sans Malayalam | Sharjah | Noto Sans Canadian Aboriginal | Standard Symbols PS | Noto Sans Gurmukhi | Noto Sans Hebrew | Noto Sans Lepcha | Terafik | Noto Sans Kannada | Noto Sans Thaana | Noto Serif Devanagari | Noto Sans Myanmar | Noto Sans Ogham | Noto Serif Tamil | Noto Sans Devanagari | Noto Sans Devanagari | Noto Sans Thai | Noto Sans Canadian Aboriginal | Noto Serif Dogra | Noto Sans Tamil | Noto Serif Bengali | Noto Sans Display | Noto Sans Thai UI | DejaVu Math TeX Gyre | Noto Sans Devanagari UI | URW Gothic | Noto Sans Buginese | Noto Sans Devanagari UI | Noto Sans Tai Le | Noto Sans Devanagari | Noto Sans Devanagari UI | Noto Sans Anatolian Hieroglyphs | AlHor | Sindbad | Noto Naskh Arabic | Essays1743 | Noto Serif | Noto Sans Kayah Li | Noto Serif Khmer | Noto Sans Tai Tham | Noto Sans Display | Noto Sans Symbols | AlArabiya | Noto Sans Tifinagh | Noto Sans Psalter Pahlavi | Noto Serif Sinhala | Noto Serif Malayalam | Noto Sans Thaana | Electron | Noto Serif Tamil | Linux Libertine Mono O | Noto Music | Noto Serif Malayalam | Noto Sans Gurmukhi UI | Andale Mono | Noto Sans Sinhala | Noto Sans Cherokee | Noto Sans Mongolian | Trebuchet MS | Noto Serif Kannada | Noto Sans Sinhala | Noto Sans Old South Arabian | Noto Serif Gurmukhi | AlYarmook | Noto Sans Brahmi | Noto Sans Bengali UI | Noto Serif Lao | Noto Sans Adlam | Noto Sans Tamil Supplement | Nimbus Roman | Titr | Noto Sans Chakma | Noto Sans Tirhuta | Elham | Noto Sans Malayalam | Webdings | Noto Sans Canadian Aboriginal | Noto Serif Gujarati | Noto Sans Cherokee | Noto Sans Tamil UI | KacstQurn | Noto Serif Sinhala | Noto Sans Thai UI | Linux Libertine Display O | Source Code Pro | Gentium Plus | Noto Sans Javanese | Noto Serif Thai | Noto Sans Telugu | Noto Sans Syriac | Noto Sans Lao UI | Noto Serif Lao | Noto Sans Multani | Noto Sans Myanmar UI | DejaVu Sans Mono | Arial Black | Noto Sans Shavian | Noto Sans Telugu UI | Mothanna | Noto Serif Georgian | Noto Serif Kannada | Noto Sans Oriya UI | Noto Sans Malayalam UI | KacstBook | KacstLetter | Kayrawan | Noto Serif Georgian | Noto Serif Georgian | Noto Sans Mandaic | Noto Sans Bengali | Cantarell | Noto Sans Telugu UI | Noto Sans Sinhala UI | Verdana | Mothanna | Noto Sans Kharoshthi | Noto Serif Georgian | KacstDigital | AlManzomah | Noto Sans Tamil | KacstTitleL | Noto Sans Old Sogdian | Noto Serif Gujarati | Thabit | Noto Serif Gujarati | Noto Sans Myanmar | Noto Sans Sinhala UI | Noto Sans Old Persian | Mothanna | Noto Sans Tamil UI | Noto Sans Old Hungarian | Koodak | Noto Sans Cham | Nada | Noto Sans Telugu UI | Noto Sans Gurmukhi | Linux Libertine Initials | Noto Serif Gurmukhi | Noto Sans Arabic UI | Noto Serif Lao | Noto Serif Bengali | Noto Sans Bhaiksuki | Noto Sans Thai UI | Noto Sans Tamil UI | Cantarell | Noto Sans Deseret | Noto Sans Runic | Cantarell | Noto Serif Kannada | Nimbus Sans | Gentium Plus Compact | Thabit | Noto Serif Devanagari | Noto Sans Gurmukhi UI | Noto Sans Hebrew | Noto Sans Khojki | Noto Sans Buhid | Noto Sans Armenian | Noto Serif Telugu | Noto Sans Devanagari UI | Noto Serif Telugu | Noto Sans Malayalam UI | Metal | Noto Sans Sinhala | Noto Serif Display | Noto Sans Malayalam UI | Noto Serif Tamil Slanted | Noto Sans Tai Viet | Noto Sans Kannada | Noto Sans Hanifi Rohingya | Noto Serif Tibetan | Noto Sans Khmer UI | Noto Sans | Noto Sans | Noto Sans Inscriptional Parthian | Noto Serif Khmer | Source Code Pro | Amiri Quran | Noto Sans Ethiopic | Noto Sans Mayan Numerals | Noto Sans Lao UI | Noto Sans Georgian | FreeSerif | Linux Libertine Initials O | Times New Roman | Nimbus Mono PS | Granada | Noto Sans Hatran | Noto Serif Sinhala | Noto Kufi Arabic | Noto Sans Telugu UI | Noto Sans Bengali UI | Noto Sans Tagalog | Noto Sans Georgian | Noto Serif Tamil Slanted | Noto Sans Malayalam | Noto Sans Syriac | Noto Serif Myanmar | Noto Sans Osage | Noto Sans Gurmukhi UI | Noto Sans Thai | DejaVu Sans | Noto Sans Tamil | Noto Sans Batak | KacstOffice | Noto Sans Glagolitic | Nesf2 | Petra | Noto Sans Malayalam | Nice | Nimbus Sans Narrow | Noto Sans Khmer UI | Noto Serif Myanmar | Noto Sans Myanmar UI | Noto Sans Old North Arabian | Noto Sans Cham | Noto Sans Oriya | URW Bookman | Source Code Pro | Noto Sans Khmer | Noto Serif Gurmukhi | Noto Sans Thai | Furat | Noto Sans Georgian | Noto Serif Malayalam | Noto Sans Mahajani | DejaVu Sans | Noto Sans Telugu | Noto Sans | Noto Serif | Noto Serif Tamil Slanted | DejaVu Serif | Noto Sans Linear A | Noto Sans Linear B | Noto Sans Bengali UI | Noto Serif Thai | Noto Sans Cham | Noto Sans Gothic | Dimnah | KacstArt | Noto Sans Lydian | Noto Serif Tibetan | Noto Serif Gujarati | Shado | Noto Sans Tibetan | Noto Sans Siddham | Noto Sans Mono | Noto Sans Myanmar UI | Noto Sans Ol Chiki | Noto Sans Display | Noto Sans Georgian | Noto Sans Tamil UI | Noto Sans Mono | Noto Sans Mono | Noto Serif | Noto Serif Bengali | Noto Sans Arabic | Noto Sans Modi | Source Code Pro | Noto Sans Lao UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Sans Sora Sompeng | Noto Sans Myanmar | Noto Sans Khmer UI | Noto Sans Meetei Mayek | Noto Sans Gujarati UI | Hani | Noto Sans Cypriot | KacstOne | Noto Serif Thai | Noto Serif Tamil | Noto Serif Gujarati | Noto Sans Miao | Noto Sans Gurmukhi UI | Tholoth | Comic Sans MS | DejaVu Sans | Salem | Noto Sans Pahawh Hmong | Noto Sans Ugaritic | Noto Sans Lao | Noto Sans Marchen | C059 | Noto Sans Cherokee | Noto Serif Thai | Liberation Mono | Noto Sans Arabic | Noto Sans Mro | Noto Sans Thai | Noto Sans PhagsPa | Noto Sans Imperial Aramaic | Noto Sans Symbols | Noto Sans Tamil UI | Noto Sans Telugu | Noto Sans Khmer UI | Noto Serif Kannada | Noto Sans Lao | Hor | Noto Sans Kannada UI | Noto Sans Bengali | Noto Sans Adlam Unjoined | Noto Serif Lao | Noto Sans Telugu | Noto Sans Arabic | Noto Serif Hebrew | Noto Serif Gurmukhi | Noto Sans Lao | Noto Sans Meroitic | Noto Serif Khmer | Thabit | Noto Sans Display | Haramain | Linux Biolinum O | Noto Sans Khmer | Linux Libertine Mono | Noto Sans Bengali | Noto Sans Gujarati | Noto Sans Malayalam UI | Noto Sans Cham | AlBattar | Noto Sans Malayalam UI | Noto Sans Lao | Noto Sans Egyptian Hieroglyphs | Noto Sans Kannada UI | Noto Sans Bassa Vah | Jet | Noto Serif Hebrew | Noto Sans Bengali UI | Noto Sans Manichaean | Noto Sans Ethiopic | Noto Sans Indic Siyaq Numbers | Noto Sans Armenian | Noto Sans | Noto Sans Grantha | Noto Sans Arabic UI | Noto Sans Kannada UI | Noto Serif Ethiopic | Noto Sans Armenian | Noto Serif Balinese | Rasheeq | Noto Sans Duployan | Ouhod | Noto Sans Thaana | Noto Serif Ethiopic | Noto Serif Malayalam | Z003 | Noto Sans Symbols | Noto Serif Myanmar | Noto Sans Arabic UI | Noto Sans Bengali UI | Noto Sans Old Italic | KacstPen | Noto Sans Arabic | Noto Serif Armenian | Noto Sans Bengali | Noto Serif Ethiopic | Noto Sans Lisu | Noto Sans Thai | Noto Sans Khmer | Noto Sans Thaana | Noto Sans Kaithi | Noto Serif Hebrew | D050000L | Noto Sans Math | Noto Naskh Arabic UI | KacstDecorative | Linux Biolinum Keyboard O | Noto Sans Tagbanwa | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Arabic UI | Noto Serif Armenian | Noto Sans Myanmar | Noto Serif Ethiopic | Noto Sans Vai | Noto Serif Sinhala | Liberation Serif | Linux Biolinum | Noto Serif Armenian | Ostorah | Noto Sans NKo | Noto Serif Devanagari | Noto Sans Lao | Noto Sans New Tai Lue | Noto Serif Georgian | Amiri Quran Colored | Linux Libertine O | Homa | Noto Sans Syloti Nagri | Noto Sans Ethiopic | Mashq | Noto Serif Malayalam | Noto Serif Devanagari | Noto Sans Sinhala UI | Noto Serif Tibetan | Noto Sans Symbols | Noto Serif Lao | Noto Sans | Noto Serif Khmer | Noto Sans Samaritan | Noto Sans Thaana | Noto Sans Gurmukhi UI | Noto Serif Tamil Slanted | Noto Sans Newa | KacstPoster | Noto Serif Telugu | Noto Sans Carian | Noto Kufi Arabic | Cantarell | Liberation Sans | Nazli | Noto Sans Bamum | Noto Serif Thai | Noto Sans Takri | Noto Serif Tamil Slanted | Noto Sans Nabataean | Noto Sans Hebrew | Noto Serif | Noto Sans Avestan | Noto Serif Myanmar | Noto Sans Cuneiform | Nagham | Noto Serif Hebrew | FreeSans | Noto Sans Kannada | Source Code Variable | Noto Sans Khmer UI | Noto Sans Armenian | Noto Sans Elbasan | Graph | Noto Sans Armenian | Noto Sans Old Turkic | Noto Sans Ethiopic | Georgia | Noto Color Emoji | Noto Sans Limbu | Source Code Pro | Noto Serif Tangut | Noto Sans Myanmar UI | KacstNaskh | Noto Sans Tamil | Noto Sans Sharada | Noto Serif Myanmar | Noto Sans Hebrew | Noto Sans Osmanya | Noto Sans Sinhala UI | Noto Sans Sinhala | Linux Libertine | Noto Serif Hebrew | Noto Serif Display | Noto Sans Palmyrene | Noto Serif Ahom | Noto Serif Kannada | Noto Sans Lycian | Source Code Pro | Noto Sans Yi | Noto Sans Telugu UI | KacstFarsi | Noto Kufi Arabic | Noto Sans Caucasian Albanian | Noto Serif | Noto Sans Mono | Arial | Noto Sans Kannada UI | Noto Sans Georgian | Noto Sans Pau Cin Hau | Noto Sans Saurashtra | Japan | Linux Biolinum Keyboard | Noto Sans Khmer | Noto Sans Old Permic | Noto Sans Sinhala UI | Noto Serif Armenian | Noto Sans Lao UI | Courier New | Noto Sans Warang Citi | Noto Sans Myanmar UI | KacstTitle | P052 | Noto Sans Syriac | Noto Serif Sinhala | Noto Serif Ethiopic | Naqsh | Tarablus | Noto Sans Telugu | Noto Sans Thai UI | Noto Sans Coptic | Noto Sans Gurmukhi | DejaVu Serif | Noto Sans Rejang | Noto Serif Bengali | Noto Sans Gurmukhi | Noto Sans Cherokee | Noto Sans Devanagari | Noto Sans Symbols2 | Mashq | Noto Sans Malayalam | Linux Libertine Display | Noto Serif Devanagari | Noto Serif Khmer | Noto Sans Mono | Noto Serif Display | Noto Sans Thai UI | Khalid | Noto Serif Display | Arab | Noto Serif Telugu | Noto Sans Kannada UI | Noto Serif Tamil | KacstScreen | Noto Nastaliq Urdu | Noto Sans Ethiopic | Noto Sans Cham | Noto Serif Gurmukhi | Noto Serif Tibetan | Impact | Cortoba | Noto Sans Kannada | Noto Serif Telugu | FreeMono | Noto Sans Lao UI | Rehan | Amiri | Noto Sans Kannada | Noto Sans Hebrew | Noto Sans Hanunoo | Noto Sans Inscriptional Pahlavi | Noto Sans Khmer | Thabit | Noto Sans Phoenician | Noto Sans Sundanese | Roya | Noto Serif Tamil | Noto Sans Myanmar | Noto Sans Khudawadi | Noto Serif Display | Noto Sans Cherokee | Noto Sans Mende Kikakui | Ubuntu Arabic | Noto Sans Sinhala |
+: make-capture-frame
+
+* presentations
+#+BEGIN_SRC emacs-lisp
+
+(add-to-list 'load-path "~/repos/org-reveal/")
+
+   
+(setq org-reveal-root "file:///home/alkhaldieid/repos/reveal.js")
+#+END_SRC
+
+#+RESULTS:
+: file:///home/alkhaldieid/repos/reveal.js
+
+* What are the most important things to setup in my build  
+** org mode and its keybindings
+** org agenda 
+** org dispacher
