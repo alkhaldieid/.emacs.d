@@ -107,9 +107,12 @@
                 (push file org-agenda-files)))
         (org-projectile-todo-files)))
 
+(require 'ob-ipython)
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t)))
+ '((python . t)
+   (ipython . t)
+   (lisp . t)))
 
 (use-package powerline-evil
   :ensure t)
@@ -120,8 +123,6 @@
 (evil-commentary-mode)
 
 (use-package dracula-theme
-   :config
-   (load-theme 'dracula t)
    :ensure t)
 
 
@@ -131,6 +132,24 @@
    :ensure t
    :config
    (beacon-mode 1))
+
+(use-package parchment-theme :ensure t)
+(use-package cloud-theme :ensure t)
+(use-package moe-theme :ensure t)
+(use-package zenburn-theme :ensure t)
+(use-package monokai-theme :ensure t)
+(use-package gruvbox-theme :ensure t)
+(use-package ample-theme :ensure t)
+(use-package ample-zen-theme :ensure t)
+(use-package alect-themes :ensure t)
+(use-package tao-theme :ensure t)
+(use-package poet-theme :ensure t)
+(use-package modus-operandi-theme :ensure t)
+(use-package modus-vivendi-theme :ensure t)
+(use-package faff-theme :ensure t)
+(use-package color-theme-modern :ensure t)
+
+(load-theme 'modus-vivendi t)
 
 (use-package try
   :ensure t)
@@ -291,84 +310,6 @@
             (define-key eyebrowse-mode-map (kbd "C-w ;") 'eyebrowse-switch-to-window-config-4)
             (eyebrowse-mode t)
             (setq eyebrowse-new-workspace t)))
-
-;; set the leader key
-(evil-leader/set-leader "<SPC>")
-;; use (evil-leader/set-key to bind keys in the leader map
-
-(evil-leader/set-key
- "<SPC> " 'helm-M-x
- "fs" 'save-buffer
- "ff" 'find-file
-
-
- "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
- ;; buffers
-
- "bb" 'switch-to-buffer
- "bk" 'kill-buffer
- "bp" 'previous-buffer
- "bn" 'next-buffer
- ;; windows
- "wl" 'evil-window-right
- "wh" 'evil-window-left
- "wk" 'evil-window-up
- "wj" 'evil-window-down
- "wd" 'evil-window-delete
- "wv" 'evil-window-vsplit
- "ws" 'evil-window-split
-
- ;; workspaces
- "lw1" 'eyebrowse-switch-to-window-config-1
- "lw2" 'eyebrowse-switch-to-window-config-2
- "lw3" 'eyebrowse-switch-to-window-config-3
- "lw4" 'eyebrowse-switch-to-window-config-4
- "lw5" 'eyebrowse-switch-to-window-config-5
- "lw6" 'eyebrowse-switch-to-window-config-6
- "lw7" 'eyebrowse-switch-to-window-config-7
- "lw8" 'eyebrowse-switch-to-window-config-8
- "lw9" 'eyebrowse-switch-to-window-config-9
- ;; files
- ;; cf files
- "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
- "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
- "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
- "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
- "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
- "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
-
- ;; evil-nerd-commenter
- "ci" 'evilnc-comment-or-uncomment-lines
- "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
- "cc" 'evilnc-copy-and-comment-lines
- "cp" 'evilnc-comment-or-uncomment-paragraphs
- "cr" 'comment-or-uncomment-region
- "cv" 'evilnc-toggle-invert-comment-line-by-line
- "."  'evilnc-copy-and-comment-operator
- "//" 'evilnc-comment-operator ; if you prefer backslash key
-
- ;; zoom-in and out
- "=" 'text-scale-increase
- "-" 'text-scale-decrease
-
- ;; org roam
- "nl" 'org-roam
- "nf" 'org-roam-find-file
- "ng" 'org-roam-show-graph
- "ni" 'org-roam-insert
- ;; org-roam-bibtex
- "na" 'orb-note-actions
- ;; syn layer  keybindings
- "ss" 'synonyms
- "sl" 'synosaurus-lookup
- "sr" 'synosaurus-choose-and-replace
- "si" 'synosaurus-choose-and-insert
- ;; org-recoll keys
- "ps" 'org-recoll-search
- "pu" 'org-recoll-update-index
- ;; evil-commentry
-;; ";" evil-commentry-line
- )
 
 (use-package paredit
   :ensure t)
@@ -697,3 +638,81 @@ same directory as the org-buffer and insert a link to this file."
 
    
 (setq org-reveal-root "file:///home/alkhaldieid/repos/reveal.js")
+
+;; set the leader key
+(evil-leader/set-leader "<SPC>")
+;; use (evil-leader/set-key to bind keys in the leader map
+
+(evil-leader/set-key
+ "<SPC> " 'helm-M-x
+ "fs" 'save-buffer
+ "ff" 'find-file
+
+
+ "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
+ ;; buffers
+
+ "bb" 'switch-to-buffer
+ "bk" 'kill-buffer
+ "bp" 'previous-buffer
+ "bn" 'next-buffer
+ ;; windows
+ "wl" 'evil-window-right
+ "wh" 'evil-window-left
+ "wk" 'evil-window-up
+ "wj" 'evil-window-down
+ "wd" 'evil-window-delete
+ "wv" 'evil-window-vsplit
+ "ws" 'evil-window-split
+
+ ;; workspaces
+ "lw1" 'eyebrowse-switch-to-window-config-1
+ "lw2" 'eyebrowse-switch-to-window-config-2
+ "lw3" 'eyebrowse-switch-to-window-config-3
+ "lw4" 'eyebrowse-switch-to-window-config-4
+ "lw5" 'eyebrowse-switch-to-window-config-5
+ "lw6" 'eyebrowse-switch-to-window-config-6
+ "lw7" 'eyebrowse-switch-to-window-config-7
+ "lw8" 'eyebrowse-switch-to-window-config-8
+ "lw9" 'eyebrowse-switch-to-window-config-9
+ ;; files
+ ;; cf files
+ "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
+ "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+ "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+ "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+ "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+ "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+
+ ;; evil-nerd-commenter
+ "ci" 'evilnc-comment-or-uncomment-lines
+ "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+ "cc" 'evilnc-copy-and-comment-lines
+ "cp" 'evilnc-comment-or-uncomment-paragraphs
+ "cr" 'comment-or-uncomment-region
+ "cv" 'evilnc-toggle-invert-comment-line-by-line
+ "."  'evilnc-copy-and-comment-operator
+ "//" 'evilnc-comment-operator ; if you prefer backslash key
+
+ ;; zoom-in and out
+ "=" 'text-scale-increase
+ "-" 'text-scale-decrease
+
+ ;; org roam
+ "nl" 'org-roam
+ "nf" 'org-roam-find-file
+ "ng" 'org-roam-show-graph
+ "ni" 'org-roam-insert
+ ;; org-roam-bibtex
+ "na" 'orb-note-actions
+ ;; syn layer  keybindings
+ "ss" 'synonyms
+ "sl" 'synosaurus-lookup
+ "sr" 'synosaurus-choose-and-replace
+ "si" 'synosaurus-choose-and-insert
+ ;; org-recoll keys
+ "ps" 'org-recoll-search
+ "pu" 'org-recoll-update-index
+ ;; evil-commentry
+;; ";" evil-commentry-line
+ )

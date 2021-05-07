@@ -134,9 +134,12 @@ Operators that deal with indentation ( < and > ) also indent headers.
 
 ** Org-babel
 #+BEGIN_SRC emacs-lisp
+(require 'ob-ipython)
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t)))
+ '((python . t)
+   (ipython . t)
+   (lisp . t)))
 #+END_SRC
 
 * Evil mode stuff
@@ -156,18 +159,34 @@ Operators that deal with indentation ( < and > ) also indent headers.
 
 * Theming & Aesthethic
 #+BEGIN_SRC emacs-lisp
-(use-package dracula-theme
-   :config
-   (load-theme 'dracula t)
-   :ensure t)
+  (use-package dracula-theme
+     :ensure t)
 
 
-(global-hl-line-mode t) ;; This highlights the current line in the buffer
+  (global-hl-line-mode t) ;; This highlights the current line in the buffer
 
-(use-package beacon ;; This applies a beacon effect to the highlighted line
-   :ensure t
-   :config
-   (beacon-mode 1))
+  (use-package beacon ;; This applies a beacon effect to the highlighted line
+     :ensure t
+     :config
+     (beacon-mode 1))
+
+  (use-package parchment-theme :ensure t)
+  (use-package cloud-theme :ensure t)
+  (use-package moe-theme :ensure t)
+  (use-package zenburn-theme :ensure t)
+  (use-package monokai-theme :ensure t)
+  (use-package gruvbox-theme :ensure t)
+  (use-package ample-theme :ensure t)
+  (use-package ample-zen-theme :ensure t)
+  (use-package alect-themes :ensure t)
+  (use-package tao-theme :ensure t)
+  (use-package poet-theme :ensure t)
+  (use-package modus-operandi-theme :ensure t)
+  (use-package modus-vivendi-theme :ensure t)
+  (use-package faff-theme :ensure t)
+  (use-package color-theme-modern :ensure t)
+
+  (load-theme 'modus-vivendi t)
 #+END_SRC
 
 #+RESULTS:
@@ -192,7 +211,7 @@ Operators that deal with indentation ( < and > ) also indent headers.
        :weight 'bold)
   :ensure t)
 #+END_SRC
-** Helm for navigation
+** Helm for navigation                                       
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :init
@@ -376,90 +395,6 @@ Operators that deal with indentation ( < and > ) also indent headers.
 
 #+RESULTS:
 : t
-
-* Evil Leader Keybindings
-#+BEGIN_SRC emacs-lisp
-
-  ;; set the leader key
-  (evil-leader/set-leader "<SPC>")
-  ;; use (evil-leader/set-key to bind keys in the leader map
-
-  (evil-leader/set-key
-   "<SPC> " 'helm-M-x
-   "fs" 'save-buffer
-   "ff" 'find-file
- 
-
-   "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
-   ;; buffers
-
-   "bb" 'switch-to-buffer
-   "bk" 'kill-buffer
-   "bp" 'previous-buffer
-   "bn" 'next-buffer
-   ;; windows
-   "wl" 'evil-window-right
-   "wh" 'evil-window-left
-   "wk" 'evil-window-up
-   "wj" 'evil-window-down
-   "wd" 'evil-window-delete
-   "wv" 'evil-window-vsplit
-   "ws" 'evil-window-split
- 
-   ;; workspaces
-   "lw1" 'eyebrowse-switch-to-window-config-1
-   "lw2" 'eyebrowse-switch-to-window-config-2
-   "lw3" 'eyebrowse-switch-to-window-config-3
-   "lw4" 'eyebrowse-switch-to-window-config-4
-   "lw5" 'eyebrowse-switch-to-window-config-5
-   "lw6" 'eyebrowse-switch-to-window-config-6
-   "lw7" 'eyebrowse-switch-to-window-config-7
-   "lw8" 'eyebrowse-switch-to-window-config-8
-   "lw9" 'eyebrowse-switch-to-window-config-9
-   ;; files
-   ;; cf files
-   "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
-   "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
-   "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
-   "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
-   "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
-   "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
-   
-   ;; evil-nerd-commenter
-   "ci" 'evilnc-comment-or-uncomment-lines
-   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-   "cc" 'evilnc-copy-and-comment-lines
-   "cp" 'evilnc-comment-or-uncomment-paragraphs
-   "cr" 'comment-or-uncomment-region
-   "cv" 'evilnc-toggle-invert-comment-line-by-line
-   "."  'evilnc-copy-and-comment-operator
-   "//" 'evilnc-comment-operator ; if you prefer backslash key
-   
-   ;; zoom-in and out
-   "=" 'text-scale-increase
-   "-" 'text-scale-decrease
-   
-   ;; org roam
-   "nl" 'org-roam
-   "nf" 'org-roam-find-file
-   "ng" 'org-roam-show-graph
-   "ni" 'org-roam-insert
-   ;; org-roam-bibtex
-   "na" 'orb-note-actions
-   ;; syn layer  keybindings
-   "ss" 'synonyms
-   "sl" 'synosaurus-lookup
-   "sr" 'synosaurus-choose-and-replace
-   "si" 'synosaurus-choose-and-insert
-   ;; org-recoll keys
-   "ps" 'org-recoll-search
-   "pu" 'org-recoll-update-index
-   ;; evil-commentry
-  ;; ";" evil-commentry-line
-   )
- #+END_SRC
-
- #+RESULTS:
 
 * Elisp Stuff
 ** ParEdit mode
@@ -848,7 +783,489 @@ same directory as the org-buffer and insert a link to this file."
 #+RESULTS:
 : file:///home/alkhaldieid/repos/reveal.js
 
+* Evil Leader Keybindings
+#+BEGIN_SRC emacs-lisp
+
+  ;; set the leader key
+  (evil-leader/set-leader "<SPC>")
+  ;; use (evil-leader/set-key to bind keys in the leader map
+
+  (evil-leader/set-key
+   "<SPC> " 'helm-M-x
+   "fs" 'save-buffer
+   "ff" 'find-file
+ 
+
+   "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
+   ;; buffers
+
+   "bb" 'switch-to-buffer
+   "bk" 'kill-buffer
+   "bp" 'previous-buffer
+   "bn" 'next-buffer
+   ;; windows
+   "wl" 'evil-window-right
+   "wh" 'evil-window-left
+   "wk" 'evil-window-up
+   "wj" 'evil-window-down
+   "wd" 'evil-window-delete
+   "wv" 'evil-window-vsplit
+   "ws" 'evil-window-split
+ 
+   ;; workspaces
+   "lw1" 'eyebrowse-switch-to-window-config-1
+   "lw2" 'eyebrowse-switch-to-window-config-2
+   "lw3" 'eyebrowse-switch-to-window-config-3
+   "lw4" 'eyebrowse-switch-to-window-config-4
+   "lw5" 'eyebrowse-switch-to-window-config-5
+   "lw6" 'eyebrowse-switch-to-window-config-6
+   "lw7" 'eyebrowse-switch-to-window-config-7
+   "lw8" 'eyebrowse-switch-to-window-config-8
+   "lw9" 'eyebrowse-switch-to-window-config-9
+   ;; files
+   ;; cf files
+   "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
+   "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+   "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+   "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+   "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+   "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+   
+   ;; evil-nerd-commenter
+   "ci" 'evilnc-comment-or-uncomment-lines
+   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+   "cc" 'evilnc-copy-and-comment-lines
+   "cp" 'evilnc-comment-or-uncomment-paragraphs
+   "cr" 'comment-or-uncomment-region
+   "cv" 'evilnc-toggle-invert-comment-line-by-line
+   "."  'evilnc-copy-and-comment-operator
+   "//" 'evilnc-comment-operator ; if you prefer backslash key
+   
+   ;; zoom-in and out
+   "=" 'text-scale-increase
+   "-" 'text-scale-decrease
+   
+   ;; org roam
+   "nl" 'org-roam
+   "nf" 'org-roam-find-file
+   "ng" 'org-roam-show-graph
+   "ni" 'org-roam-insert
+   ;; org-roam-bibtex
+   "na" 'orb-note-actions
+   ;; syn layer  keybindings
+   "ss" 'synonyms
+   "sl" 'synosaurus-lookup
+   "sr" 'synosaurus-choose-and-replace
+   "si" 'synosaurus-choose-and-insert
+   ;; org-recoll keys
+   "ps" 'org-recoll-search
+   "pu" 'org-recoll-update-index
+   ;; evil-commentry
+  ;; ";" evil-commentry-line
+   )
+ #+END_SRC
+
+ #+RESULTS:
+
 * What are the most important things to setup in my build  
+** note taking
+
 ** org mode and its keybindings
 ** org agenda 
 ** org dispacher
+** latex
+** translating and synonyms on the fly
+** ivy + swiper instead of helm
+** python IDE
+** Ein
+** auto-completion for python 
+* integrating doom config file
+#+BEGIN_SRC lisp
+
+  ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+
+  ;; Place your private configuration here! Remember, you do not need to run 'doom
+  ;; sync' after modifying this file!
+
+
+  ;; Some functionality uses this to identify you, e.g. GPG configuration, email
+  ;; clients, file templates and snippets.
+  (setq user-full-name "Eid Alkhaldi"
+        user-mail-address "eid.alkhaldi@gmail.com")
+
+  ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
+  ;; are the three important ones:
+  ;;
+  ;; + `doom-font'
+  ;; + `doom-variable-pitch-font'
+  ;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
+  ;;   presentations or streaming.
+  ;;
+  ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+  ;; font string. You generally only need these two:
+  ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
+  ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+
+  ;; There are two ways to load a theme. Both assume the theme is installed and
+  ;; available. You can either set `doom-theme' or manually load a theme with the
+  ;; `load-theme' function. This is the default:
+  (setq doom-theme 'doom-one)
+
+  ;; If you use `org' and don't want your org files in the default location below,
+  ;; change `org-directory'. It must be set before org loads!
+  (setq org-directory "~/Dropbox/org/")
+
+  ;; This determines the style of line numbers in effect. If set to `nil', line
+  ;; numbers are disabled. For relative line numbers, set this to `relative'.
+  (setq display-line-numbers-type 'relative)
+
+
+  ;; Here are some additional functions/macros that could help you configure Doom:
+  ;;
+  ;; - `load!' for loading external *.el files relative to this one
+  ;; - `use-package!' for configuring packages
+  ;; - `after!' for running code after a package has loaded
+  ;; - `add-load-path!' for adding directories to the `load-path', relative to
+  ;;   this file. Emacs searches the `load-path' when you load packages with
+  ;;   `require' or `use-package'.
+  ;; - `map!' for binding new keys
+  ;;
+  ;; To get information about any of these functions/macros, move the cursor over
+  ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
+  ;; This will open documentation for it, including demos of how they are used.
+  ;;
+  ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
+  ;; they are implemented.
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ;; org settings
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;; Latex ;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (setq user-full-name "Eid Alkhaldi")
+    (require 'ox)
+    (require 'ox-latex)
+
+    (setq org-latex-pdf-process '("%latex -interaction nonstopmode -output-directory %o %f" "%latex -interaction nonstopmode -output-directory %o %f" "latex -interaction nonstopmode -output-directory %o %f" ))
+    (setq org-latex-create-formula-image-program 'dvipng)
+
+
+    (with-eval-after-load 'org
+      (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)
+                                                               (plantuml . t)
+                                                               ))
+      (add-to-list 'org-latex-classes
+                   '("apa6"
+                     "\\documentclass{apa6}"
+                     ("\\section{%s}" . "\\section*{%s}")
+                     ("\\subsection{%s}" . "\\subsection*{%s}")
+                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                     ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                     ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+      (add-to-list 'org-latex-classes
+                   '("IEEEtran"
+                     "\\documentclass[transmag]{IEEEtran}"
+                     ("\\section{%s}" . "\\section*{%s}")
+                     ("\\subsection{%s}" . "\\subsection*{%s}")
+                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                     ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                     ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+      (add-to-list 'org-latex-classes
+                   '("thesis"
+                     "\\documentclass[12pt]{uthesis-v12}"
+                     ("\\section{%s}" . "\\section*{%s}")))
+
+      (setq org-latex-pdf-process
+            '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;End of  Latex ;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;; Note Taking  ;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;; End of Note Taking  ;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;; LOAD FILES ;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; (load-file "~/repos/helm-fzf/helm-fzf.el")
+
+    (add-to-list 'load-path "~/repos/org-reveal/")
+    (add-to-list 'load-path "~/repos/org-gantt/")
+
+    (setq org-reveal-root "file:///home/alkhaldieid/repos/reveal.js")
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;END OF LOAD FILES ;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;; Python configs;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+    (setq python-shell-interpreter "ipython"
+          python-shell-interpreter-args "--simple-prompt -i")
+    ;; (exec-path-from-shell-initialize)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;END OF Python configs;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;; NOTE TAKING CONFIGS ;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))
+    (setq
+     dropbox_dir (concat (getenv "HOME") "/Dropbox")
+     org_notes (concat dropbox_dir "/org/roam/")
+     zot_bib (concat dropbox_dir "/mend/library.bib")
+     org-directory org_notes
+     deft-directory org_notes
+     org-roam-directory org_notes
+     agenda_dir (concat dropbox_dir "/org/agenda"))
+    (with-eval-after-load 'org
+      (setq
+       bibtex-completion-notes-path org_notes
+       bibtex-completion-bibliography zot_bib
+       bibtex-completion-pdf-field "file"
+       bibtex-completion-notes-template-multiple-files
+       (concat
+        "#+TITLE: ${title}\n"
+        "#+ROAM_KEY: cite:${=key=}\n"
+        "* TODO Notes\n"
+        ":PROPERTIES:\n"
+        ":Custom_ID: ${=key=}\n"
+        ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+        ":AUTHOR: ${author-abbrev}\n"
+        ":JOURNAL: ${journaltitle}\n"
+        ":DATE: ${date}\n"
+        ":YEAR: ${year}\n"
+        ":DOI: ${doi}\n"
+        ":URL: ${url}\n"
+        ":END:\n\n"
+        "* Why am I reading this article?\n"
+        "* Problem Definition\n"
+        "* Proposed Method\n"
+        "* Dataset used\n")))
+
+  ;;;;;;;;;;;; ORG NOTER ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    (with-eval-after-load 'org
+      (setq
+       org-ref-completion-library 'org-ref-ivy-cite
+       org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename
+       org-ref-default-bibliography (list zot_bib)
+       org-ref-bibliography-files (list zot_bib)
+       org-ref-bibliography-notes (concat org_notes  "bibnotes.org")
+       org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+       org-ref-notes-directory org_notes
+       org-ref-notes-function 'orb-edit-notes
+       org-noter-default-notes-file-name '(concat dropbox_dir "/notes.org")
+       org-noter-default-search-path  '(concat dropbox_dir "/mend")))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (setq user-full-name "Eid Alkhaldi")
+  (require 'ox)
+  (require 'ox-latex)
+  (setq org-latex-create-formula-image-program 'dvipng)
+
+
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)
+                                                             (plantuml . t)
+                                                             ))
+
+    (setq org-latex-pdf-process
+          '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
+
+  (add-to-list 'org-latex-classes
+               '("apa6"
+                 "\\documentclass{apa6}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+  (add-to-list 'org-latex-classes
+               '("IEEEtran"
+                 "\\documentclass[transmag]{IEEEtran}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (add-to-list 'org-latex-classes
+               '("thesis"
+                 "\\documentclass[12pt]{uthesis-v12}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ))
+
+  (add-to-list 'org-latex-classes
+               '("utoledo12"
+                 "\\documentclass[12pt]{uthesis-v12}"
+                 [NO-DEFAULT-PACKAGES]
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (unless (assoc "beamer" org-latex-classes)
+    (add-to-list 'org-latex-classes
+                 '("beamer"
+                   "\\documentclass[presentation]{beamer}"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+    ;; org settings
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;; Latex ;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;g
+
+    ;; (org-babel-load-file "~/repos/shared/latex_congigs.org")
+    ;; (setq org-latex-pdf-process '("%latex -interaction nonstopmode -output-directory %o %f" "%latex -interaction nonstopmode -output-directory %o %f" "latex -interaction nonstopmode -output-directory %o %f" ))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;End of  Latex ;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    (global-company-mode)
+    (global-visual-line-mode t)
+    ;;(add-to-list 'deft-extensions "tex")
+     ;;; enables the live-preview of compiled pdfs
+    (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+    (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
+    (org-babel-do-load-languages 'org-babel-load-languages '((ipython . t)))
+    (org-babel-do-load-languages 'org-babel-load-languages '((shell . t)))
+
+        ;;; set up zathura with auctex
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;; ODT stuff ;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (eval-after-load "org" '(require 'ox-odt nil t))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;; END of ODT stuff ;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;; My functions ;;;;;;;;;;;;;;;;;;
+    (defun my-org-screenshot ()
+      "Take a screenshot into a time stamped unique-named file in the
+  same directory as the org-buffer and insert a link to this file."
+      (interactive)
+      (setq filename
+            (concat
+             (make-temp-name
+              (concat (buffer-file-name)
+                      "_"
+                      (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+      (call-process "import" nil nil nil filename)
+      (insert (concat "[[" filename "]]"))
+      (org-display-inline-images))
+
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;; open with configs;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (openwith-mode t)
+    (setq openwith-associations '(("\\.pdf\\'" "evince" (file))
+                                  ("\\.mp4\\'" "mpv" (file))
+                                  ("\\.mkv\\'" "mpv" (file))
+                                  ("\\.webm\\'" "mpv" (file))
+                                  ))
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;; Organizational stuff ;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; (setq browse-url-browser-function 'eww-browse-url)
+
+    (setq browse-url-browser-function  'browse-url-default-browser)
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;; 1. agenda setup ;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    (setq org-todo-keywords
+          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
+
+    (setq org-todo-keyword-faces
+          (quote (("TODO" :foreground "red" :weight bold)
+                  ("NEXT" :foreground "blue" :weight bold)
+                  ("DONE" :foreground "forest green" :weight bold)
+                  ("TBC" :foreground "forest green" :weight bold)
+                  ("WAITING" :foreground "orange" :weight bold)
+                  ("HOLD" :foreground "magenta" :weight bold)
+                  ("CANCELLED" :foreground "forest green" :weight bold)
+                  ("email" :foreground "forest green" :weight bold)
+                  ("PHONE" :foreground "forest green" :weight bold))))
+    (setq org-use-fast-todo-selection t)
+
+    ;; capturing templates
+    (setq org-capture-templates
+          '(("n" "New Idea" entry (file "~/Dropbox/org/agenda/newpaperideas.org")
+             "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+            ("f" "Fancy" entry (file "~/Dropbox/org/roam/20201017010543-fancy.org")
+             "* %? :fancy: \n%t" :clock-in nil :clock-resume nil)
+            ("p" "research" entry (file "~/Dropbox/org/agenda/research.org")
+             "* %? :research:todo: \n%t" :clock-in nil :clock-resume nil)
+            ("a" "alias" plain (file "~/.config/aliasrc")
+             "alias %i %? \n" )
+            ("c" "coding goal" entry (file "~/Dropbox/org/agenda/coding.org")
+             "* %? :goal: \n%t" :clock-in nil :clock-resume nil)
+            ("t" "TODO item" entry (file+headline "~/Dropbox/org/agenda/TODOs.org" "Tasks")
+             "* TODO%? \n")
+            ;; ("t" "TODO item" entry (file "~/Dropbox/org/agenda/TODOs.org")
+            ;;  "** TODO%? :goal: \n%t" :clock-in nil :clock-resume nil)
+            ("r" "to be refiled" entry (file "~/Dropbox/org/agenda/refile.org")
+             "* %? :misc: \n%t" :clock-in nil :clock-resume nil)
+            ("w" "to be refiled" entry (file "~/Dropbox/org/agenda/refile.org")
+             "* %? :website: \n%t" :clock-in nil :clock-resume nil)))
+    (global-set-key (kbd "<f5>") 'org-capture)
+    (global-set-key (kbd "<f12>") 'org-agenda)
+
+
+    ;; The following setting is different from the document so that you
+    ;; can override the document org-agenda-files by setting your
+    ;; org-agenda-files in the variable org-user-agenda-files
+    ;;
+    (if (boundp 'org-user-agenda-files)
+        (setq org-agenda-files org-user-agenda-files)
+      (setq org-agenda-files (quote ("~/Dropbox/org/roam/daily"
+                                     "~/Dropbox/org/agenda/"
+                                     ))))
+
+    (with-eval-after-load 'org-agenda
+      (require 'org-projectile)
+      (mapcar #'(lambda (file)
+                  (when (file-exists-p file)
+                    (push file org-agenda-files)))
+              (org-projectile-todo-files)))
+#+END_SRC 
