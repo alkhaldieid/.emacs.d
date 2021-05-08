@@ -122,34 +122,31 @@
   :ensure t)
 (evil-commentary-mode)
 
-(use-package dracula-theme
-   :ensure t)
-
-
 (global-hl-line-mode t) ;; This highlights the current line in the buffer
+  (use-package beacon ;; This applies a beacon effect to the highlighted line
+     :ensure t
+     :config
+     (beacon-mode 1))
+;; a bunch of nice themes
 
-(use-package beacon ;; This applies a beacon effect to the highlighted line
-   :ensure t
-   :config
-   (beacon-mode 1))
+  (use-package dracula-theme :ensure t)
+  (use-package parchment-theme :ensure t)
+  (use-package cloud-theme :ensure t)
+  (use-package moe-theme :ensure t)
+  (use-package zenburn-theme :ensure t)
+  (use-package monokai-theme :ensure t)
+  (use-package gruvbox-theme :ensure t)
+  (use-package ample-theme :ensure t)
+  (use-package ample-zen-theme :ensure t)
+  (use-package alect-themes :ensure t)
+  (use-package tao-theme :ensure t)
+  (use-package poet-theme :ensure t)
+  (use-package modus-operandi-theme :ensure t)
+  (use-package modus-vivendi-theme :ensure t)
+  (use-package faff-theme :ensure t)
+  (use-package color-theme-modern :ensure t)
 
-(use-package parchment-theme :ensure t)
-(use-package cloud-theme :ensure t)
-(use-package moe-theme :ensure t)
-(use-package zenburn-theme :ensure t)
-(use-package monokai-theme :ensure t)
-(use-package gruvbox-theme :ensure t)
-(use-package ample-theme :ensure t)
-(use-package ample-zen-theme :ensure t)
-(use-package alect-themes :ensure t)
-(use-package tao-theme :ensure t)
-(use-package poet-theme :ensure t)
-(use-package modus-operandi-theme :ensure t)
-(use-package modus-vivendi-theme :ensure t)
-(use-package faff-theme :ensure t)
-(use-package color-theme-modern :ensure t)
-
-(load-theme 'modus-vivendi t)
+  (load-theme 'modus-vivendi t)
 
 (use-package try
   :ensure t)
