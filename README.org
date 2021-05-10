@@ -17,7 +17,7 @@
 
 ;; Display battery for when in full screen mode
 ;; Uncomment in laptops
-(display-battery-mode t)
+(display-battery-mode -1)
 
 ;; Misc stuff
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -142,6 +142,18 @@ Operators that deal with indentation ( < and > ) also indent headers.
    (lisp . t)))
 #+END_SRC
 
+** Configs
+#+BEGIN_SRC emacs-lisp :output no
+;; disables the automatic indentation inside an orgmode source block when invoking evil-org-open-below with <normal-state> o
+(setq org-src-tab-acts-natively nil)
+
+#+END_SRC
+
+#+RESULTS:
+: complete
+
+
+
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
 (use-package powerline-evil
@@ -183,7 +195,7 @@ Operators that deal with indentation ( < and > ) also indent headers.
   (use-package faff-theme :ensure t)
   (use-package color-theme-modern :ensure t)
 
-  (load-theme 'modus-vivendi t)
+  (load-theme 'modus-operandi t)
 #+END_SRC
 
 #+RESULTS:
@@ -209,7 +221,7 @@ Operators that deal with indentation ( < and > ) also indent headers.
   :ensure t)
 #+END_SRC
 ** Helm for navigation                                       
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package helm
   :init
     (require 'helm-config)
@@ -229,6 +241,66 @@ Operators that deal with indentation ( < and > ) also indent headers.
     (global-set-key (kbd "M-y") 'helm-show-kill-ring)  ;; Show kill ring, pick something to paste
   :ensure t)
 #+END_SRC
+** Ivy for navigation (alternative to helm)
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+:ensure t
+:diminish (ivy-mode)
+:bind (("C-x b" . ivy-switch-buffer))
+:config
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "%d/%d ")
+(setq ivy-display-style 'fancy))
+
+(use-package counsel
+:ensure t
+:bind
+(("M-y" . counsel-yank-pop)
+    :map ivy-minibuffer-map
+    ("M-y" . ivy-next-line)))
+
+
+
+(use-package swiper
+:ensure t
+:bind (("C-s" . swiper-isearch)
+        ("C-r" . swiper-isearch)
+        ("C-c C-r" . ivy-resume)
+        ("M-x" . counsel-M-x)
+        ("C-x C-f" . counsel-find-file))
+:config
+(progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
+(setq ivy-use-virtual-buffers t)
+(setq enable-recursive-minibuffers t)
+;; enable this if you want `swiper' to use it
+;; (setq search-default-mode #'char-fold-to-regexp)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+(global-set-key (kbd "<f1> l") 'counsel-find-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-c g") 'counsel-git)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)
+(global-set-key (kbd "C-c k") 'counsel-ag)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+(define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
+#+END_SRC
+
+#+RESULTS:
+: counsel-minibuffer-history
 ** Treemacs
 #+BEGIN_SRC emacs-lisp
 (use-package treemacs
@@ -780,6 +852,10 @@ same directory as the org-buffer and insert a link to this file."
 #+RESULTS:
 : file:///home/alkhaldieid/repos/reveal.js
 
+* prose utils
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC 
 * Evil Leader Keybindings
 #+BEGIN_SRC emacs-lisp
 
@@ -790,7 +866,7 @@ same directory as the org-buffer and insert a link to this file."
   (evil-leader/set-key
    "<SPC> " 'helm-M-x
    "fs" 'save-buffer
-   "ff" 'find-file
+   "ff" 'helm-find-files
  
 
    "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
@@ -808,6 +884,7 @@ same directory as the org-buffer and insert a link to this file."
    "wd" 'evil-window-delete
    "wv" 'evil-window-vsplit
    "ws" 'evil-window-split
+   "wm" 'delete-other-windows
  
    ;; workspaces
    "lw1" 'eyebrowse-switch-to-window-config-1
@@ -847,6 +924,7 @@ same directory as the org-buffer and insert a link to this file."
    "nf" 'org-roam-find-file
    "ng" 'org-roam-show-graph
    "ni" 'org-roam-insert
+   "nt" 'org-roam-dailies-find-today
    ;; org-roam-bibtex
    "na" 'orb-note-actions
    ;; syn layer  keybindings
