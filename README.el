@@ -682,9 +682,9 @@ same directory as the org-buffer and insert a link to this file."
 ;; use (evil-leader/set-key to bind keys in the leader map
 
 (evil-leader/set-key
- "<SPC> " 'helm-M-x
+ "<SPC> " 'counsel-M-x
  "fs" 'save-buffer
- "ff" 'helm-find-files
+ "ff" 'counsel-find-file
 
 
  "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))

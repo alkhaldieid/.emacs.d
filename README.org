@@ -152,7 +152,6 @@ Operators that deal with indentation ( < and > ) also indent headers.
 #+RESULTS:
 : complete
 
-
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
 (use-package powerline-evil
@@ -194,12 +193,11 @@ Operators that deal with indentation ( < and > ) also indent headers.
   (use-package faff-theme :ensure t)
   (use-package color-theme-modern :ensure t)
 
-  (load-theme 'modus-operandi t)
+  (load-theme 'modus-vivendi t)
 #+END_SRC
 
 #+RESULTS:
 : t
-
 * MISC Packages
 ** Try
 #+BEGIN_SRC emacs-lisp
