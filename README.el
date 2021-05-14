@@ -149,7 +149,7 @@
   (use-package faff-theme :ensure t)
   (use-package color-theme-modern :ensure t)
 
-  (load-theme 'modus-operandi t)
+  (load-theme 'modus-vivendi t)
 
 (use-package try
   :ensure t)
