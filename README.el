@@ -304,6 +304,9 @@
   :ensure t
 )
 
+(use-package pyvenv
+    :ensure t)
+
 (use-package python-mode)
 
 (use-package elpy

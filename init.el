@@ -88,7 +88,7 @@
  '(ibuffer-title-face 'modus-themes-pseudo-header)
  '(org-src-block-faces 'nil)
  '(package-selected-packages
-   '(synonymous ivy org-roam color-theme-modern faff-theme modus-vivendi-theme modus-operandi-theme poet-theme tao-theme alect-themes ample-zen-theme ample-theme gruvbox-theme monokai-theme zenburn-theme moe-theme cloud-theme parchment-theme ox-reveal org-projectile evil-nerd-commenter org-roam-server company-jedi ein conda better-defaults engine-mode unicode-fonts eyebrowse org-ref helm-company org-noter magit company-quickhelp treemacs-projectile treemacs-evil treemacs helm beacon dracula-theme powerline-evil yasnippet which-key use-package try synosaurus spacemacs-theme org-roam-bibtex evil-leader evil-commentary cyberpunk-theme company-anaconda auto-complete afternoon-theme))
+   '(pyenv synonymous ivy org-roam color-theme-modern faff-theme modus-vivendi-theme modus-operandi-theme poet-theme tao-theme alect-themes ample-zen-theme ample-theme gruvbox-theme monokai-theme zenburn-theme moe-theme cloud-theme parchment-theme ox-reveal org-projectile evil-nerd-commenter org-roam-server company-jedi ein conda better-defaults engine-mode unicode-fonts eyebrowse org-ref helm-company org-noter magit company-quickhelp treemacs-projectile treemacs-evil treemacs helm beacon dracula-theme powerline-evil yasnippet which-key use-package try synosaurus spacemacs-theme org-roam-bibtex evil-leader evil-commentary cyberpunk-theme company-anaconda auto-complete afternoon-theme))
  '(pdf-view-midnight-colors '("#ffffff" . "#100f10"))
  '(vc-annotate-background nil)
  '(vc-annotate-background-mode nil)
