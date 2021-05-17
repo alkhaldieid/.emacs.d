@@ -306,6 +306,7 @@
 
 (use-package pyvenv
     :ensure t)
+(setq pyvenv-default-virtual-env-name "~/myenvs/invest/")
 
 (use-package python-mode)
 
