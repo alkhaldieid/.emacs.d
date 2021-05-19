@@ -335,6 +335,8 @@
   :config
     (setq company-quickhelp-delay 0.5)
   :ensure t)
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
 
 (use-package yasnippet
   :ensure t
