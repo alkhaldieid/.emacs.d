@@ -6,4 +6,4 @@ auto-save-list/*
 *.dat
 ac-comphist.dat
 elpa/archives/melpa/archive-contents
-org-roam.db
+org\-roam.db
