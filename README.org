@@ -875,85 +875,125 @@ same directory as the org-buffer and insert a link to this file."
   ;; set the leader key
   (evil-leader/set-leader "<SPC>")
   ;; use (evil-leader/set-key to bind keys in the leader map
+  ;; Global leader map
 
   (evil-leader/set-key
-   "<SPC> " 'counsel-M-x
-   "fs" 'save-buffer
-   "ff" 'counsel-find-file
- 
+    "<SPC> " 'counsel-M-x
+    "fs" 'save-buffer
+    "ff" 'counsel-find-file
 
-   "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
-   ;; buffers
 
-   "bb" 'switch-to-buffer
-   "bk" 'kill-buffer
-   "bp" 'previous-buffer
-   "bn" 'next-buffer
-   ;; windows
-   "wl" 'evil-window-right
-   "wh" 'evil-window-left
-   "wk" 'evil-window-up
-   "wj" 'evil-window-down
-   "wd" 'evil-window-delete
-   "wv" 'evil-window-vsplit
-   "ws" 'evil-window-split
-   "wm" 'delete-other-windows
- 
-   ;; workspaces
-   "lw1" 'eyebrowse-switch-to-window-config-1
-   "lw2" 'eyebrowse-switch-to-window-config-2
-   "lw3" 'eyebrowse-switch-to-window-config-3
-   "lw4" 'eyebrowse-switch-to-window-config-4
-   "lw5" 'eyebrowse-switch-to-window-config-5
-   "lw6" 'eyebrowse-switch-to-window-config-6
-   "lw7" 'eyebrowse-switch-to-window-config-7
-   "lw8" 'eyebrowse-switch-to-window-config-8
-   "lw9" 'eyebrowse-switch-to-window-config-9
-   ;; files
-   ;; cf files
-   "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
-   "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
-   "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
-   "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
-   "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
-   "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
-   
-   ;; evil-nerd-commenter
-   "ci" 'evilnc-comment-or-uncomment-lines
-   "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-   "cc" 'evilnc-copy-and-comment-lines
-   "cp" 'evilnc-comment-or-uncomment-paragraphs
-   "cr" 'comment-or-uncomment-region
-   "cv" 'evilnc-toggle-invert-comment-line-by-line
-   "."  'evilnc-copy-and-comment-operator
-   "//" 'evilnc-comment-operator ; if you prefer backslash key
-   
-   ;; zoom-in and out
-   "=" 'text-scale-increase
-   "-" 'text-scale-decrease
-   
-   ;; org roam
-   "nl" 'org-roam
-   "nf" 'org-roam-find-file
-   "ng" 'org-roam-show-graph
-   "ni" 'org-roam-insert
-   "nt" 'org-roam-dailies-find-today
-   ;; org-roam-bibtex
-   "na" 'orb-note-actions
-   ;; syn layer  keybindings
-   "ss" 'synonyms
-   "sl" 'synosaurus-lookup
-   "sr" 'synosaurus-choose-and-replace
-   "si" 'synosaurus-choose-and-insert
-   ;; org-recoll keys
-   "ps" 'org-recoll-search
-   "pu" 'org-recoll-update-index
-   ;; evil-commentry
-  ;; ";" evil-commentry-line
-   )
+    ;; buffers
+
+    "bb" 'switch-to-buffer
+    "bk" 'kill-buffer
+    "bp" 'previous-buffer
+    "bn" 'next-buffer
+    ;; windows
+    "wl" 'evil-window-right
+    "wh" 'evil-window-left
+    "wk" 'evil-window-up
+    "wj" 'evil-window-down
+    "wd" 'evil-window-delete
+    "wv" 'evil-window-vsplit
+    "ws" 'evil-window-split
+    "wm" 'delete-other-windows
+
+    ;; workspaces
+    "lw1" 'eyebrowse-switch-to-window-config-1
+    "lw2" 'eyebrowse-switch-to-window-config-2
+    "lw3" 'eyebrowse-switch-to-window-config-3
+    "lw4" 'eyebrowse-switch-to-window-config-4
+    "lw5" 'eyebrowse-switch-to-window-config-5
+    "lw6" 'eyebrowse-switch-to-window-config-6
+    "lw7" 'eyebrowse-switch-to-window-config-7
+    "lw8" 'eyebrowse-switch-to-window-config-8
+    "lw9" 'eyebrowse-switch-to-window-config-9
+
+    ;; evil-nerd-commenter
+    "ci" 'evilnc-comment-or-uncomment-lines
+    "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "cc" 'evilnc-copy-and-comment-lines
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    "cr" 'comment-or-uncomment-region
+    "cv" 'evilnc-toggle-invert-comment-line-by-line
+    "."  'evilnc-copy-and-comment-operator
+    "//" 'evilnc-comment-operator ; if you prefer backslash key
+
+    ;; zoom-in and out
+    "=" 'text-scale-increase
+    "-" 'text-scale-decrease
+
+    ;; org roam
+    "nl" 'org-roam
+    "nf" 'org-roam-find-file
+    "ng" 'org-roam-show-graph
+    "ni" 'org-roam-insert
+    "nt" 'org-roam-dailies-find-today
+    ;; org-roam-bibtex
+    "na" 'orb-note-actions
+    ;; syn layer  keybindings
+    "ss" 'synonyms
+    "sl" 'synosaurus-lookup
+    "sr" 'synosaurus-choose-and-replace
+    "si" 'synosaurus-choose-and-insert
+    ;; org-recoll keys
+    "ps" 'org-recoll-search
+    "pu" 'org-recoll-update-index
+    ;; evil-commentry
+    ;; ";" evil-commentry-line
+    ;; bookmarks 
+
+    ;; work files
+    "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
+    "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
+    "ow3" '(lambda() (interactive) (find-file "~/Dropbox/third/paper.org"))
+    "ow4" '(lambda() (interactive) (find-file "~/Dropbox/four/paper.org"))
+    "owp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
+    "owc" '(lambda() (interactive) (find-file "~/Dropbox/conference/paper.org"))
+    "owa" '(lambda() (interactive) (find-file
+                                    "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
+    "oot" '(lambda() (interactive) (find-file "~/Dropbox/org/agenda/TODOs.org"))
+    "oor" '(lambda() (interactive) (find-file "~/Dropbox/org/agenda/routine.org"))
+    "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
+    "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
+
+    ;; cf files
+    "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
+    "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+    "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+    "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+    "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
+    "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+
+    "qs" 'save-buffers-kill-emacs
+
+    )
+  ;; orgmode leader map
+  (evil-leader/set-key-for-mode 'org-mode "e" 'org-set-effort)
+
  #+END_SRC
 
  #+RESULTS:
+
+* Latex
+#+BEGIN_SRC emacs-lisp
+
+(add-to-list 'org-latex-classes
+             '("thesis"
+               "\\documentclass[12pt]{uthesis-v12}"
+               ("\\chapter{%s}" . "\\chapter*{%s}")
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ))
+#+END_SRC
+
+#+RESULTS:
+| thesis  | \documentclass[12pt]{uthesis-v12} | (\chapter{%s} . \chapter*{%s}) | (\section{%s} . \section*{%s})       | (\subsection{%s} . \subsection*{%s})       |                                      |                                            |
+| apa6    | \documentclass{apa6}              | (\section{%s} . \section*{%s}) | (\subsection{%s} . \subsection*{%s}) | (\subsubsection{%s} . \subsubsection*{%s}) | (\paragraph{%s} . \paragraph*{%s})   | (\subparagraph{%s} . \subparagraph*{%s})   |
+| article | \documentclass[11pt]{article}     | (\section{%s} . \section*{%s}) | (\subsection{%s} . \subsection*{%s}) | (\subsubsection{%s} . \subsubsection*{%s}) | (\paragraph{%s} . \paragraph*{%s})   | (\subparagraph{%s} . \subparagraph*{%s})   |
+| report  | \documentclass[11pt]{report}      | (\part{%s} . \part*{%s})       | (\chapter{%s} . \chapter*{%s})       | (\section{%s} . \section*{%s})             | (\subsection{%s} . \subsection*{%s}) | (\subsubsection{%s} . \subsubsection*{%s}) |
+| book    | \documentclass[11pt]{book}        | (\part{%s} . \part*{%s})       | (\chapter{%s} . \chapter*{%s})       | (\section{%s} . \section*{%s})             | (\subsection{%s} . \subsection*{%s}) | (\subsubsection{%s} . \subsubsection*{%s}) |
 
 * What are the most important things to setup in my build  
 ** note taking
