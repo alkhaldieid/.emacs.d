@@ -1,6 +1,6 @@
 ;; Remove initial buffer, set index file
 (setq inhibit-startup-message t)
-;; (setq initial-buffer-choice "~/Dropbox/index.org")
+(setq initial-buffer-choice "~/Dropbox/org/agenda/TODOs.org")
 
 ;; Hide Scroll bar,menu bar, tool bar
 (scroll-bar-mode -1)
@@ -25,6 +25,14 @@
 ;;set the default font"
 ;;(set-default-font "Ubuntu Mono-25")
 (global-visual-line-mode t)
+
+(use-package org
+  :ensure t)
+(defun package-config ()
+  (unless (package-installed-p 'org-plus-contrib)
+    (package-refresh-contents)
+    (package-install 'org-plus-contrib)))
+(add-hook 'after-init-hook 'package-config)
 
 (use-package org-superstar  ;; Improved version of org-bullets
   :ensure t
@@ -116,6 +124,231 @@
 
 ;; disables the automatic indentation inside an orgmode source block when invoking evil-org-open-below with <normal-state> o
 (setq org-src-tab-acts-natively nil)
+
+(setq
+ org_notes (concat (getenv "HOME") "Dropbox/org/roam/")
+ zot_bib (concat (getenv "HOME") "Dropbox/mend/library.bib")
+ org-directory org_notes
+ deft-directory org_notes
+ org-roam-directory org_notes
+ )
+(require 'org-ref)
+
+(setq
+      org-ref-completion-library 'org-ref-ivy-cite
+      org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtexy
+      org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
+      org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
+      org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+      org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
+      org-ref-notes-function 'orb-edit-notes
+)
+;;;;;;;;;;; Spacemacs configs;;;;
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;; NOTE TAKING CONFIGS ;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq
+   dropbox_dir (concat (getenv "HOME") "/Dropbox")
+   org_notes (concat dropbox_dir "/org/roam/")
+   zot_bib (concat dropbox_dir "/mend/library.bib")
+   org-directory org_notes
+   deft-directory org_notes
+   org-roam-directory org_notes
+   agenda_dir (concat dropbox_dir "/org/agenda")
+)
+(with-eval-after-load 'org
+    (setq
+    bibtex-completion-notes-path org_notes
+    bibtex-completion-bibliography zot_bib
+    bibtex-completion-pdf-field "file"
+    bibtex-completion-notes-template-multiple-files
+    (concat
+      "#+TITLE: ${title}\n"
+      "#+ROAM_KEY: cite:${=key=}\n"
+      "* TODO Notes\n"
+      ":PROPERTIES:\n"
+      ":Custom_ID: ${=key=}\n"
+      ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+      ":AUTHOR: ${author-abbrev}\n"
+      ":JOURNAL: ${journaltitle}\n"
+      ":DATE: ${date}\n"
+      ":YEAR: ${year}\n"
+      ":DOI: ${doi}\n"
+      ":URL: ${url}\n"
+      ":END:\n\n"
+      "* Why am I reading this article?\n"
+      "* Problem Definition\n"
+      "* Proposed Method\n"
+      "* Dataset used\n"
+
+     )
+  )
+)
+;;;;;;;;;;;; ORG NOTER ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(with-eval-after-load 'org
+   (setq
+            org-ref-completion-library 'org-ref-ivy-cite
+            org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename
+            org-ref-default-bibliography (list zot_bib)
+            org-ref-bibliography-files (list zot_bib)
+            org-ref-bibliography-notes (concat org_notes  "/bibnotes.org")
+            org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+            org-ref-notes-directory org_notes
+            org-ref-notes-function 'orb-edit-notes
+        )
+      (setq
+            org-noter-default-notes-file-name '(concat dropbox_dir "/notes.org")
+            org-noter-default-search-path  '(concat dropbox_dir "/mend"))
+
+  )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; org settings
+
+  (setq user-full-name "Eid Alkhaldi")
+  (require 'ox)
+  (require 'ox-latex)
+
+  (setq org-latex-pdf-process '("%latex -interaction nonstopmode -output-directory %o %f" "%latex -interaction nonstopmode -output-directory %o %f" "latex -interaction nonstopmode -output-directory %o %f" ))
+  (setq org-latex-create-formula-image-program 'dvipng)
+  (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (mapcar #'(lambda (file)
+                (when (file-exists-p file)
+                  (push file org-agenda-files)))
+            (org-projectile-todo-files)))
+  (global-company-mode)
+  (menu-bar-mode 1)
+  (global-visual-line-mode t)
+  ;(add-to-list 'deft-extensions "tex")
+   ;;; enables the live-preview of compiled pdfs
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
+;;;;; form
+  (with-eval-after-load 'org
+      (add-to-list 'org-latex-classes
+                  '("apa6"
+                    "\\documentclass{apa6}"
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+      (setq org-latex-pdf-process
+            '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;; My functions ;;;;;;;;;;;;;;;;;;
+  (defun my-org-screenshot ()
+    "Take a screenshot into a time stamped unique-named file in the
+same directory as the org-buffer and insert a link to this file."
+    (interactive)
+    (setq filename
+          (concat
+           (make-temp-name
+            (concat (buffer-file-name)
+                    "_"
+                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+    (call-process "import" nil nil nil filename)
+    (insert (concat "[[" filename "]]"))
+    (org-display-inline-images))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;; Organizational stuff ;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; following this guy
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
+
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("TBC" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("MEETING" :foreground "forest green" :weight bold)
+                ("PHONE" :foreground "forest green" :weight bold))))
+  (setq org-use-fast-todo-selection t)
+
+  ;; capturing templates
+  (setq org-capture-templates
+        '(("n" "New Idea" entry (file "~/Dropbox/org/agenda/newpaperideas.org")
+           "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
+           ))
+
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;; Apperance ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq evil-emacs-state-cursor '("chartreuse3" (box)))
+  (setq-default evil-insert-state-cursor 'box)
+
+  (setq org-startup-folded "folded")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;; company confiuration ;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq company-minimum-prefix-length 3
+       company-idle-delay 0.05)
+;;;;;;;;;;;;;
+
+(with-eval-after-load 'org
+  (add-to-list 'org-latex-classes
+               '("thesis"
+                 "\\documentclass[12pt]{uthesis-v12}"
+                 ("\\chapter{%s}" . "\\chapter*{%s}")
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ))
+  '("altacv" "\\documentclass[10pt,a4paper,ragged2e,withhyper]{altacv}
+
+% Change the page layout if you need to
+\\geometry{left=1.25cm,right=1.25cm,top=1.5cm,bottom=1.5cm,columnsep=1.2cm}
+
+% Use roboto and lato for fonts
+\\renewcommand{\\familydefault}{\\sfdefault}
+
+% Change the colours if you want to
+\\definecolor{SlateGrey}{HTML}{2E2E2E}
+\\definecolor{LightGrey}{HTML}{666666}
+\\definecolor{DarkPastelRed}{HTML}{450808}
+\\definecolor{PastelRed}{HTML}{8F0D0D}
+\\definecolor{GoldenEarth}{HTML}{E7D192}
+\\colorlet{name}{black}
+\\colorlet{tagline}{PastelRed}
+\\colorlet{heading}{DarkPastelRed}
+\\colorlet{headingrule}{GoldenEarth}
+\\colorlet{subheading}{PastelRed}
+\\colorlet{accent}{PastelRed}
+\\colorlet{emphasis}{SlateGrey}
+\\colorlet{body}{LightGrey}
+
+% Change some fonts, if necessary
+\\renewcommand{\\namefont}{\\Huge\\rmfamily\\bfseries}
+\\renewcommand{\\personalinfofont}{\\footnotesize}
+\\renewcommand{\\cvsectionfont}{\\LARGE\\rmfamily\\bfseries}
+\\renewcommand{\\cvsubsectionfont}{\\large\\bfseries}
+
+% Change the bullets for itemize and rating marker
+% for \cvskill if you want to
+\\renewcommand{\\itemmarker}{{\\small\\textbullet}}
+\\renewcommand{\\ratingmarker}{\\faCircle}
+"
+
+    ("\\cvsection{%s}" . "\\cvsection*{%s}")))
 
 (use-package powerline-evil
   :ensure t)
@@ -470,186 +703,6 @@
 
 (use-package openwith :ensure t)
 
-(setq
- org_notes (concat (getenv "HOME") "Dropbox/org/roam/")
- zot_bib (concat (getenv "HOME") "Dropbox/mend/library.bib")
- org-directory org_notes
- deft-directory org_notes
- org-roam-directory org_notes
- )
-(require 'org-ref)
-
-(setq
-      org-ref-completion-library 'org-ref-ivy-cite
-      org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtexy
-      org-ref-default-bibliography (list "/home/alkhaldieid/Dropbox/mend/library.bib")
-      org-ref-bibliography-notes "/home/alkhaldieid/Dropbox/org/roam/bibnotes.org"
-      org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-      org-ref-notes-directory "/home/alkhaldieid/Dropbox/org/roam/"
-      org-ref-notes-function 'orb-edit-notes
-)
-;;;;;;;;;;; Spacemacs configs;;;;
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;; NOTE TAKING CONFIGS ;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq
-   dropbox_dir (concat (getenv "HOME") "/Dropbox")
-   org_notes (concat dropbox_dir "/org/roam/")
-   zot_bib (concat dropbox_dir "/mend/library.bib")
-   org-directory org_notes
-   deft-directory org_notes
-   org-roam-directory org_notes
-   agenda_dir (concat dropbox_dir "/org/agenda")
-)
-(with-eval-after-load 'org
-    (setq
-    bibtex-completion-notes-path org_notes
-    bibtex-completion-bibliography zot_bib
-    bibtex-completion-pdf-field "file"
-    bibtex-completion-notes-template-multiple-files
-    (concat
-      "#+TITLE: ${title}\n"
-      "#+ROAM_KEY: cite:${=key=}\n"
-      "* TODO Notes\n"
-      ":PROPERTIES:\n"
-      ":Custom_ID: ${=key=}\n"
-      ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
-      ":AUTHOR: ${author-abbrev}\n"
-      ":JOURNAL: ${journaltitle}\n"
-      ":DATE: ${date}\n"
-      ":YEAR: ${year}\n"
-      ":DOI: ${doi}\n"
-      ":URL: ${url}\n"
-      ":END:\n\n"
-      "* Why am I reading this article?\n"
-      "* Problem Definition\n"
-      "* Proposed Method\n"
-      "* Dataset used\n"
-
-     )
-  )
-)
-;;;;;;;;;;;; ORG NOTER ;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(with-eval-after-load 'org
-   (setq
-            org-ref-completion-library 'org-ref-ivy-cite
-            org-ref-get-pdf-filename-function 'org-ref-get-mendeley-filename
-            org-ref-default-bibliography (list zot_bib)
-            org-ref-bibliography-files (list zot_bib)
-            org-ref-bibliography-notes (concat org_notes  "/bibnotes.org")
-            org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-            org-ref-notes-directory org_notes
-            org-ref-notes-function 'orb-edit-notes
-        )
-      (setq
-            org-noter-default-notes-file-name '(concat dropbox_dir "/notes.org")
-            org-noter-default-search-path  '(concat dropbox_dir "/mend"))
-
-  )
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;; LaTex Configurations;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  ;; org settings
-
-  (setq user-full-name "Eid Alkhaldi")
-  (require 'ox)
-  (require 'ox-latex)
-
-  (setq org-latex-pdf-process '("%latex -interaction nonstopmode -output-directory %o %f" "%latex -interaction nonstopmode -output-directory %o %f" "latex -interaction nonstopmode -output-directory %o %f" ))
-  (setq org-latex-create-formula-image-program 'dvipng)
-  (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (mapcar #'(lambda (file)
-                (when (file-exists-p file)
-                  (push file org-agenda-files)))
-            (org-projectile-todo-files)))
-  (global-company-mode)
-  (menu-bar-mode 1)
-  (global-visual-line-mode t)
-  ;(add-to-list 'deft-extensions "tex")
-   ;;; enables the live-preview of compiled pdfs
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  (org-babel-do-load-languages 'org-babel-load-languages '((python . t)))
-;;;;; form
-  (with-eval-after-load 'org
-      (add-to-list 'org-latex-classes
-                  '("apa6"
-                    "\\documentclass{apa6}"
-                    ("\\section{%s}" . "\\section*{%s}")
-                    ("\\subsection{%s}" . "\\subsection*{%s}")
-                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-      (setq org-latex-pdf-process
-            '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f")))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;; My functions ;;;;;;;;;;;;;;;;;;
-  (defun my-org-screenshot ()
-    "Take a screenshot into a time stamped unique-named file in the
-same directory as the org-buffer and insert a link to this file."
-    (interactive)
-    (setq filename
-          (concat
-           (make-temp-name
-            (concat (buffer-file-name)
-                    "_"
-                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
-    (call-process "import" nil nil nil filename)
-    (insert (concat "[[" filename "]]"))
-    (org-display-inline-images))
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;; Organizational stuff ;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; following this guy
-  (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING" "TBC(b)"))))
-
-  (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
-                ("DONE" :foreground "forest green" :weight bold)
-                ("TBC" :foreground "forest green" :weight bold)
-                ("WAITING" :foreground "orange" :weight bold)
-                ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold)
-                ("MEETING" :foreground "forest green" :weight bold)
-                ("PHONE" :foreground "forest green" :weight bold))))
-  (setq org-use-fast-todo-selection t)
-
-  ;; capturing templates
-  (setq org-capture-templates
-        '(("n" "New Idea" entry (file "~/Dropbox/org/agenda/newpaperideas.org")
-           "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
-           ))
-
-
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;; Apperance ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq evil-emacs-state-cursor '("chartreuse3" (box)))
-  (setq-default evil-insert-state-cursor 'box)
-
-  (setq org-startup-folded "folded")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;; company confiuration ;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq company-minimum-prefix-length 3
-       company-idle-delay 0.05)
-;;;;;;;;;;;;;
-
 ; https://cestlaz.github.io/posts/using-emacs-24-capture-2/
 ; Bind Key to: emacsclient -ne "(make-capture-frame)"
 
@@ -688,77 +741,97 @@ same directory as the org-buffer and insert a link to this file."
 ;; use (evil-leader/set-key to bind keys in the leader map
 
 (evil-leader/set-key
- "<SPC> " 'counsel-M-x
- "fs" 'save-buffer
- "ff" 'counsel-find-file
+  "<SPC> " 'counsel-M-x
+  "fs" 'save-buffer
+  "ff" 'counsel-find-file
 
 
- "d"'(lambda() (interactive) (find-file "~/Dropbox/second_final/ieee"))
- ;; buffers
+  ;; buffers
 
- "bb" 'switch-to-buffer
- "bk" 'kill-buffer
- "bp" 'previous-buffer
- "bn" 'next-buffer
- ;; windows
- "wl" 'evil-window-right
- "wh" 'evil-window-left
- "wk" 'evil-window-up
- "wj" 'evil-window-down
- "wd" 'evil-window-delete
- "wv" 'evil-window-vsplit
- "ws" 'evil-window-split
- "wm" 'delete-other-windows
+  "bb" 'switch-to-buffer
+  "bd" 'kill-buffer
+  "bp" 'previous-buffer
+  "bn" 'next-buffer
+  ;; windows
+  "wl" 'evil-window-right
+  "wh" 'evil-window-left
+  "wk" 'evil-window-up
+  "wj" 'evil-window-down
+  "wd" 'evil-window-delete
+  "wv" 'evil-window-vsplit
+  "ws" 'evil-window-split
+  "wm" 'delete-other-windows
 
- ;; workspaces
- "lw1" 'eyebrowse-switch-to-window-config-1
- "lw2" 'eyebrowse-switch-to-window-config-2
- "lw3" 'eyebrowse-switch-to-window-config-3
- "lw4" 'eyebrowse-switch-to-window-config-4
- "lw5" 'eyebrowse-switch-to-window-config-5
- "lw6" 'eyebrowse-switch-to-window-config-6
- "lw7" 'eyebrowse-switch-to-window-config-7
- "lw8" 'eyebrowse-switch-to-window-config-8
- "lw9" 'eyebrowse-switch-to-window-config-9
- ;; files
- ;; cf files
- "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/init.el"))
- "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
- "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
- "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
- "cfk" '(lambda() (interactive) (find-file "~/.emacs.d/userConfig/keybindings.el"))
- "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+  ;; workspaces
+  "lw1" 'eyebrowse-switch-to-window-config-1
+  "lw2" 'eyebrowse-switch-to-window-config-2
+  "lw3" 'eyebrowse-switch-to-window-config-3
+  "lw4" 'eyebrowse-switch-to-window-config-4
+  "lw5" 'eyebrowse-switch-to-window-config-5
+  "lw6" 'eyebrowse-switch-to-window-config-6
+  "lw7" 'eyebrowse-switch-to-window-config-7
+  "lw8" 'eyebrowse-switch-to-window-config-8
+  "lw9" 'eyebrowse-switch-to-window-config-9
 
- ;; evil-nerd-commenter
- "ci" 'evilnc-comment-or-uncomment-lines
- "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
- "cc" 'evilnc-copy-and-comment-lines
- "cp" 'evilnc-comment-or-uncomment-paragraphs
- "cr" 'comment-or-uncomment-region
- "cv" 'evilnc-toggle-invert-comment-line-by-line
- "."  'evilnc-copy-and-comment-operator
- "//" 'evilnc-comment-operator ; if you prefer backslash key
+  ;; evil-nerd-commenter
+  "ci" 'evilnc-comment-or-uncomment-lines
+  "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+  "cc" 'evilnc-copy-and-comment-lines
+  "cp" 'evilnc-comment-or-uncomment-paragraphs
+  "cr" 'comment-or-uncomment-region
+  "cv" 'evilnc-toggle-invert-comment-line-by-line
+  "."  'evilnc-copy-and-comment-operator
+  ";;" 'evilnc-comment-operator ; if you prefer backslash key
 
- ;; zoom-in and out
- "=" 'text-scale-increase
- "-" 'text-scale-decrease
+  ;; zoom-in and out
+  "=" 'text-scale-increase
+  "-" 'text-scale-decrease
 
- ;; org roam
- "nl" 'org-roam
- "nf" 'org-roam-find-file
- "ng" 'org-roam-show-graph
- "ni" 'org-roam-insert
- "nt" 'org-roam-dailies-find-today
- ;; org-roam-bibtex
- "na" 'orb-note-actions
- ;; syn layer  keybindings
- "ss" 'synonyms
- "sl" 'synosaurus-lookup
- "sr" 'synosaurus-choose-and-replace
- "si" 'synosaurus-choose-and-insert
- ;; org-recoll keys
- "ps" 'org-recoll-search
- "pu" 'org-recoll-update-index
- ;; evil-commentry
-;; ";" evil-commentry-line
- )
+  ;; org roam
+  "nl" 'org-roam
+  "nf" 'org-roam-find-file
+  "ng" 'org-roam-show-graph
+  "ni" 'org-roam-insert
+  "nt" 'org-roam-dailies-find-today
+  ;; org-roam-bibtex
+  "na" 'orb-note-actions
+  ;; syn layer  keybindings
+  "ss" 'synonyms
+  "sl" 'synosaurus-lookup
+  "sr" 'synosaurus-choose-and-replace
+  "si" 'synosaurus-choose-and-insert
+  ;; org-recoll keys
+  "ps" 'org-recoll-search
+  "pu" 'org-recoll-update-index
+  ;; evil-commentry
+  ;; ";" evil-commentry-line
+  ;; bookmarks 
+
+  ;; work files
+  "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
+  "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
+  "ow3" '(lambda() (interactive) (find-file "~/Dropbox/third/paper.org"))
+  "ow4" '(lambda() (interactive) (find-file "~/Dropbox/four/paper.org"))
+  "owp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
+  "owc" '(lambda() (interactive) (find-file "~/Dropbox/conference/paper.org"))
+  "owa" '(lambda() (interactive) (find-file
+                                  "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
+  "oot" '(lambda() (interactive) (find-file "~/Dropbox/org/agenda/TODOs.org"))
+  "oor" '(lambda() (interactive) (find-file "~/Dropbox/org/agenda/routine.org"))
+  "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
+  "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
+
+  ;; cf files
+  "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/README.org"))
+  "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+  "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+  "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+  "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+
+  ;; emacs quitting
+  "qs" 'save-buffers-kill-emacs
+
+  )
+
+(evil-leader/set-key-for-mode 'org-mode 
+    "e" 'org-set-effort)
