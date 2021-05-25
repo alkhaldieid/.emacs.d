@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ipython 
+# key: si
+# --
+#+BEGIN_SRC ipython :session :results output drawer
+$0
+#+END_SRC

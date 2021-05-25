@@ -3,8 +3,8 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "~/Dropbox/org/roam/20210520132710-job.org")
- (front-context-string . "#+title: job\n\nal")
+ (filename . "~/Dropbox/org/roam/Imambi2021.org")
+ (front-context-string . "#+TITLE: Pytorch")
  (rear-context-string)
  (position . 1))
 )

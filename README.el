@@ -313,7 +313,9 @@ same directory as the org-buffer and insert a link to this file."
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ))
-  '("altacv" "\\documentclass[10pt,a4paper,ragged2e,withhyper]{altacv}
+
+  (add-to-list 'org-latex-classes
+               '("altacv" "\\documentclass[10pt,a4paper,ragged2e,withhyper]{altacv}
 
 % Change the page layout if you need to
 \\geometry{left=1.25cm,right=1.25cm,top=1.5cm,bottom=1.5cm,columnsep=1.2cm}
@@ -348,7 +350,8 @@ same directory as the org-buffer and insert a link to this file."
 \\renewcommand{\\ratingmarker}{\\faCircle}
 "
 
-    ("\\cvsection{%s}" . "\\cvsection*{%s}")))
+                 ("\\cvsection{%s}" . "\\cvsection*{%s}")
+                 ("\\cvevent{%s}" . "\\cvevent*{%s}"))))
 
 (use-package powerline-evil
   :ensure t)
@@ -539,7 +542,9 @@ same directory as the org-buffer and insert a link to this file."
 
 (use-package pyvenv
     :ensure t)
-(setq pyvenv-default-virtual-env-name "~/myenvs/invest/")
+(setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
+(setq conda-env-home-directory "/home/alkhaldieid/anaconda3/")
+(setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
 
 (use-package python-mode)
 

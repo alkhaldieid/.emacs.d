@@ -658,13 +658,16 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 * Python
 ** pyenv
 #+BEGIN_SRC emacs-lisp
-(use-package pyvenv
-    :ensure t)
-(setq pyvenv-default-virtual-env-name "~/myenvs/invest/")
+  (use-package pyvenv
+      :ensure t)
+  (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
+  (setq conda-env-home-directory "/home/alkhaldieid/anaconda3/")
+  (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
 #+END_SRC
 
+
 #+RESULTS:
-: ~/myenvs/invest/
+: /home/alkhaldieid/anaconda3/
 
 ** Elpy
 
@@ -1134,6 +1137,7 @@ translation, synonyms and other useful tools needed for writing efficiency.
     (with-eval-after-load 'org
       (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)
                                                                (plantuml . t)
+                                                               (ipython . t)
                                                                ))
       (add-to-list 'org-latex-classes
                    '("apa6"
