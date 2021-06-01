@@ -387,6 +387,8 @@ same directory as the org-buffer and insert a link to this file."
 
   (load-theme 'modus-vivendi t)
 
+(set-face-attribute 'default nil :height 120)
+
 (use-package try
   :ensure t)
 
@@ -541,10 +543,12 @@ same directory as the org-buffer and insert a link to this file."
 )
 
 (use-package pyvenv
-    :ensure t)
+  :ensure t)
 (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
 (setq conda-env-home-directory "/home/alkhaldieid/anaconda3/")
 (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
+;; workon home
+(setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
 
 (use-package python-mode)
 
@@ -554,9 +558,6 @@ same directory as the org-buffer and insert a link to this file."
   (elpy-enable))
   (add-hook 'elpy-mode-hook 'flycheck-mode)
 
-(use-package py-autopep8)
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopop8-enable-on-save)  
 (use-package company-jedi)
 (add-to-list 'company-backends 'company-jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -566,15 +567,28 @@ same directory as the org-buffer and insert a link to this file."
   :ensure t
   :config
   (global-company-mode))
-  
+
 (use-package company-quickhelp
   :after (company)
   :hook (company-mode . company-quickhelp-mode)
   :config
-    (setq company-quickhelp-delay 0.5)
+  (setq company-quickhelp-delay 0.5)
   :ensure t)
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(use-package company-jedi
+  :ensure t)
+
+(defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
+
+(add-hook 'python-mode-hook 'my/python-mode-hook)
+
+(use-package eglot
+  :ensure t)
+;;;  (add-hook 'foo-mode-hook 'eglot-ensure)
+(add-hook 'python-mode-hook 'eglot-ensure)
 
 (use-package yasnippet
   :ensure t
@@ -840,3 +854,18 @@ same directory as the org-buffer and insert a link to this file."
 
 (evil-leader/set-key-for-mode 'org-mode 
     "e" 'org-set-effort)
+
+(use-package elfeed
+  :ensure t)
+
+(setq elfeed-feeds
+      '(("http://nullprogram.com/feed/" blog emacs)
+        "http://www.50ply.com/atom.xml"  ; no autotagging
+        "http://arxiv.org/rss/cs"
+        ("http://nedroid.com/feed/" webcomic)))
+;; If you're getting many "Queue timeout exceeded" errors, increase the fetch timeout via elfeed-set-timeout.
+
+(setf url-queue-timeout 30)
+;; disable evil-mode for elfeed search mode
+(add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
+(add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)

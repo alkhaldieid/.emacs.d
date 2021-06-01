@@ -405,7 +405,6 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 #+RESULTS:
 | altacv | \documentclass[10pt,a4paper,ragged2e,withhyper]{altacv} |
 
-
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
 (use-package powerline-evil
@@ -422,6 +421,7 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 : t
 
 * Theming & Aesthethic
+** themes
 #+BEGIN_SRC emacs-lisp
   (global-hl-line-mode t) ;; This highlights the current line in the buffer
   (use-package beacon ;; This applies a beacon effect to the highlighted line
@@ -452,6 +452,15 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 
 #+RESULTS:
 : t
+** fonts
+set the font size 100/10 = 10pts
+for more info go to this website
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil :height 120)
+#+END_SRC
+
+#+RESULTS:
+
 * MISC Packages
 ** Try
 #+BEGIN_SRC emacs-lisp
@@ -659,15 +668,17 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 ** pyenv
 #+BEGIN_SRC emacs-lisp
   (use-package pyvenv
-      :ensure t)
+    :ensure t)
   (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
   (setq conda-env-home-directory "/home/alkhaldieid/anaconda3/")
   (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
+  ;; workon home
+  (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
 #+END_SRC
 
 
 #+RESULTS:
-: /home/alkhaldieid/anaconda3/
+: /home/alkhaldieid/anaconda3/envs/
 
 ** Elpy
 
@@ -680,9 +691,6 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
   (elpy-enable))
   (add-hook 'elpy-mode-hook 'flycheck-mode)
 
-(use-package py-autopep8)
-(require 'py-autopep8)
-(add-hook 'elpy-mode-hook 'py-autopop8-enable-on-save)  
 (use-package company-jedi)
 (add-to-list 'company-backends 'company-jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
@@ -691,25 +699,53 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 
 
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Company for Auto completion
 #+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t
-  :config
-  (global-company-mode))
+  (use-package company
+    :ensure t
+    :config
+    (global-company-mode))
   
-(use-package company-quickhelp
-  :after (company)
-  :hook (company-mode . company-quickhelp-mode)
-  :config
+  (use-package company-quickhelp
+    :after (company)
+    :hook (company-mode . company-quickhelp-mode)
+    :config
     (setq company-quickhelp-delay 0.5)
-  :ensure t)
+    :ensure t)
   (add-hook 'python-mode-hook 'jedi:setup)
   (setq jedi:complete-on-dot t)   
 #+END_SRC
 
 #+RESULTS:
 : t
+#+BEGIN_SRC emacs-lisp
+  (use-package company-jedi
+    :ensure t)
+  
+  (defun my/python-mode-hook ()
+    (add-to-list 'company-backends 'company-jedi))
+  
+  (add-hook 'python-mode-hook 'my/python-mode-hook)
+  
+#+END_SRC
+
+#+RESULTS:
+| my/python-mode-hook | #[0 \211\207 [py--imenu-create-index-function imenu-create-index-function] 2] | jedi:setup | elpy-mode |
+
+** eglot
+#+BEGIN_SRC emacs-lisp
+  (use-package eglot
+    :ensure t)
+  ;;;  (add-hook 'foo-mode-hook 'eglot-ensure)
+  (add-hook 'python-mode-hook 'eglot-ensure)
+#+END_SRC
+
+#+RESULTS:
+| eglot-ensure | my/python-mode-hook | jedi:setup | elpy-mode |
 
 * yasnippet configs
 #+BEGIN_SRC emacs-lisp
@@ -1451,3 +1487,26 @@ translation, synonyms and other useful tools needed for writing efficiency.
                     (push file org-agenda-files)))
               (org-projectile-todo-files)))
 #+END_SRC 
+
+* elfeed
+#+BEGIN_SRC emacs-lisp :results no
+  (use-package elfeed
+    :ensure t)
+  
+  (setq elfeed-feeds
+        '(("http://nullprogram.com/feed/" blog emacs)
+          "http://www.50ply.com/atom.xml"  ; no autotagging
+          "http://arxiv.org/rss/cs"
+          ("http://nedroid.com/feed/" webcomic)))
+  ;; If you're getting many "Queue timeout exceeded" errors, increase the fetch timeout via elfeed-set-timeout.
+  
+  (setf url-queue-timeout 30)
+  ;; disable evil-mode for elfeed search mode
+  (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
+  (add-to-list 'evil-emacs-state-modes 'elfeed-show-mode)
+  
+  
+#+END_SRC
+
+#+RESULTS:
+| elfeed-show-mode | elfeed-search-mode | 5x5-mode | archive-mode | bbdb-mode | biblio-selection-mode | blackbox-mode | bookmark-bmenu-mode | bookmark-edit-annotation-mode | browse-kill-ring-mode | bs-mode | bubbles-mode | bzr-annotate-mode | calc-mode | cfw:calendar-mode | completion-list-mode | Custom-mode | custom-theme-choose-mode | debugger-mode | delicious-search-mode | desktop-menu-blist-mode | desktop-menu-mode | doc-view-mode | dun-mode | dvc-bookmarks-mode | dvc-diff-mode | dvc-info-buffer-mode | dvc-log-buffer-mode | dvc-revlist-mode | dvc-revlog-mode | dvc-status-mode | dvc-tips-mode | ediff-mode | ediff-meta-mode | efs-mode | Electric-buffer-menu-mode | emms-browser-mode | emms-mark-mode | emms-metaplaylist-mode | emms-playlist-mode | ess-help-mode | etags-select-mode | fj-mode | gc-issues-mode | gdb-breakpoints-mode | gdb-disassembly-mode | gdb-frames-mode | gdb-locals-mode | gdb-memory-mode | gdb-registers-mode | gdb-threads-mode | gist-list-mode | git-rebase-mode | gnus-article-mode | gnus-browse-mode | gnus-group-mode | gnus-server-mode | gnus-summary-mode | gomoku-mode | google-maps-static-mode | ibuffer-mode | jde-javadoc-checker-report-mode | magit-cherry-mode | magit-diff-mode | magit-log-mode | magit-log-select-mode | magit-popup-mode | magit-popup-sequence-mode | magit-process-mode | magit-reflog-mode | magit-refs-mode | magit-revision-mode | magit-stash-mode | magit-stashes-mode | magit-status-mode | mh-folder-mode | monky-mode | mpuz-mode | mu4e-main-mode | mu4e-headers-mode | mu4e-view-mode | notmuch-hello-mode | notmuch-search-mode | notmuch-show-mode | notmuch-tree-mode | occur-mode | package-menu-mode | pdf-outline-buffer-mode | pdf-view-mode | proced-mode | rcirc-mode | rebase-mode | recentf-dialog-mode | reftex-select-bib-mode | reftex-select-label-mode | reftex-toc-mode | sldb-mode | slime-inspector-mode | slime-thread-control-mode | slime-xref-mode | snake-mode | solitaire-mode | sr-buttons-mode | sr-mode | sr-tree-mode | sr-virtual-mode | tar-mode | tetris-mode | tla-annotate-mode | tla-archive-list-mode | tla-bconfig-mode | tla-bookmarks-mode | tla-branch-list-mode | tla-browse-mode | tla-category-list-mode | tla-changelog-mode | tla-follow-symlinks-mode | tla-inventory-file-mode | tla-inventory-mode | tla-lint-mode | tla-logs-mode | tla-revision-list-mode | tla-revlog-mode | tla-tree-lint-mode | tla-version-list-mode | twittering-mode | urlview-mode | vc-annotate-mode | vc-dir-mode | vc-git-log-view-mode | vc-hg-log-view-mode | vc-svn-log-view-mode | vm-mode | vm-summary-mode | w3m-mode | wab-compilation-mode | xgit-annotate-mode | xgit-changelog-mode | xgit-diff-mode | xgit-revlog-mode | xhg-annotate-mode | xhg-log-mode | xhg-mode | xhg-mq-mode | xhg-mq-sub-mode | xhg-status-extra-mode |
