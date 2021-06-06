@@ -986,10 +986,10 @@ translation, synonyms and other useful tools needed for writing efficiency.
     "<SPC> " 'counsel-M-x
     "fs" 'save-buffer
     "ff" 'counsel-find-file
-
-
+  
+  
     ;; buffers
-
+  
     "bb" 'switch-to-buffer
     "bd" 'kill-buffer
     "bp" 'previous-buffer
@@ -1003,7 +1003,7 @@ translation, synonyms and other useful tools needed for writing efficiency.
     "wv" 'evil-window-vsplit
     "ws" 'evil-window-split
     "wm" 'delete-other-windows
-
+  
     ;; workspaces
     "lw1" 'eyebrowse-switch-to-window-config-1
     "lw2" 'eyebrowse-switch-to-window-config-2
@@ -1014,7 +1014,7 @@ translation, synonyms and other useful tools needed for writing efficiency.
     "lw7" 'eyebrowse-switch-to-window-config-7
     "lw8" 'eyebrowse-switch-to-window-config-8
     "lw9" 'eyebrowse-switch-to-window-config-9
-
+  
     ;; evil-nerd-commenter
     "ci" 'evilnc-comment-or-uncomment-lines
     "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
@@ -1024,17 +1024,18 @@ translation, synonyms and other useful tools needed for writing efficiency.
     "cv" 'evilnc-toggle-invert-comment-line-by-line
     "."  'evilnc-copy-and-comment-operator
     ";;" 'evilnc-comment-operator ; if you prefer backslash key
-
+  
     ;; zoom-in and out
     "=" 'text-scale-increase
     "-" 'text-scale-decrease
-
+  
     ;; org roam
     "nl" 'org-roam
     "nf" 'org-roam-find-file
     "ng" 'org-roam-show-graph
     "ni" 'org-roam-insert
     "nt" 'org-roam-dailies-find-today
+    "ny" 'org-roam-dailies-find-yesterday
     ;; org-roam-bibtex
     "na" 'orb-note-actions
     ;; syn layer  keybindings
@@ -1048,7 +1049,7 @@ translation, synonyms and other useful tools needed for writing efficiency.
     ;; evil-commentry
     ;; ";" evil-commentry-line
     ;; bookmarks 
-
+  
     ;; work files
     "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
     "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
@@ -1062,17 +1063,17 @@ translation, synonyms and other useful tools needed for writing efficiency.
     "oor" '(lambda() (interactive) (find-file "~/Dropbox/org/agenda/routine.org"))
     "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
     "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
-
+  
     ;; cf files
     "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/README.org"))
     "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
     "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
     "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
     "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
-
+  
     ;; emacs quitting
     "qs" 'save-buffers-kill-emacs
-
+  
     )
 #+END_SRC
 
