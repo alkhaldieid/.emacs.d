@@ -812,6 +812,7 @@ same directory as the org-buffer and insert a link to this file."
   "ng" 'org-roam-show-graph
   "ni" 'org-roam-insert
   "nt" 'org-roam-dailies-find-today
+  "ny" 'org-roam-dailies-find-yesterday
   ;; org-roam-bibtex
   "na" 'orb-note-actions
   ;; syn layer  keybindings
