@@ -414,7 +414,10 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 (use-package evil-commentary
   :ensure t)
 (evil-commentary-mode)
-
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 #+END_SRC
 
 #+RESULTS:
@@ -674,11 +677,16 @@ for more info go to this website
   (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
   ;; workon home
   (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
+  ;; (setq python-shell-interpreter "ipython"
+  ;;   python-shell-interpreter-args "--simple-prompt -i")
+  
+  (setq python-shell-interpreter "python")
+
 #+END_SRC
 
 
 #+RESULTS:
-: /home/alkhaldieid/anaconda3/envs/
+: python
 
 ** Elpy
 

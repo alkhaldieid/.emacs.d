@@ -360,6 +360,10 @@ same directory as the org-buffer and insert a link to this file."
 (use-package evil-commentary
   :ensure t)
 (evil-commentary-mode)
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 (global-hl-line-mode t) ;; This highlights the current line in the buffer
   (use-package beacon ;; This applies a beacon effect to the highlighted line
@@ -549,6 +553,10 @@ same directory as the org-buffer and insert a link to this file."
 (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
 ;; workon home
 (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
+;; (setq python-shell-interpreter "ipython"
+;;   python-shell-interpreter-args "--simple-prompt -i")
+
+(setq python-shell-interpreter "python")
 
 (use-package python-mode)
 
