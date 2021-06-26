@@ -556,7 +556,13 @@ same directory as the org-buffer and insert a link to this file."
 ;; (setq python-shell-interpreter "ipython"
 ;;   python-shell-interpreter-args "--simple-prompt -i")
 
-(setq python-shell-interpreter "python")
+;; (setq python-shell-interpreter "python")
+;; (setq python-shell-interpreter "python")
+(setq python-shell-interpreter "jupyter"
+    python-shell-interpreter-args "console --simple-prompt"
+    python-shell-prompt-detect-failure-warning nil)
+(add-to-list 'python-shell-completion-native-disabled-interpreters
+           "jupyter")
 
 (use-package python-mode)
 

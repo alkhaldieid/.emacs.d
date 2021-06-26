@@ -1,0 +1,10 @@
+(define-package "evil" "20210614.2147" "Extensible Vi layer for Emacs."
+  '((emacs "24.1")
+    (goto-chg "1.6")
+    (cl-lib "0.5"))
+  :commit "5094271b9a31a2102530699aea9ef387f4b96e0e" :keywords
+  '("emulation" "vim")
+  :url "https://github.com/emacs-evil/evil")
+;; Local Variables:
+;; no-byte-compile: t
+;; End:

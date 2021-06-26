@@ -407,17 +407,22 @@ org-plus-contrib package includes the ox.extra.el which is used to activate the 
 
 * Evil mode stuff
 #+BEGIN_SRC emacs-lisp
-(use-package powerline-evil
-  :ensure t)
-(powerline-evil-vim-theme)
-(powerline-evil-vim-color-theme)
-(use-package evil-commentary
-  :ensure t)
-(evil-commentary-mode)
-(use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
+  (use-package powerline-evil
+    :ensure t)
+  (powerline-evil-vim-theme)
+  (powerline-evil-vim-color-theme)
+  (use-package evil-commentary
+    :ensure t)
+  (evil-commentary-mode)
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+  (use-package undo-tree
+    :ensure t)
+  (global-undo-tree-mode)
+  
+  
 #+END_SRC
 
 #+RESULTS:
@@ -680,13 +685,19 @@ for more info go to this website
   ;; (setq python-shell-interpreter "ipython"
   ;;   python-shell-interpreter-args "--simple-prompt -i")
   
-  (setq python-shell-interpreter "python")
+  ;; (setq python-shell-interpreter "python")
+  ;; (setq python-shell-interpreter "python")
+  (setq python-shell-interpreter "jupyter"
+      python-shell-interpreter-args "console --simple-prompt"
+      python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+             "jupyter")
 
 #+END_SRC
 
 
 #+RESULTS:
-: python
+| jupyter | pypy | ipython |
 
 ** Elpy
 
