@@ -364,6 +364,9 @@ same directory as the org-buffer and insert a link to this file."
   :ensure t
   :config
   (global-evil-surround-mode 1))
+(use-package undo-tree
+  :ensure t)
+(global-undo-tree-mode)
 
 (global-hl-line-mode t) ;; This highlights the current line in the buffer
   (use-package beacon ;; This applies a beacon effect to the highlighted line
