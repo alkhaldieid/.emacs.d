@@ -1,0 +1,524 @@
+#+STARTUP: overview
+#+TITLE: My dotemacs
+My Personal Emacs configs for note-taking workflow, coding, managing daily agenda, composing documents, presentations in latex, managing bibtex files, emails and much much more. 
+* [#A] Minimal System Wide Configs
+** Package Manager
+    Setup the packages managers 
+  #+BEGIN_SRC emacs-lisp :results silent
+    (require 'package)
+    (package-initialize)
+
+    (add-to-list 'package-archives
+	  '("melpa" . "https://melpa.org/packages/"))
+    (add-to-list 'package-archives
+	  '("gPalmer Hall nu" . "https://elpa.gnu.org/packages/"))
+    (add-to-list 'package-archives
+	  '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+
+    ;; (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+
+    (setq package-enable-at-startup nil)
+
+    ;; Bootstrap `use-package'
+    (unless (package-installed-p 'use-package)
+     (package-install 'use-package))
+
+  #+END_SRC 
+
+** Evil Mode
+   Can't function without vim motion keys. So, Evil mode and evil stuff have to be setup first!.
+*** Evil Mode
+    Install and enable evil-mode 
+   #+BEGIN_SRC emacs-lisp :results silent
+     ;; Download Evil
+     (unless (package-installed-p 'evil)
+       (package-install 'evil))
+
+     ;; Enable Evil
+     (require 'evil)
+     (evil-mode 1)
+   #+END_SRC
+
+*** Undo
+    Replicate the undo/redo functionality in vim. 
+   #+BEGIN_SRC emacs-lisp :results silent
+     (use-package undo-tree
+	 :ensure t)
+     (global-undo-tree-mode)
+   #+END_SRC
+** Global Visual Line Mode
+   #+begin_src emacs-lisp :results silent
+     (global-visual-line-mode t)
+   #+end_src
+** Completion 
+*** Ivy for navigation (alternative to helm) + swiper + Counsel
+   #+BEGIN_SRC emacs-lisp :results silent
+     (use-package ivy
+       :ensure t
+       :diminish (ivy-mode)
+       :bind (("C-x b" . ivy-switch-buffer))
+       :config
+     (ivy-mode 1)
+     (setq ivy-use-virtual-buffers t)
+     (setq ivy-count-format "%d/%d ")
+     (setq ivy-display-style 'fancy))
+
+     (use-package counsel
+     :ensure t
+     :bind
+     (("M-y" . counsel-yank-pop)
+	 :map ivy-minibuffer-map
+	 ("M-y" . ivy-next-line)))
+
+     (use-package swiper
+     :ensure t
+     :bind (("C-s" . swiper-isearch)
+	     ("C-r" . swiper-isearch)
+	     ("C-c C-r" . ivy-resume)
+	     ("M-x" . counsel-M-x)
+	     ("C-x C-f" . counsel-find-file))
+     :config
+     (progn
+	 (ivy-mode 1)
+	 (setq ivy-use-virtual-buffers t)
+	 (setq ivy-display-style 'fancy)
+	 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+	 ))
+     (setq ivy-use-virtual-buffers t)
+     (setq enable-recursive-minibuffers t)
+   #+END_SRC
+
+** Which-key
+ #+BEGIN_SRC emacs-lisp
+ (use-package which-key
+   :config
+     (setq which-key-idle-delay 0.3)
+     (setq which-key-popup-type 'frame)
+     (which-key-mode)
+     (which-key-setup-minibuffer)
+     (set-face-attribute 'which-key-local-map-description-face nil
+	:weight 'bold)
+   :ensure t)
+ #+END_SRC
+
+ #+RESULTS:
+ : t
+
+** WM in emacs
+ #+BEGIN_SRC emacs-lisp :results silent
+ (use-package eyebrowse
+   :diminish eyebrowse-mode
+   :config (progn
+             (define-key eyebrowse-mode-map (kbd "C-w j") 'eyebrowse-switch-to-window-config-1)
+             (define-key eyebrowse-mode-map (kbd "C-w k") 'eyebrowse-switch-to-window-config-2)
+             (define-key eyebrowse-mode-map (kbd "C-w l") 'eyebrowse-switch-to-window-config-3)
+             (define-key eyebrowse-mode-map (kbd "C-w ;") 'eyebrowse-switch-to-window-config-4)
+             (eyebrowse-mode t)
+             (setq eyebrowse-new-workspace t)))
+ #+END_SRC
+
+** Evil Leader Keybindings
+**** Leader
+     Install the evil-leader, enable it globally and set the leader key
+ #+BEGIN_SRC emacs-lisp :results silent
+   (use-package evil-leader
+     :ensure t)
+   (global-evil-leader-mode)
+   (evil-leader/set-leader "<SPC>")
+ #+END_SRC
+**** Global leader map
+ #+BEGIN_SRC emacs-lisp :results silent
+   (evil-leader/set-key
+     "<SPC> " 'counsel-M-x
+     "fs" 'save-buffer
+     "ff" 'counsel-find-file
+     "fr" 'ranger
+     ;; frames
+     "Fd" 'delete-frame
+     "Fn" 'make-frame
+     ;; buffers
+     ;; "bb" 'switch-to-buffer
+     "bb" 'ibuffer
+     "bd" 'kill-buffer
+     "bp" 'previous-buffer
+     "bn" 'next-buffer
+     ;; windows
+     "wl" 'evil-window-right
+     "wL" 'evil-window-move-far-right
+     "wh" 'evil-window-left
+     "wH" 'evil-window-move-far-left
+     "wk" 'evil-window-up
+     "wj" 'evil-window-down
+     "wd" 'evil-window-delete
+     "wv" 'evil-window-vsplit
+     "ws" 'evil-window-split
+     "wm" 'delete-other-windows
+
+     ;; workspaces
+     "lw1" 'eyebrowse-switch-to-window-config-1
+     "lw2" 'eyebrowse-switch-to-window-config-2
+     "lw3" 'eyebrowse-switch-to-window-config-3
+     "lw4" 'eyebrowse-switch-to-window-config-4
+     "lw5" 'eyebrowse-switch-to-window-config-5
+     "lw6" 'eyebrowse-switch-to-window-config-6
+     "lw7" 'eyebrowse-switch-to-window-config-7
+     "lw8" 'eyebrowse-switch-to-window-config-8
+     "lw9" 'eyebrowse-switch-to-window-config-9
+
+     ;; evil-nerd-commenter
+     "ci" 'evilnc-comment-or-uncomment-lines
+     "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+     "cc" 'evilnc-copy-and-comment-lines
+     "cp" 'evilnc-comment-or-uncomment-paragraphs
+     "cr" 'comment-or-uncomment-region
+     "cv" 'evilnc-toggle-invert-comment-line-by-line
+     "."  'evilnc-copy-and-comment-operator
+     ";;" 'evilnc-comment-operator ; if you prefer backslash key
+
+     ;; zoom-in and out
+     "=" 'text-scale-increase
+     "-" 'text-scale-decrease
+
+     ;; syn layer  keybindings
+     "ss" 'synonyms
+     "sl" 'synosaurus-lookup
+     "sr" 'synosaurus-choose-and-replace
+     "si" 'synosaurus-choose-and-insert
+     ;; org-recoll keys
+     "ps" 'org-recoll-search
+     "pu" 'org-recoll-update-index
+     ;; evil-commentry
+     ;; ";" evil-commentry-line
+     ;; bookmarks 
+
+
+     ;; emacs quitting
+     "qs" 'save-buffers-kill-emacs
+
+     ;; project compilation
+     "cfcd" 'ae/compile-dwm
+
+     ;; writeroom keybindings
+     "dw" 'olivetti-mode
+     "d=" 'olivetti-expand
+     "d-" 'olivetti-shrink
+
+     ;; org agenda keybindings
+
+
+     "gg" 'magit-status
+
+     ;; org roam
+     "nl" 'org-roam-buffer-toggle
+     "nf" 'org-roam-node-find
+     ;; "ng" 'org-roam-show-graph
+     ;; "ni" 'org-roam-insert
+     "ni" 'org-roam-node-insert
+     "ns" 'org-roam-db-sync
+     "ngt" 'org-roam-dailies-goto-today
+     "ngT" 'org-roam-dailies-goto-tomorrow
+     "ngy" 'org-roam-dailies-goto-yesterday
+     "ngn" 'org-roam-node-visit
+     "ngd" 'org-roam-dailies-find-date
+     "nct" 'org-roam-dailies-capture-today
+     "ncy" 'org-roam-dailies-capture-yesterday
+     ;; org-roam-bibtex
+     "na" 'orb-note-actions
+
+     ;; insert commands
+
+     ;; "ir" 'helm-bibtex
+     "ir" 'org-ref-insert-link
+     "in" 'org-roam-node-insert
+     )
+ #+END_SRC
+
+**** bookmarked files 
+ #+BEGIN_SRC emacs-lisp
+
+   (evil-leader/set-key
+     ;; work files
+     "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
+     "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
+     "ow3" '(lambda() (interactive) (find-file "~/Dropbox/third/paper.org"))
+     "ow4" '(lambda() (interactive) (find-file "~/Dropbox/four/paper.org"))
+     ;; "owpp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
+     "owpp" '(lambda() (interactive) (find-file "~/repos/writings/proposal/paper/second_draft/paper.org"))
+     "owps" '(lambda() (interactive) (find-file "~/Dropbox/proposal/presentation/lab/beamer.org"))
+     "owc" '(lambda() (interactive) (find-file "~/Dropbox/conference/paper.org"))
+     "owa" '(lambda() (interactive) (find-file
+				     "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
+     "owd" '(lambda() (interactive) (find-file
+				     "/home/alkhaldieid/Dropbox/dissertation/dissertation.org"))
+
+     "owlp" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/proposalheader.tex"))
+     "owla" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/abstract.tex"))
+     "owb1" '(lambda() (interactive) (find-file "~/work/mend/library.bib"))
+     "owb2" '(lambda() (interactive) (find-file "~/work/res/cited_lib.bib"))
+
+     "ocv" '(lambda() (interactive) (find-file "~/repos/cv/org/cv.org"))
+     "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
+     "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
+     "oat" '(lambda() (interactive) (find-file "~/repos/org/agenda/TODOs.org"))
+     "oam" '(lambda() (interactive) (find-file "~/repos/org/agenda/monthly.org"))
+     "oar" '(lambda() (interactive) (find-file "~/repos/org/agenda/research.org"))
+
+     ;; cf files
+     "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/README.org"))
+     "cfo" '(lambda() (interactive) (find-file "~/.ihsec/myb/README.org"))
+     "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+     "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+     "cfz" '(lambda() (interactive) (find-file "~/.config/zsh/.zshrc"))
+     "cfp" '(lambda() (interactive) (find-file "~/.profile"))
+     "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+     "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+     "cfd" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
+     "cfk" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
+     "cfk" '(lambda() (interactive) (find-file "~/.config/kitty/kitty.conf"))
+
+     ;; yasnippet
+     "yn"  'yas-new-snippet
+     "yf"  'yas-visit-snippet-file
+
+     )
+     #+END_SRC
+
+ #+RESULTS:
+
+**** orgmode leader map
+ #+BEGIN_SRC emacs-lisp
+   (evil-leader/set-key-for-mode 'org-mode
+       "e" 'my/org-set-effort-in-pomodoros
+       )
+ #+END_SRC
+* [#A] Writing Workflow
+There are several things that I need in my writing workflow.
+** DONE A reliable bibliographies management system. > org-ref
+** DONE A reliable note taking system that binds the notes files to the pdfs automatically. > org-roam
+** DONE Reliable org-latex-export and \LaTeX settings
+** DONE translation and synonyms finding at point
+** TODO spell-checking and grammar correction
+** [#A] Handling bibliographies
+*** Org-ref
+ Package-Requires: ((org "9.4") (dash "0") (s "0") (f "0") (htmlize "0") (hydra "0") (avy "0") (parsebib "0") (bibtex-completion "0") (citeproc "0"))
+installed them through melpa
+
+    1. [X] bibtex-completion
+    2. [X] citeproc
+    3. dash already installed
+    4. parsebib already installed as a dep
+    5. [X] htmilze
+    6. [X] avy
+    7. [X] hydra
+    8. [ ] org-ref-ivy
+    9. [X] ivy-bibtex
+#+begin_src emacs-lisp :results silent       
+  (setq bibtex-completion-bibliography '("/home/alkhaldieid/work/res/cited_lib.bib")
+	  bibtex-completion-library-path '("~/work/res/pdfs")
+	  bibtex-completion-notes-path "~/repos/org/roam/"
+	  bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+
+	  bibtex-completion-notes-template-multiple-files
+	  (concat
+	  "#+TITLE: ${title}\n"
+	  "#+ROAM_KEY: cite:${=key=}\n"
+	  ":PROPERTIES:\n"
+	  ":Custom_ID: ${=key=}\n"
+	  ":AUTHOR: ${author-abbrev}\n"
+	  ":JOURNAL: ${journaltitle}\n"
+	  ":DATE: ${date}\n"
+	  ":YEAR: ${year}\n"
+	  ":DOI: ${doi}\n"
+	  ":URL: ${url}\n"
+	  ":END:\n\n"
+	  "* Why am I reading this article?\n"
+	  "* Problem Definition\n"
+	  "* Proposed Method\n"
+	  "* Dataset used\n"
+	  "* Key Notes\n")
+	  bibtex-completion-additional-search-fields '(keywords)
+	  bibtex-completion-display-formats
+	  '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+	    (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+	    (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	    (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	    (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+	  bibtex-completion-pdf-open-function
+	  (lambda (fpath)
+	    (call-process "open" nil 0 nil fpath)))
+  (use-package org-ref
+    :ensure t)
+  (require 'org-ref-ivy)
+
+  (setq org-ref-insert-link-function 'org-ref-insert-link-hydra/body
+	org-ref-insert-cite-function 'org-ref-cite-insert-ivy
+	org-ref-insert-label-function 'org-ref-insert-label-link
+	org-ref-insert-ref-function 'org-ref-insert-ref-link
+	org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
+
+#+end_src
+** [#A] Taking Notes
+*** Org-Roam-Mode
+#+begin_src emacs-lisp :results silent
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/repos/org/roam"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+#+end_src
+** [#A] LaTeX export classes
+*** init
+    #+begin_src emacs-lisp
+      (require 'ox-latex)
+      (unless (boundp 'org-latex-classes)
+	(setq org-latex-classes nil))
+    #+end_src
+
+    #+RESULTS:
+
+*** latex classes
+      #+begin_src emacs-lisp :results silent
+	(add-to-list 'org-latex-classes
+		       '("draft"
+			 "\\documentclass[12pt]{report}"
+			 ("\\chapter{%s}" . "\\chapter*{%s}")
+			 ("\\section{%s}" . "\\section*{%s}")
+			 ("\\subsection{%s}" . "\\subsection*{%s}")))
+      #+end_src
+*** LaTex export process
+    #+BEGIN_SRC emacs-lisp
+      (setq org-latex-pdf-process (list
+	 "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+    #+END_SRC 
+
+    #+RESULTS:
+    | latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f |
+
+** [#A] Translation and Synonyms at point
+translation, synonyms and other useful tools needed for writing efficiency. 
+
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package mw-thesaurus
+    :ensure t)
+
+  (define-key evil-normal-state-map (kbd "T") 'mw-thesaurus-lookup-at-point)
+  (define-key evil-normal-state-map (kbd "t") 'ispell-word)
+
+#+END_SRC 
+
+** flyspell configs
+Things I want flyspell to do automatically:
+1. enable flyspell mode in every text mode buffer
+2. bind a key to go to the next or the previous flyspell error or learn the correct one if they make sense.
+#+BEGIN_SRC emacs-lisp :results silent
+  ;; 
+#+END_SRC
+* [#C] Writing Workflow extras
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package olivetti
+    :ensure t)
+#+END_SRC
+* [#C] Org extras
+** evil-org
+   The main desired functionality of the org indent mode is the ability to automatically indent and number the next numbered item in a numbered list when "o" is pressed in the normal mode.
+   Evil-org mode enable us to move org-headings with vim keys with the meta key.
+   To auto-indent the subheading enable the org-indent-mode.
+   #+begin_src emacs-lisp :results silent
+     (use-package evil-org
+       :ensure t
+       :after org
+       :hook (org-mode . (lambda () evil-org-mode))
+       :config
+       (require 'evil-org-agenda)
+       (evil-org-agenda-set-keys)
+       (evil-org-mode))
+     (org-indent-mode t)
+   #+end_src
+** org-superstar
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package org-superstar
+  :ensure t
+  :config 
+  (add-hook 'org-mode-hook (lambda ()  (org-superstar-mode 1))))
+#+END_SRC
+
+* Misc less important comfy stuff
+** try
+   #+begin_src emacs-lisp
+     (use-package try
+       :ensure t)
+   #+end_src
+
+   #+RESULTS:
+** yasnippet configs
+   Yasnippets make it easy to insert most commenly typed code snippets.
+ #+BEGIN_SRC emacs-lisp
+ (use-package yasnippet
+   :ensure t
+   :init
+   (yas-global-mode 1))
+ #+END_SRC
+* Editor Related Configs
+** auto-save and backup files
+   To avoid cluttering directories you work on with FILENAME~ files, save your auto-save, backup and undo-tree files in specific directories.
+#+BEGIN_SRC emacs-lisp :results silent
+    (setq auto-save-file-name-transforms
+	  '((".*" "~/.emacs.d/auto-save-list/" t))
+	  backup-directory-alist
+	  '(("." . "~/.emacs.d/backups/"))
+	  undo-tree-history-directory-alist
+	  '(("." . "~/.emacs.d/undo-tree/")))
+#+END_SRC
+
+** y for yes and n for no
+#+BEGIN_SRC emacs-lisp :results silent
+(fset 'yes-or-no-p 'y-or-n-p)
+(setenv "HOME" "/home/alkhaldieid/")
+#+END_SRC
+** Follow the symlink without asking
+#+BEGIN_SRC emacs-lisp :results silent
+(setq vc-follow-symlinks t)
+#+END_SRC
+** Return Follow Links with RET
+#+BEGIN_SRC emacs-lisp :results silent
+;; unbind RET first and enable org-return-follow-link
+(with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "RET") nil))
+
+(setq org-return-follows-link  t)
+
+#+END_SRC
+** Themes and fonts
+#+BEGIN_SRC emacs-lisp :results silent
+  (load-theme 'leuven)
+  (set-scroll-bar-mode nil)
+#+END_SRC
+
+* openwith
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package openwith :ensure t)
+
+  (openwith-mode t)
+
+  (setq openwith-associations '(("\\.pdf\\'" "evince" (file))
+                                ("\\.mp4\\'" "mpv" (file))
+                                ("\\.amr\\'" "mpv" (file))
+                                ("\\.mkv\\'" "mpv" (file))
+                                ("\\.webm\\'" "mpv" (file))
+                                ("\\.html\\'" "brave" (file))
+                                ))
+#+END_SRC
+
+* Magit
