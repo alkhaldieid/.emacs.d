@@ -1,0 +1,7 @@
+(undo-tree-save-format-version . 1)
+"a1d92e8e23ce5d2be3b6474a9e406dd70d77c1f5"
+[nil nil nil nil (25161 34274 142846 350000) 0 nil]
+([nil nil ((#("%?" 0 2 (fontified nil line-prefix "" wrap-prefix "")) . -198) (200 . 200) (198 . 201) (#(":ROAM_REFS: cite:Ichimura2012" 0 1 (fontified nil line-prefix "" wrap-prefix "") 1 10 (fontified nil line-prefix "" wrap-prefix "") 10 11 (fontified nil line-prefix "" wrap-prefix "") 11 12 (fontified nil line-prefix "" wrap-prefix "") 12 29 (fontified nil line-prefix "" wrap-prefix "")) . -62) (62 . 120) (62 . 63) (#(":ID: acfe3a40-c9f7-44b3-9eb1-287de85709ba" 0 1 (fontified nil line-prefix "" wrap-prefix "") 1 3 (fontified nil line-prefix "" wrap-prefix "") 3 4 (fontified nil line-prefix "" wrap-prefix "") 4 5 (fontified nil line-prefix "" wrap-prefix "") 5 41 (fontified nil line-prefix "" wrap-prefix "")) . -14) (14 . 102) (14 . 15) (1 . 20) (1 . 101) (t . -1)) nil (25161 34274 142842 633000) 0 nil])
+([nil current ((#("
+" 0 1 (fontified t)) . 198)) nil (25161 34274 142831 823000) 0 nil])
+nil

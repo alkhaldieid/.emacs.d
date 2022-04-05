@@ -1,0 +1,40 @@
+(undo-tree-save-format-version . 1)
+"63c0a84f54bad3d11166633d758a9e39c6612bbb"
+[nil nil nil nil (25152 40435 715828 803000) 0 nil]
+([nil nil ((nil rear-nonsticky nil 165310 . 165311) (nil fontified nil 165296 . 165311) (165296 . 165311) 165295 (t 25152 40423 660173 420000)) nil (25152 40435 715702 867000) 0 nil])
+([nil nil ((#("CarkliYavuz2018" 0 15 (fontified t)) . 165311) (undo-tree-id455 . -14) (undo-tree-id456 . -14) (undo-tree-id457 . -15) (undo-tree-id458 . -14) 165325) nil (25152 40435 715695 183000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 166062 . 166063) (nil fontified nil 166051 . 166063) (166051 . 166063) 166050 (t 25152 40436 400173 506000)) nil (25152 40436 511093 196000) 0 nil])
+([nil nil ((#("Ichimura2012" 0 12 (fontified t)) . 166063) (undo-tree-id459 . -11) (undo-tree-id460 . -11) (undo-tree-id461 . -12) (undo-tree-id462 . -11) 166074) nil (25152 40436 511087 185000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 173 . 174) (nil fontified nil 164 . 174) (164 . 174) 163 (t 25152 40436 540173 508000)) nil (25152 40436 648249 906000) 0 nil])
+([nil nil ((#("Miller2011" 0 9 (fontified t) 9 10 (fontified t rear-nonsticky t)) . 174) (undo-tree-id463 . -9) (undo-tree-id464 . -9) (undo-tree-id465 . -10) (undo-tree-id466 . -9) 183) nil (25152 40436 648243 635000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 1593 . 1594) (nil fontified nil 1583 . 1594) (1583 . 1594) 1582 (t 25152 40436 680173 509000)) nil (25152 40436 792049 317000) 0 nil])
+([nil nil ((#("Martens2019" 0 10 (fontified t) 10 11 (rear-nonsticky t fontified t)) . 1594) (undo-tree-id467 . -10) (undo-tree-id468 . -10) (undo-tree-id469 . -11) (undo-tree-id470 . -10) 1604) nil (25152 40436 792043 185000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 166134 . 166135) (#("
+" 0 1 (fontified nil)) . -167710) (166134 . 167711) 166133 (t 25152 40436 823506 843000)) nil (25164 1640 936697 859000) 0 nil])
+([nil nil ((167449 . 167450)) nil (25164 1640 936976 511000) 0 nil])
+([nil nil ((nil rear-nonsticky nil 167473 . 167474) (nil fontified nil 167449 . 167474) (167449 . 167474)) nil (25164 1653 964704 958000) 0 nil] [nil nil ((nil rear-nonsticky nil 167494 . 167495) (#("
+" 0 1 (fontified nil)) . -169070) (167494 . 169071) 167449) ((#("
+@article{Lin2013,
+abstract = {We propose a novel deep network structure called “Network In Network”(NIN) to enhance model discriminability for local patches within the receptive field. The conventional convolutional layer uses linear filters followed by a nonlinear activation function to scan the input. Instead, we build micro neural networks with more complex structures to abstract the data within the receptive field. We instantiate the micro neural network with a multilayer perceptron, which is a potent function approximator. The feature maps are obtained by sliding the micro networks over the input in a similar manner as CNN; they are then fed into the next layer. Deep NIN can be implemented by stacking mutiple of the above described structure. With enhanced local modeling via the micro network, we are able to utilize global average pooling over feature maps in the classification layer, which is easier to interpret and less prone to overfitting than traditional fully connected layers. We demonstrated the state-of-the-art classification performances with NIN on CIFAR-10 and CIFAR-100, and reasonable performances on SVHN and MNIST datasets.},
+archivePrefix = {arXiv},
+arxivId = {1312.4400},
+author = {Lin, Min and Chen, Qiang and Yan, Shuicheng},
+eprint = {1312.4400},
+file = {:home/alkhaldieid/Dropbox/mend/Lin, Chen, Yan - 2014.pdf:pdf},
+journal = {2nd International Conference on Learning Representations, ICLR 2014 - Conference Track Proceedings},
+pages = {1--10},
+title = {{Network in network}},
+url = {http://arxiv.org/abs/1312.4400},
+year = {2014}
+}
+" 0 1 (fontified nil rear-nonsticky nil) 1 9 (fontified nil face font-lock-function-name-face) 9 10 (fontified nil) 10 17 (fontified nil face font-lock-constant-face) 17 19 (fontified nil) 19 27 (fontified t face font-lock-variable-name-face) 27 90 (fontified t) 90 429 (fontified t) 429 590 (fontified t) 590 1163 (fontified t) 1163 1176 (face font-lock-variable-name-face) 1188 1195 (face font-lock-variable-name-face) 1211 1217 (face font-lock-variable-name-face) 1267 1273 (face font-lock-variable-name-face) 1289 1293 (face font-lock-variable-name-face) 1360 1367 (face font-lock-variable-name-face) 1472 1477 (face font-lock-variable-name-face) 1489 1494 (face font-lock-variable-name-face) 1521 1524 (face font-lock-variable-name-face) 1528 1558 (button (t) bibtex-args (197132)) 1561 1565 (face font-lock-variable-name-face) 1575 1576 (fontified nil) 1576 1577 (fontified nil)) . 167494) (undo-tree-id0 . -1) (undo-tree-id1 . -1576) (undo-tree-id2 . -1) (undo-tree-id3 . -1576) (undo-tree-id4 . -1) (undo-tree-id5 . -1) (169070 . 169071) (nil rear-nonsticky t 167494 . 167495)) (25164 1640 936688 692000) 0 nil])
+([nil nil ((#(" Dropbox/mend/Lin, Chen, Yan - 2014.pdf" 0 39 (fontified t)) . 167474) (undo-tree-id6 . -38) (undo-tree-id7 . -38) (undo-tree-id8 . 38) (undo-tree-id9 . -1) (undo-tree-id10 . -1) (undo-tree-id11 . -38) (undo-tree-id12 . -39) (undo-tree-id13 . -38) (undo-tree-id14 . -38) 167512) nil (25164 1653 964697 594000) 0 nil])
+nil
+([nil nil ((nil rear-nonsticky nil 167839 . 167840) (nil fontified nil 167697 . 167840) (167697 . 167840) 167696 (t 25164 1654 3562 998000)) nil (25164 4313 385489 725000) 0 nil])
+([nil nil ((167695 . 167696) 167682) nil (25164 4313 385479 355000) 0 nil])
+([nil nil ((#("
+" 0 1 (fontified t)) . 167696) (undo-tree-id15 . 1) (t 25164 4313 436780 632000)) nil (25164 4317 321786 11000) 0 nil])
+([nil nil ((167697 . 167698) (t 25164 4317 366780 460000)) nil (25164 4374 65797 18000) 0 nil])
+([nil nil ((167697 . 167698) (t 25164 4374 116777 983000) 167696) nil (25164 4377 898421 60000) 0 nil])
+([nil current ((167842 . 167843) (t 25164 4377 950111 154000) 167841) nil (25164 4380 450392 551000) 0 nil])
+nil

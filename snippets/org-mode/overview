@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: overview
+# key: ov
+# --
+
+#+STARTUP: overview

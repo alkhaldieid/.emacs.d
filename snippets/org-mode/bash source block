@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: bash source block
+# key: sb
+# --
+
+#+BEGIN_SRC bash :noeval
+$0
+#+END_SRC

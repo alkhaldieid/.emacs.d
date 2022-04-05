@@ -1,0 +1,2 @@
+sudo make clean insntall
+sudo make install

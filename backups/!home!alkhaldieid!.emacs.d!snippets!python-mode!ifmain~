@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: ifmain
+# key: ifm
+# --
+if __name__=="__main__":

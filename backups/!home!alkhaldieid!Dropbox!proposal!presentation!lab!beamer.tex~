@@ -1,0 +1,663 @@
+% Created 2022-04-04 Mon 00:59
+% Intended LaTeX compiler: pdflatex
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\usetheme{Antibes}
+\author{Eid Alkhaldi}
+\date{\today}
+\title{Ensemble Optimization for Histological Image Classification}
+\hypersetup{
+ pdfauthor={Eid Alkhaldi},
+ pdftitle={Ensemble Optimization for Histological Image Classification},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+
+\section*{Motivation and Challenges}
+\label{sec:org85f6c9f}
+\begin{frame}[label={sec:org8718080}]{Importance of Breast Histological image classification}
+\begin{itemize}
+\item Breast cancer is the most common type of cancer amongst women worldwide
+\item More than 10\% of women in the U.S. will be diagnosed with breast cancer
+\item Microscopic analysis of biopsy is the most accurate diagnosis method
+\item Demands extensive work
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orge9d68f7}]{Importance of Breast Histological image classification}
+\begin{itemize}
+\item Requires specialized expertise (pathologists)
+\item Time consuming due to scarcity of pathologists
+\item Expensive to hire
+\item Pathologists often disagree
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org7c68774}]{Importance of Breast Histological image classification}
+Early diagnosis is important for:
+\begin{itemize}
+\item Prognosis
+\item Reducing healthcare costs
+\item Better chance of recovery
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgbda0c9b}]{Importance of Breast Histological image classification}
+\begin{itemize}
+\item An automated intelligent approach is needed to compensate for the time delay of analysis caused by the insufficient number of pathologists
+\item The aim of histology image classification methods is to identify abnormalities in the specimens' structures and specify their carcinogenic level
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org42b9e6f}]{Challenges}
+\begin{itemize}
+\item Deep Learning (DL) showed remarkable competence
+\begin{itemize}
+\item Extract complex features
+\item Expands class separability better than conventional ML
+\item CNNs are the most reliable DL models
+\end{itemize}
+\end{itemize}
+\begin{itemize}
+\item Limitations:
+\begin{itemize}
+\item CNNs has a huge number of parameters
+\item It demands a high quantity of labeled images
+\item Curse of Dimensionality
+\begin{itemize}
+\item The larger the dataset, the more training time is required
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org7a7decf}]{Challenges}
+\begin{itemize}
+\item Consequently, end-to-end training of CNNs suffered significantly, due to the scarcity of annotated hematoxylin and eosin (H\&E) stained histology images.
+\item End-to-end training is data greedy
+\item End-to-end training using an insufficient number of classified examples is prone to overfitting regardless of how the weights were initialized
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgea004c2}]{Challenges}
+\begin{itemize}
+\item Transfer learning is the reusing of a model trained on a large dataset for a different task
+\item The general layers learns general features
+\item Training only the task specific layers is very efficient
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgf8c0551}]{Challenges}
+\begin{itemize}
+\item Transfer Learning proved to be a more reliable alternative to  end-to-end training
+\begin{itemize}
+\item Improves accuracy and robustness
+\item Reduces the training time significantly, particularly for small datasets
+\end{itemize}
+\item Limitations:
+\begin{itemize}
+\item Could result in overfitting, mainly when training the general layers
+\item It lacks the ability to separate task-specific layers from general ones
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org0a5e6b1}]{Challenges}
+\begin{itemize}
+\item Ensembles are a vertical or cascaded combination of the features or the predictions of accurate models to produce a better performing model
+\begin{itemize}
+\item Ensembling a number of models proved to be very effective and more robust alternative
+\item For ensembles to perform better than its individual model, the models have to be heterogeneous
+\begin{itemize}
+\item Why?
+\begin{itemize}
+\item To avoid making the same misclassifications
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section*{Proposed Solutions}
+\label{sec:org82da8dd}
+\begin{frame}[label={sec:orgaca9698}]{Proposed Solutions}
+\begin{itemize}
+\item Genetically Optimized Heterogeneous Ensemble for Histolgy Image Classification
+\item Adaptive PSO-Based Ensemble Optimization for Histology Image Classification
+\item Ensemble Optimization Using Cartesian Genetic Programming
+\item Ensemble Optimization Using Colonal Selection Algorithm
+\end{itemize}
+\end{frame}
+\section*{Genetically Optimized Heterogeneous Ensemble for Histolgy Image Classification}
+\label{sec:orgf97f869}
+\begin{frame}[label={sec:org6751305}]{Meta-training}
+The first proposed methods is composed of two phases:
+\begin{itemize}
+\item Meta-training
+\item Ensemble training
+\end{itemize}
+The meta-training is composed of three stages:
+\begin{itemize}
+\item Preprocessing
+\item Transfer Learning
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org8511286}]{Preprocessing}
+\begin{itemize}
+\item The aim of preprocessing is to augment the dataset
+\item The histological datasets are usually small due to the lack of data
+\item Affine Transformation applied
+\begin{itemize}
+\item random cropping
+\item rotation
+\item width/height shifting
+\item vertical/horizontal flipping
+\end{itemize}
+\item Resizeing and cropping to a lower resoluiton
+\item Normalization
+\end{itemize}
+\end{frame}
+\section*{Transfer Learning}
+\label{sec:org5071702}
+\begin{frame}[label={sec:org63e7737}]{Introduction}
+\begin{itemize}
+\item Transfer Learning is the process of re-utilization of models' weights that were trained on benchmark datasets such as ImageNet
+\begin{itemize}
+\item More reliable, robust and accurate than end-to-end
+\item More time-efficient
+\end{itemize}
+\item The weights of a model that was trained end-to-end is used as the initialization for the training of images in a different domain
+\item For the new domain, the parameters of the domain-specific layers only are trainable
+\item All other weights are frozen
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:orga19ecac}]{Gaussian Dropout}
+\begin{equation} \label{gaus} \sigma _(gaussian)= \sqrt{rate/(1 - rate)}
+  \end{equation} 
+Where \emph{rate} denotes the user control parameter
+and \(\sigma _(gaussian)\) refers the dropout gaussian standard deviation
+\begin{itemize}
+\item Why?
+\begin{itemize}
+\item Blocking several units from firing during the feedforward and the backpropagation steps of training
+\end{itemize}
+\item restricts the classifier from learning the irrelevant particularities of an image
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:org2dd6f09}]{Learning Rate Scheduler}
+\begin{itemize}
+\item Aims to minimize the cost function
+\item Avoids saddle points in the search spaces which are common in high dimensional problems when LR is too small
+\item However, over-increasing the LR will cause fluctuations with high spikes as shown in figure \ref{fig:orgc6c218a}
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgf7d2ba5}]{Learning Rate Scheduler}
+\begin{figure}[htbp]
+
+\includegraphics[width=12cm,height=4cm]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/cyc.png}
+\caption{\label{fig:orgc6c218a}High spikes of validiation loss and accuracy curves over exponential cyclical learning rate in a single epoch in ResNet50 with freeze layer = 141 and a batch size = 32. The learning rate with the lowest validation loss at lr = 0.05 is chosen as the base lr for the full training.}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:org12adcb8}]{GA for optimum freeze layer selection}
+\begin{itemize}
+\item The objective of implementing the genetic algorithm is to evolve the solutions to the fittest task-specific layer
+\item GA is an optimization method inspired by simulating the natural selection through crossover and mutation \cite{Singh2018}
+\item The possible layers can't be batch normalizaiton layers or the first 20\% of layers
+\item Each possible layer is encoded by a binary chromosome
+\item After calculating the initial population fitnesses, the fittest layers are chosen to crossover at a predefined crossover probability Pc to produce better offsprings in the next generation.
+\item All layers, except BN, are frozen upto the decoded layer
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org1f3316f}]{GA for optimum freeze layer selection}
+\begin{itemize}
+\item cyclical LR is implemented to pick the LR that is most appropriate for the decoded freeze-layer
+\item The model is then trained on lower resolution images for 10 epochs
+\item The cross-entropy loss is then calculated on the validation dataset
+\item The fittest model is then trained thoroughly with higher resultion images
+\item The proposed method Flowchart is shown in figure \ref{orgfcdf1b3}.
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgc779bec}]{The Flowchart of the meta-training phase}
+\begin{center}
+\includegraphics[width=12cm,height=6.5cm]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/FC.png}
+\label{orgfcdf1b3}
+\end{center}
+\end{frame}
+\begin{frame}[label={sec:orgae17364}]{GA for optimum freeze layer selection}
+\begin{figure}[htbp]
+
+\includegraphics[width=12cm,height=5.5cm]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/xcepNoGA.png}
+\caption{Xception network without GA block converges with a small number of epochs}
+\end{figure} 
+\end{frame}
+\begin{frame}[label={sec:orgd06a8ce}]{GA for optimum freeze layer selection}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm,height=5.5cm]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/xcepGA.png}
+\caption{Xception network with GA block converges with a small number of epochs}
+\end{figure} 
+\end{frame}
+
+\section*{Full Training}
+\label{sec:orgda26f14}
+\begin{frame}[label={sec:org0447923}]{Ensemble}
+\begin{itemize}
+\item 4 of the best performing models heterogeneous models are chosen based on their accuracy and misclassification diversity
+\item The predictins are stacked horizontally by a flat layer and densely connected to the labels
+\item the weights are then trained on the heldout dataset with a much higher resolution
+\end{itemize}
+\end{frame}
+\section*{Adaptive PSO-Based Ensemble Optimization for Histology Image Classification}
+\label{sec:org50ce940}
+\begin{frame}[label={sec:orgd22302f}]{Overview}
+\begin{itemize}
+\item The main objective of Ensemble optimization is finding a robust composite of several classifiers in order to cultivate a single larger and more accurate model
+\item The search space of all possible configurations of a stacked ensemble model is massive
+\item brute-forcing and grid-search are impractical
+\item manual selection of hyperparameter requires experience and doesn't necessarily produce ideal results
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgff2503f}]{Overview}
+\begin{itemize}
+\item Bio-inspired Computational algorithms proved to be very efficient in solving optimization problems
+\item Particle Swarm Optimization (PSO) is one of the most popular techniques used in NP hard problems and optimization methods for non-convex search-space
+\item Swarm-based optimization techniques were developed to mimic the social behaviour of groups of animals that are navigating their way cooperatively to find food resources
+\item PSO ws first proposed by Eberhart and Kennedy in 1995 as a paradigm for Neural Networks weights optimization
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgff91f44}]{Overview}
+\begin{itemize}
+\item Its aims is to find the global minimum of objective functions with complex search space
+\item PSO starts with initialization of a generation that has a specified number of candidate solutions called particles
+\item In each epoch, particles move in the defined finite search space of the problem based on how well the whole swarm of birds is performing
+\item The swarm share the best position achieved by the whole swarm, which is the global best position and fitness.
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org1f21ba4}]{Overview}
+\begin{itemize}
+\item The velocity and the position of the particle are each updated based on the following equations
+\end{itemize}
+\begin{equation}
+    V^{t+1}_{ij}=w V^{t}_{ij}+c_1 r^t_1\left(pbest_{ij}-X^t_{ij}\right) +c_2r^t_2\left(gbest_j-X^t_ij\right)
+\end{equation}
+
+\begin{equation}
+  \begin{gathered}[b]
+  x^{t+1}=x^{t}+V^{t+1}
+  \end{gathered}
+\end{equation}
+\begin{itemize}
+\item where \(V^{t+1}_{ij}\) is the updated velocity, \(V^{t}\) is the current velocity
+\item \(w\) is the inertia weight, \(c1\) and \(c2\) are acceleration constants referred to as the cognitive learning rate
+\item \(gbest\) and  \(pbest\) are the global and the population best positions
+\item \(r1\), \(r2\) are random numbers evenly distributed
+between [0,1) \cite{He2016}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:orgef808d6}]{PSO advantages}
+\begin{itemize}
+\item Robustness
+\item Ease of implementation
+\item Remarkable time efficiency
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgf07ead4}]{Standart PSO limitations}
+\begin{itemize}
+\item PSO is highly reliant on the proper tuning of its learning hyper-parameters
+It is especially sensitive to:
+\begin{itemize}
+\item inertia \(w\) (exploitation vs exploration trade-off)
+\item accelerate constants \(c1\) and \(c2\) (cognitive and social params)
+\item \(Vmax\)
+\end{itemize}
+PSO was used to find the best linear combination weights of the horizontally stacked fine-tuned
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label={sec:orgee35b2e}]{Mamdani FIS for adaptive PSO}
+\begin{itemize}
+\item Fuzzy Inference Systems (FIS) were designed to map fuzzy inputs that belong to fuzzy sets with varying degrees to fuzzy outputs
+\item FIS has been successfully applied to the adaptation of parameters for numerous algorithms
+\item FIS deals with parameters that belong to classes that are not clearly defined
+\item A fuzzy set is a set whose elements have a degree of association to one or more fuzzy classes
+\end{itemize}
+\end{frame}
+\section*{Mamdani FIS steps}
+\label{sec:orge92fc25}
+\begin{frame}[label={sec:orgcbe33c5}]{fuzzification of the inputs and the outputs}
+\begin{equation}
+\begin{gathered}[b]
+    \mu(x,a,b,c) = \max(\min(\frac{x-a}{b-a},\frac{c-x}{c-b}),0)
+\end{gathered}
+\end{equation}
+\end{frame}
+\begin{frame}[label={sec:org1027841}]{IF-THEN Rule evaluation}
+\begin{table}[htbp]
+\caption{\label{tab:org0a5d3d9}The Mamdani Fuzzy Rules}
+\centering
+\begin{tabular}{rll}
+Rule number & antecedents & consequent\\
+\hline
+1 & d1 = high, d2 = high,   NCF = high & w = high\\
+2 & d1 = low , d2 = medium, NCF = medium & w = high\\
+3 & d1 = low, d2 = low,   NCF = medium & w = high\\
+4 & d1 = low, d2 = low,   NCF = low & w = low\\
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}[label={sec:org3a9e329}]{Aggregation of the rule output}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/second_final/fuzzy2.png}
+\caption{\label{fig:orgd6c7762}The Mamdani FIS membership functions for the fuzzification of the PSO Inertia Weight}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:org5e3d7bf}]{Defuzzification}
+\begin{equation}
+  \begin{gathered}[b]
+   Center of Gravity = \frac{\sum\limits_{x=a}^{b}\mu_A(x)x}{\sum\limits_{x=a}^{b}\mu_A(x)}
+  \end{gathered}
+\end{equation}
+\end{frame}
+
+\begin{frame}[label={sec:orgbd000fc}]{Mamdani FIS for adaptive PSO}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm,height=5.5cm]{/home/alkhaldieid/Dropbox/proposal/presentation/pso_algorithm.png}
+\caption{\label{fig:orgdc93e2d}Adaptive PSO Algorithm}
+\end{figure}
+\end{frame}
+\section*{Ensemble Optimization Using Cartesian Genetic Programming}
+\label{sec:orge6f4245}
+\begin{frame}[label={sec:org2832495}]{Evolutionary Algorithms in ensembles are generally used for:}
+\begin{enumerate}
+\item hyperparameter optimization
+\item topology (design) optimization
+\end{enumerate}
+\end{frame}
+\begin{frame}[label={sec:org2a45f22}]{Standard CGP}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/cgp.png}
+\caption{\label{fig:orgf6c05cd}The standard CGP representation of the Neural Network and the encoded gene \cite{Miller2011}}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:org2fb13c7}]{The CGP method focuses on determining the most optimum architecture of the stacked ensemble}
+\begin{itemize}
+\item Why CGP?
+\begin{itemize}
+\item because it is more flexible than GA
+\item reduces software bloat
+\end{itemize}
+\item A solution can be represented in a Cartesian form as shown in Figure \ref{fig:org09470a5}
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org83a4f4b}]{dCGPANN Variant}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/dcgp.png}
+\caption{\label{fig:org0dc563e}The dCGP representation of the Neural Network and the additions of weights and biases to the encoded gene \cite{Martens2019}}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label={sec:org4961abe}]{dCGPANN used algorithm}
+\begin{center}
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/proposal/presentation/lab/algo.png}
+\label{org562b492}
+\end{center}
+\end{frame}
+\begin{frame}[label={sec:org5accb9b}]{Cartesian Genetic Programming}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm,height=5.5cm]{/home/alkhaldieid/Dropbox/third/ensemble_gene3.png}
+\caption{\label{fig:org09470a5}A randomly generated ensemble topology by CGP}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:orgeb8c4e8}]{The proposed method is composed of two stages.}
+\begin{block}{Stage 1}
+\begin{enumerate}
+\item fine-tune and train end-to-end multiple heterogeneous
+\item select the best-performing models
+\item The test dataset patches are then augmented to 5000 images.
+\end{enumerate}
+\end{block}
+\begin{block}{Stage 2}
+\begin{enumerate}
+\item The classifiers' predictions of the 5000 images are used to train the stacked ensemble using dCGPANN.
+\item 
+\end{enumerate}
+\end{block}
+\end{frame}
+
+\begin{frame}[label={sec:orgacb1b28}]{Cartesian Genetic Programming}
+\begin{itemize}
+\item The predictions of the 5000 images are used to train the stacked ensemble using CGP
+\item CGP inputs are a 16x1 vector
+\item The solutions are then evolved using crossover and mutation operators based on predefined parameters.
+\end{itemize}
+\end{frame}
+\section*{Ensemble Optimization Using CSA}
+\label{sec:org5aa77e6}
+\begin{frame}[label={sec:org7d104fd}]{Immunecomputing}
+\begin{itemize}
+\item Colonal Selection Algorithm is bio-inspired by the immune systems in mammals
+\item Immune systems has the capacity to identify harmful infected cells (antigens)
+\item In response, the immune system produces antibodies to fight antigens
+\item Antibodies are then cloned based on the degree of antibodies-antigens recognition score called Affinity Score
+\end{itemize}
+:Effort:   3
+\end{frame}
+\begin{frame}[label={sec:org93be356}]{Parameters to be optimized}
+\begin{itemize}
+\item The antibodies with the highest Affinity scores are used as the antigens for the second epoch
+\item The new antigens are then mutated
+\item The procedure is repeated for a predefined number of iterations or until stop criteria are met
+\item the CSA is going to be used to optimize the hyperparameters of the ensemble training
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org63b9781}]{Parameters to be optimized}
+\begin{itemize}
+\item each antigen or antibody contains the hyperparameters of the ensmble such as:
+\begin{itemize}
+\item number of hidden layers
+\item number of Convolutional layers
+\item number of epochs
+\item batch size
+\item Type of optimizers
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section*{Experimental Setup}
+\label{sec:org6efd468}
+\begin{frame}[label={sec:org729b2a4}]{Evaluation Metrics}
+\label{orgdb711d9}
+
+\begin{itemize}
+\item Accuracy:  the rate of correct predictions to the total number of samples \cite{Duchesnay2019,Javeed2019}.
+\end{itemize}
+\begin{equation}
+  acc = \sum TP + \sum TN/\sum \#samples
+\end{equation}
+\begin{itemize}
+\item Precision: the rate of correct class predictions to the total number of
+samples belonging to that class  [[\cite{Duchesnay2019,Javeed2019}.
+\end{itemize}
+\begin{equation}
+ Precision = \sum TP + \sum TN
+\end{equation}
+
+\begin{itemize}
+\item Recall: the true positive rate \cite{Duchesnay2019,Javeed2019}.
+\end{itemize}
+\begin{equation}
+ TPR = \sum TP /  \#positive \  samples
+\end{equation}
+\begin{itemize}
+\item F1 score
+\end{itemize}
+
+\begin{equation}
+F1 score = 2 \times \frac{Precision \times Recall}{(Precision + Recall)}
+\end{equation}
+\begin{itemize}
+\item log-loss: the cross-entropy loss, which is the negative log-likelihood of the class labels given predictions \cite{Duchesnay2019,Javeed2019}
+\item The area under the ROC curve
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org773a4b2}]{Dataset 1 BACH: ICIAR 2018 Grand Challenge on \alert{BreAst Cancer Histology} images}
+\begin{itemize}
+\item ICIAR 2018 dataset
+\item The histology patches dataset consist of 400 labeled training images
+\item 2048 x 1536 pixels resolution
+\item cancerous classes of the images is uniform distribution, as shown in Table \ref{tab:orgeaa327a}
+\item Highly experienced medical specialists classified the images
+\item Classes are shown in Table \ref{tab:org911eb22}.
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:org229bf07}]{Dataset 1 BACH: ICIAR 2018 Grand Challenge on \alert{BreAst Cancer Histology} images}
+\begin{table}[htbp]
+\caption{\label{tab:org911eb22}BACH: ICIAR 2018 Grand Challenge on \alert{BreAst Cancer Histology} images}
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{2}{|l|}{Non-carcinoma} & \multicolumn{2}{l|}{Carcinoma} \\
+\hline
+Normal & Benign & In Situ & Invasive \\
+\hline
+100 & 100 & 100 & 100 \\
+\hline
+\end{tabular}
+\end{table}
+Unlabeled test images = 100
+\end{frame}
+\begin{frame}[label={sec:org4fe9896}]{Dataset 1 BACH: ICIAR 2018 Grand Challenge on \alert{BreAst Cancer Histology} images}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=12cm,height=5cm]{/home/alkhaldieid/Dropbox/second_final/data.png}
+\caption{\label{fig:org97fb4d9}Benign, InSitu, Invasive and Normal H\&E stained breast samples (from top left to bottom right)}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:org981981e}]{Dataset 1 BACH: ICIAR 2018 Grand Challenge on \alert{BreAst Cancer Histology} images}
+\begin{table}[htbp]
+\caption{\label{tab:orgeaa327a}The Distribution of the ICIAR Dataset in our Study.}
+\centering
+\begin{tabular}{lrrrr}
+Type & Normal & Benign & InSitu & Invasive\\
+Train & 90 & 90 & 90 & 90\\
+validation & 5 & 5 & 5 & 5\\
+Held-out test & 5 & 5 & 5 & 5\\
+Test & 25 & 25 & 25 & 25\\
+\end{tabular}
+\end{table}
+\end{frame}
+\begin{frame}[label={sec:orgdb5caa8}]{Dataset 2 IDC}
+\begin{itemize}
+\item Extracted from 279 patients
+\item 277524 non-overlapping 50x50 patches
+\item Binary Classes
+\end{itemize}
+\end{frame}
+\begin{frame}[label={sec:orgc073ce3}]{Dataset 2 IDC statistics}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/datasethists.png}
+\caption{\label{fig:org616e015}Dataset Statistics}
+\end{figure}
+\end{frame}
+
+\begin{frame}[label={sec:org5687479}]{Dataset 2 IDC Positive Samples}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcpp.png}
+\caption{\label{fig:org30bf396}IDC positive samples}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:org5629752}]{Dataset 2 IDC Negative Samples}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcnp.png}
+\caption{\label{fig:org81b3921}IDC negative samples}
+\end{figure}
+\end{frame}
+\begin{frame}[label={sec:orgb9fa80c}]{Hardware and Sofrware}
+\begin{itemize}
+\item The experiments are run on:
+\begin{itemize}
+\item NVIDIA Geo-Force RTX 2080 GPU
+\item AMD Ryzen Threadripper 1950X 16-Core processor
+\end{itemize}
+\item Using the following open source software
+\begin{itemize}
+\item Tensorflow
+\item Keras
+\item Pyton-dcgp
+\item DEAP
+\item gplearn
+\item PySwarm
+\item Artix Linux
+\item NEAT
+\end{itemize}
+\end{itemize}
+\end{frame}
+\section*{Suggested Dissertation Outline}
+\label{sec:org8fe6a01}
+
+\begin{table}[htbp]
+\caption{The anticipated dissertation contents part 1}
+\centering
+\begin{tabular}{rl}
+\hline
+Chapter & Title\\
+\hline
+1. & Introduction\\
+\hline
+2. & Literature Review\\
+\hline
+3. & Genetically Optimized Heterogeneous Ensemble\\
+ & for Histological Image Classification\\
+\hline
+4. & Adaptive PSO-Based Ensemble Optimization\\
+ & for Histology Image Classification\\
+\hline
+5. & Cartesian Genetic Programming\\
+ & for Stacked Ensemble Optimization\\
+\hline
+6. & Ensemble Training Optimization\\
+ & Using Colonal Selection Algorithm\\
+\hline
+8. & Conclusion and Future Work\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{frame}[label={sec:org698475e}]{Dissertation-related Research Publications}
+[1] Alkhaldi, E. \& Salari, E. (2019) Genetically Optimized
+Heterogeneous Ensemble for Histological Image
+Classification. International Journal of Science and
+Engineering Investigations (IJSEI), 8(95), 113-118.
+
+[2] E. Alkhaldi and E. Salari, “Adaptive PSO-Based Ensemble Optimization for Histology
+Image Classification,”. International Journal of Computer Science and Technology (IJCST), vol. 8491, pp. 26–34, 2021.
+\end{frame}
+\section*{Questions?}
+\label{sec:org9b81249}
+Questions?
+\begin{frame}[allowframebreaks]
+        \frametitle{References}
+        \bibliographystyle{ieeetr}
+        \bibliography{~/work/res/cited_lib.bib}
+\end{frame}
+\end{document}

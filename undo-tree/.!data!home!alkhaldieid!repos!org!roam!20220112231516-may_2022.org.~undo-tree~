@@ -1,0 +1,7 @@
+(undo-tree-save-format-version . 1)
+"1531ece12020479a254a1173eeecda13796defc3"
+[nil nil nil nil (25159 4517 375704 832000) 0 nil]
+([nil nil ((nil rear-nonsticky nil 87 . 88) (#("
+" 0 1 (fontified nil line-prefix "" wrap-prefix #("* " 0 2 (face org-indent)))) . -377) (87 . 378) (t 25055 42837 600363 243000)) nil (25159 4517 375702 16000) 0 nil])
+([nil current ((377 . 378) 88) nil (25159 4517 375695 53000) 0 nil])
+nil
