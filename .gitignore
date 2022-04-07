@@ -6,4 +6,5 @@ README.el
 README.org~
 init.el~
 org-roam.db
-
+\#.gitignore#
+undo-tree/*
