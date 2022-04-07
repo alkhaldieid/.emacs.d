@@ -8,3 +8,4 @@ init.el~
 org-roam.db
 \#.gitignore#
 undo-tree/*
+auto-save-list/*
