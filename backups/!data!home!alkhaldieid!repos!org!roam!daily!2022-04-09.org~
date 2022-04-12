@@ -1,0 +1,325 @@
+:PROPERTIES:
+:ID:       72ba9e38-d95f-4668-b561-ea869c40c567
+:END:
+#+title: 2022-04-09
+* PSO implementation using PySwarm
+** Loading Data
+First, we’ll load the dataset from scikit-learn. The Iris Dataset contains 3 classes for each of the iris species (iris setosa, iris virginica, and iris versicolor). It has 50 samples per class with 150 samples in total, making it a very balanced dataset. Each sample is characterized by four features (or dimensions): sepal length, sepal width, petal length, petal width.
+
+#+BEGIN_SRC python :session
+
+# Import modules
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+
+# Import PySwarms
+import pyswarms as ps
+
+data=load_iris()
+
+X = data.data
+Y = data.target
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC python :session :results output drawer
+print(X.shape)
+print(Y.shape)
+#+END_SRC
+
+#+RESULTS:
+:results:
+:end:
+** Construct a custom objective function
+Input layer size: 4
+Hidden layer size: 20 (activation: tanh(x))
+Output layer size: 3 (activation: softmax(x))
+
+
+Things we’ll do:
+
+1. [ ] Create a forward_prop method that will do forward propagation for one particle.
+2. [ ] Create an overhead objective function f() that will compute forward_prop() for the whole swarm.
+
+Shape of input-to-hidden weight matrix: (4, 20)
+Shape of input-to-hidden bias array: (20, )
+Shape of hidden-to-output weight matrix: (20, 3)
+Shape of hidden-to-output bias array: (3, )
+
+by unrolling the weights and biases together we get:
+number of params
+#+BEGIN_SRC python :session :results output drawer
+  n_params = 4*20+20+20*3+3
+  print("The number of parameters of each particle is {}".format(n_params))
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+The number of parameters of each particle is 163
+:end:
+
+#+BEGIN_SRC python :session :results output drawer
+  n_inputs = 4
+  n_hidden = 20
+  n_classes = 3
+  n_w1 = n_inputs*n_hidden
+  n_b1 = n_hidden
+  n_w2 = n_hidden*n_classes
+  n_b2 = n_classes
+  print(n_w1,n_b1,n_w2,n_b2)
+#+END_SRC
+
+#+RESULTS:
+:results:
+80 20 60 3
+:end:
+
+#+BEGIN_SRC python :session :results output drawer
+print(Y.shape)
+#+END_SRC
+
+#+RESULTS:
+:results:
+(150,)
+:end:
+#+BEGIN_SRC python :session :results output drawer
+print(Y)
+#+END_SRC
+
+#+RESULTS:
+:results:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2]
+:end:
+
+#+BEGIN_SRC python :session :results output drawer
+  def mysoftmax(logits):
+      return np.exp(logits) / np.sum(np.exp(logits,axis=1,keepdims=True))
+
+  def my_loss(probs):
+      N = 150 #number of samples
+      correct_logprobs = -np.log(probs[range(N), Y])
+      loss = np.sum(correct_logprobs)/N
+      return loss
+
+
+  def forward_prop(params):
+      n_inputs = 4
+      n_hidden = 20
+      n_classes = 3
+      n_w1 = n_inputs*n_hidden
+      n_b1 = n_hidden
+      n_w2 = n_hidden*n_classes
+      n_b2 = n_classes
+
+      # Roll back the weights and the biases
+      W1 = params[0:n_w1].reshape((n_inputs,n_hidden))
+      b1 = params[n_w1:n_w1+n_b1].reshape((n_hidden,))
+      W2 = params[n_w1+n_b1:n_w1+n_b1+n_w2].reshape((n_hidden,n_classes))
+      b1 = params[n_w1+n_b1+n_w2:n_w1+n_b1+n_w2].reshape((n_classes,))
+
+      a1 = np.tanh(X.dot(W1) + b1)
+      logits = a1.(W2)+b2
+
+      probs = mysoftmax(logits)
+      loss = myloss(probs)
+      return loss
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+:end:
+
+#+BEGIN_SRC python :session :results output drawer
+
+#+END_SRC
+
+Now let's define the objective function that computes the loss for each particle in the swarm
+
+#+BEGIN_SRC python :session :results output drawer
+  def f(x):
+      j = [forward_prop(x[i]) for i in range(x.shape[0])]
+      return np.array(j)
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+:end:
+
+Using the default PSO implementation:
+#+BEGIN_SRC python :session :results output drawer
+# Initialize swarm
+options = {'c1': 0.5, 'c2': 0.3, 'w':0.9}
+
+# Call instance of PSO
+dimensions = (4 * 20) + (20 * 3) + 20 + 3
+optimizer = ps.single.GlobalBestPSO(n_particles=100, dimensions=dimensions, options=options)
+
+# Perform optimization
+cost, pos = optimizer.optimize(f, print_step=1, iters=20, verbose=3)
+#+END_SRC
+
+#+RESULTS:
+:results:
+2022-04-10 09:14:06,271 - pyswarms.single.global_best - INFO - Optimize for 20 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.9}
+pyswarms.single.global_best:   0%|                                                                              |0/20pyswarms.single.global_best:   0%|                                                                              |0/20
+:end:
+
+* scratch
+** get the one hot encoding of y
+turns out this was not important
+#+BEGIN_SRC python :session :results output drawer
+  def getonehot(y):
+      YY = []
+      for i in y:
+          if i == 0:
+              YY.append([1,0,0])
+          elif i ==1:
+              YY.append([0,1,0])
+          else:
+              YY.append([0,0,1])
+      return YY
+
+  print(getonehot(Y))
+#+END_SRC
+
+#+RESULTS:
+:results:
+[[1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1], [0, 0, 1]]
+:end:
+
+#+BEGIN_SRC python :session :results output drawer
+  params = np.ones([163,1])
+  print(params.shape)
+  n_inputs = 4
+  n_hidden = 20
+  n_classes = 3
+
+  # Roll-back the weights and biases
+  W1 = params[0:80].reshape((n_inputs,n_hidden))
+  print(W1.shape)
+  b1 = params[80:100].reshape((n_hidden,))
+  print(b1.shape)
+  W2 = params[100:160].reshape((n_hidden,n_classes))
+  print(W2.shape)
+  b2 = params[160:163].reshape((n_classes,))
+  print(b2.shape)
+
+  # Perform forward propagation
+  z1 = X.dot(W1) + b1  # Pre-activation in Layer 1
+  print(z1.shape)
+  a1 = np.tanh(z1)     # Activation in Layer 1
+  z2 = a1.dot(W2) + b2 # Pre-activation in Layer 2
+  print(z2.shape)
+  logits = z2          # Logits for Layer 2
+  print("logits size = ",logits.shape)
+
+  # Compute for the softmax of the logits
+  exp_scores = np.exp(logits)
+  print(exp_scores.shape)
+  probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
+  print("probs shape = ",probs.shape)
+
+  # Compute for the negative log likelihood
+  N = 150 # Number of samples
+  corect_logprobs = -np.log(probs[range(N), Y])
+  print("corect", corect_logprobs.shape)
+
+  loss = np.sum(corect_logprobs) / N
+  print("loss =",loss)
+
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+(163, 1)
+(4, 20)
+(20,)
+(20, 3)
+(3,)
+(150, 20)
+(150, 3)
+logits size =  (150, 3)
+(150, 3)
+probs shape =  (150, 3)
+corect (150,)
+loss = 1.0986122886681096
+:end:
+
+probs vs probs[range(N), Y]
+#+BEGIN_SRC python :session :results output drawer
+  print("probs[range(N), Y] =",probs[range(N), Y].shape)
+  print("Y shape = ",Y.shape)
+  print("range(N) shape = ",range(N))
+  print("probs shape = ",probs.shape)
+#+END_SRC
+
+#+RESULTS:
+:results:
+probs[range(N), Y] = (150,)
+Y shape =  (150,)
+range(N) shape =  range(0, 150)
+probs shape =  (150, 3)
+:end:
+
+** Broadcasting in [[id:fb602667-edd4-414a-aba2-04d098e6e0bc][numpy]]
+How does the tanh affect the dimensions of a matrix
+1. broadcasting
+#+BEGIN_SRC python :session :results output drawer
+  g = np.array([[1, 2, 3], [4, 5, 6]], np.int32)
+  j = np.array([5,6,7])
+  z = g + j
+  b = np.tanh(z)
+  ex = np.exp(b)
+  sm = np.sum(ex,axis = 1, keepdims=True)
+  prob = ex/sm
+  n = 2
+  h = np.array([1, 2])
+
+
+
+  print("g = ",g)
+  print("j = ", j)
+  print("z = ",z)
+  print("b = ",b)
+  print("ex = ", ex)
+  print("sm = ", sm)
+  print("prob = ", prob)
+  print(type(Y))
+  print(np.shape(Y))
+  print(Y[:10])
+  print(h.shape)
+  
+#+END_SRC
+
+
+#+RESULTS:
+:results:
+g =  [[1 2 3]
+ [4 5 6]]
+j =  [5 6 7]
+z =  [[ 6  8 10]
+ [ 9 11 13]]
+b =  [[0.99998771 0.99999977 1.        ]
+ [0.99999997 1.         1.        ]]
+ex =  [[2.71824843 2.71828122 2.71828182]
+ [2.71828175 2.71828183 2.71828183]]
+sm =  [[8.15481146]
+ [8.1548454 ]]
+prob =  [[0.33333063 0.33333465 0.33333472]
+ [0.33333333 0.33333334 0.33333334]]
+<class 'numpy.ndarray'>
+(150,)
+[0 0 0 0 0 0 0 0 0 0]
+(2,)
+:end:

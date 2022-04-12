@@ -1,7 +1,7 @@
 #+STARTUP: overview
 #+TITLE: My dotemacs
 My Personal Emacs configs for note-taking workflow, coding, managing daily agenda, composing documents, presentations in latex, managing bibtex files, emails and much much more. 
-* [#A] Minimal System Wide Configs
+* [#A] Minimal System Wide Configurations
 ** Package Manager
     Setup the packages managers 
   #+BEGIN_SRC emacs-lisp :results silent
@@ -518,7 +518,7 @@ Things I want flyspell to do automatically:
    :init
    (yas-global-mode 1))
  #+END_SRC
-* Editor Related Configs
+* Editor Related Configurations
 ** auto-save and backup files
    To avoid cluttering directories you work on with FILENAME~ files, save your auto-save, backup and undo-tree files in specific directories.
 #+BEGIN_SRC emacs-lisp :results silent
@@ -554,6 +554,17 @@ Things I want flyspell to do automatically:
   (set-scroll-bar-mode nil)
 #+END_SRC
 
+** Org-babel
+#+BEGIN_SRC emacs-lisp :results silent
+  (unless (package-installed-p 'ob-ipython)
+    (package-install 'ob-ipython))
+  (require 'ob-ipython)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (ipython . t)
+     (lisp . t)))
+#+END_SRC
 * openwith
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package openwith :ensure t)
@@ -592,3 +603,13 @@ Things I want flyspell to do automatically:
       :ensure t)
     (global-company-mode)
   #+END_SRC
+
+* Python
+** switch to a conda env
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package pyvenv
+    :ensure t)
+  (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
+  (setq python-shell-virtualenv-path "/home/alkhaldieid/anaconda3/")
+  (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
+#+END_SRC

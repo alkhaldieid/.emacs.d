@@ -3,6 +3,6 @@
 # key: sp 
 # --
 
-#+BEGIN_SRC python
+#+BEGIN_SRC python :session :results output drawer
 $0
 #+END_SRC

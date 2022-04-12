@@ -1,0 +1,202 @@
+:PROPERTIES:
+:ID:       e501d759-bf25-47dd-a038-3cc2523d8972
+:END:
+#+title: 2022-04-11
+
+* install ipython source code
+#+BEGIN_SRC emacs-lisp :results silent
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ipython . t)
+   ;; other languages..
+   ))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package major-mode-hydra
+  :ensure t
+  :bind
+  ("M-SPC" . major-mode-hydra))
+;; (load-file "/home/alkhaldieid/.emacs.d/scimax/scimax-ob.el")
+;; (load-file "/home/alkhaldieid/.emacs.d/scimax/scimax-jupyter.el")
+(use-package jupyter
+  :ensure t)
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC ipython :session :results raw drawer
+  %matplotlib inline
+  import matplotlib.pyplot as plt
+  import numpy as np
+#+END_SRC
+
+#+RESULTS:
+:results:
+# Out[1]:
+:end:
+
+* PSO implementation using PySwarm
+** Loading Data
+First, we’ll load the dataset from scikit-learn. The Iris Dataset contains 3 classes for each of the iris species (iris setosa, iris virginica, and iris versicolor). It has 50 samples per class with 150 samples in total, making it a very balanced dataset. Each sample is characterized by four features (or dimensions): sepal length, sepal width, petal length, petal width.
+
+#+BEGIN_SRC ipython :session :results output drawer
+
+# Import modules
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+
+
+# Import PySwarms
+import pyswarms as ps
+
+data=load_iris()
+
+X = data.data
+Y = data.target
+#+END_SRC
+
+#+RESULTS:
+
+
+#+BEGIN_SRC ipython :session :results output drawer
+print(X.shape)
+print(Y.shape)
+#+END_SRC
+
+#+RESULTS:
+:results:
+(150, 4)
+(150,)
+:end:
+** Construct a custom objective function
+Input layer size: 4
+Hidden layer size: 20 (activation: tanh(x))
+Output layer size: 3 (activation: softmax(x))
+
+
+Things we’ll do:
+
+1. [ ] Create a forward_prop method that will do forward propagation for one particle.
+2. [ ] Create an overhead objective function f() that will compute forward_prop() for the whole swarm.
+
+Shape of input-to-hidden weight matrix: (4, 20)
+Shape of input-to-hidden bias array: (20, )
+Shape of hidden-to-output weight matrix: (20, 3)
+Shape of hidden-to-output bias array: (3, )
+
+by unrolling the weights and biases together we get:
+number of params
+#+BEGIN_SRC ipython :session :results output drawer
+  n_params = 4*20+20+20*3+3
+  print("The number of parameters of each particle is {}".format(n_params))
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+The number of parameters of each particle is 163
+:end:
+
+#+BEGIN_SRC ipython :session :results output drawer
+  n_inputs = 4
+  n_hidden = 20
+  n_classes = 3
+  n_w1 = n_inputs*n_hidden
+  n_b1 = n_hidden
+  n_w2 = n_hidden*n_classes
+  n_b2 = n_classes
+  print(n_w1,n_b1,n_w2,n_b2)
+#+END_SRC
+
+#+RESULTS:
+:results:
+80 20 60 3
+:end:
+
+#+BEGIN_SRC ipython :session :results output drawer
+print(Y.shape)
+#+END_SRC
+
+#+RESULTS:
+:results:
+(150,)
+:end:
+#+BEGIN_SRC ipython :session :results output drawer
+print(Y)
+#+END_SRC
+
+#+RESULTS:
+:results:
+[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2
+ 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+ 2 2]
+:end:
+
+#+BEGIN_SRC ipython :session :results output drawer
+  def mysoftmax(logits):
+      return np.exp(logits) / np.sum(np.exp(logits,axis=1,keepdims=True))
+
+  def my_loss(probs):
+      N = 150 #number of samples
+      correct_logprobs = -np.log(probs[range(N), Y])
+      loss = np.sum(correct_logprobs)/N
+      return loss
+
+
+  def forward_prop(params):
+      n_inputs = 4
+      n_hidden = 20
+      n_classes = 3
+      n_w1 = n_inputs*n_hidden
+      n_b1 = n_hidden
+      n_w2 = n_hidden*n_classes
+      n_b2 = n_classes
+
+      # Roll back the weights and the biases
+      W1 = params[0:n_w1].reshape((n_inputs,n_hidden))
+      b1 = params[n_w1:n_w1+n_b1].reshape((n_hidden,))
+      W2 = params[n_w1+n_b1:n_w1+n_b1+n_w2].reshape((n_hidden,n_classes))
+      b1 = params[n_w1+n_b1+n_w2:n_w1+n_b1+n_w2].reshape((n_classes,))
+
+      a1 = np.tanh(X.dot(W1) + b1)
+      logits = a1.(W2)+b2
+
+      probs = mysoftmax(logits)
+      loss = myloss(probs)
+      return loss
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+:end:
+
+Now let's define the objective function that computes the loss for each particle in the swarm
+
+#+BEGIN_SRC ipython :session :results output drawer
+  def f(x):
+      j = [forward_prop(x[i]) for i in range(x.shape[0])]
+      return np.array(j)
+
+#+END_SRC
+
+#+RESULTS:
+:results:
+:end:
+
+Using the default PSO implementation:
+#+BEGIN_SRC ipython :session :results output drawer
+# Initialize swarm
+options = {'c1': 0.5, 'c2': 0.3, 'w':0.9}
+
+# Call instance of PSO
+dimensions = (4 * 20) + (20 * 3) + 20 + 3
+optimizer = ps.single.GlobalBestPSO(n_particles=100, dimensions=dimensions, options=options)
+
+# Perform optimization
+cost, pos = optimizer.optimize(f,  iters=200, verbose=3)
+#+END_SRC

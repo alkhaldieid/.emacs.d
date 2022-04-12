@@ -1,5 +1,5 @@
 (undo-tree-save-format-version . 1)
-"bb4eaaa315b33ca84308a79bf45784e9fe89c57e"
+"6dba4f1de6af4a73d118d4c7723d81e43bcc8d45"
 [nil nil nil nil (25152 19077 767153 651000) 0 nil]
 ([nil nil ((744 . 983) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -151,7 +151,7 @@
  '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
  '(package-selected-packages
    '(company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 833 (fontified nil)) . -1) (t 25156 50694 442213 871000)) nil (25161 25322 130533 885000) 0 nil])
-([nil current ((856 . 1095) (#("(custom-set-faces
+([nil nil ((856 . 1095) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -173,4 +173,92 @@
  '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
  '(package-selected-packages
    '(deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 838 (fontified nil)) . -1) (t 25161 25322 459356 840000)) nil (25161 27276 386862 301000) 0 nil])
+([nil nil ((867 . 1106) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -867) (864 . 866) (#("
+" 0 1 (fontified nil)) . -864) (598 . 865) (#(" " 0 1 (fontified nil)) . 598) (453 . 599) (#("
+" 0 1 (fontified nil)) . -453) (368 . 454) (#(" " 0 1 (fontified nil)) . 368) (340 . 369) (#("
+" 0 1 (fontified nil)) . -340) (272 . 341) (#(" " 0 1 (fontified nil)) . 272) (1 . 273) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   [\"black\" \"red3\" \"ForestGreen\" \"yellow3\" \"blue\" \"magenta3\" \"DeepSkyBlue\" \"gray50\"])
+ '(evil-undo-system 'undo-tree)
+ '(global-company-mode t)
+ '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
+ '(package-selected-packages
+   '(org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 854 (fontified nil)) . -1) (t 25161 27276 432628 662000)) nil (25169 15907 814885 277000) 0 nil])
+([nil nil ((874 . 1113) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -874) (871 . 873) (#("
+" 0 1 (fontified nil)) . -871) (598 . 872) (#(" " 0 1 (fontified nil)) . 598) (453 . 599) (#("
+" 0 1 (fontified nil)) . -453) (368 . 454) (#(" " 0 1 (fontified nil)) . 368) (340 . 369) (#("
+" 0 1 (fontified nil)) . -340) (272 . 341) (#(" " 0 1 (fontified nil)) . 272) (1 . 273) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   [\"black\" \"red3\" \"ForestGreen\" \"yellow3\" \"blue\" \"magenta3\" \"DeepSkyBlue\" \"gray50\"])
+ '(evil-undo-system 'undo-tree)
+ '(global-company-mode t)
+ '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
+ '(package-selected-packages
+   '(ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 865 (fontified nil)) . -1) (t 25169 15907 842326 501000)) nil (25169 16197 836556 568000) 0 nil])
+([nil nil ((891 . 1130) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -891) (888 . 890) (#("
+" 0 1 (fontified nil)) . -888) (598 . 889) (#(" " 0 1 (fontified nil)) . 598) (453 . 599) (#("
+" 0 1 (fontified nil)) . -453) (368 . 454) (#(" " 0 1 (fontified nil)) . 368) (340 . 369) (#("
+" 0 1 (fontified nil)) . -340) (272 . 341) (#(" " 0 1 (fontified nil)) . 272) (1 . 273) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   [\"black\" \"red3\" \"ForestGreen\" \"yellow3\" \"blue\" \"magenta3\" \"DeepSkyBlue\" \"gray50\"])
+ '(evil-undo-system 'undo-tree)
+ '(global-company-mode t)
+ '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
+ '(package-selected-packages
+   '(pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 872 (fontified nil)) . -1) (t 25169 16198 238980 533000)) nil (25172 3385 944301 252000) 0 nil])
+([nil current ((899 . 1138) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )" 0 239 (fontified nil)) . -899) (896 . 898) (#("
+" 0 1 (fontified nil)) . -896) (598 . 897) (#(" " 0 1 (fontified nil)) . 598) (453 . 599) (#("
+" 0 1 (fontified nil)) . -453) (368 . 454) (#(" " 0 1 (fontified nil)) . 368) (340 . 369) (#("
+" 0 1 (fontified nil)) . -340) (272 . 341) (#(" " 0 1 (fontified nil)) . 272) (1 . 273) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   [\"black\" \"red3\" \"ForestGreen\" \"yellow3\" \"blue\" \"magenta3\" \"DeepSkyBlue\" \"gray50\"])
+ '(evil-undo-system 'undo-tree)
+ '(global-company-mode t)
+ '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
+ '(package-selected-packages
+   '(major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 889 (fontified nil)) . -1) (t 25172 3385 984317 758000)) nil (25172 3388 706675 730000) 0 nil])
 nil

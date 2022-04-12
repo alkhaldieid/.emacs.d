@@ -1,0 +1,17 @@
+import numpy as np
+from sklearn.datasets import load_digits
+
+# split dataset
+DATA = load_digits()
+X = DATA.data
+Y = DATA.target
+NUM_SAMPLES = 1797
+NUM_TRAINSET = 1500
+indices = list(range(NUM_SAMPLES))
+np.random.shuffle(indices)
+train_indices = indices[:NUM_TRAINSET]
+test_indices = indices[NUM_TRAINSET:]
+X_train = X[train_indices, :]
+X_test = X[test_indices, :]
+Y_train = Y[train_indices]
+Y_test = Y[test_indices]

@@ -1,0 +1,1689 @@
+% Created 2022-03-25 Fri 09:07
+% Intended LaTeX compiler: pdflatex
+\documentclass[12pt]{report}
+
+\usepackage[top=0.5in]{geometry}
+\usepackage{subfig}
+\usepackage[section]{placeins}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{minted}
+\setlength{\parindent}{0cm}
+\usepackage{adjustbox}
+\usepackage{float}
+\def\acknowledgments{\chapter*{Acknowledgments}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+\vspace{0.32in}}
+\def\endacknowledgments{\clearpage}
+\def\abbreviation#1#2{\setlength{\parskip}{-0.3em}\item[#1] #2 }
+\newcommand{\abbreviationlabel}[1]{\mbox{\textrm{#1~}}\dotfill}
+\newenvironment{listofabbreviations}
+{\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+\vspace{0.8em}
+\begin{singlespace}
+\begin{list}{}%
+{\renewcommand{\makelabel}{\abbreviationlabel}%
+\setlength{\labelwidth}{2in}%
+\setlength{\leftmargin}{2.08in}%
+}%
+}%
+{\end{list}\end{singlespace}}
+%#########  LIST OF SYMBOLS
+\def\emblem#1#2{\setlength{\parskip}{-0.3em}\item[#1] #2 }
+\def\emblemskip{\mbox{} \\[-1em]}
+
+\newcommand{\symbollabel}[1]{\mbox{\textrm{#1~}}\dotfill}
+\newenvironment{listofsymbols}
+{\chapter*{List of Symbols}
+\addcontentsline{toc}{chapter}{List of Symbols}
+\vspace{0.8em}
+\begin{singlespace}
+\begin{list}{}%
+{\renewcommand{\makelabel}{\symbollabel}%
+\setlength{\labelwidth}{1in}%
+\setlength{\leftmargin}{1.08in}%
+}%
+}%
+{\end{list}\end{singlespace}}
+\def\preface{\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+\vspace{0.34in}}
+\def\endpreface{\clearpage}
+\def\abstractpage{%%% BEGIN ABSTRACTPAGE DEFINITION
+\clearpage\addcontentsline{toc}{chapter}{Abstract}
+\begin{singlespace}
+\begin{center}{ %%% BEGINS TOP PORTION
+An Abstract of \TitleLineBIGskip
+\ifthenelse{\equal{\@title}{}}
+{ \fbox{\large\bf Error: insert title in $\backslash$title\{\}} }
+{\@title} \TitleLineBIGskip
+%###
+%###  The error command above covers the situation
+%###  where the \title{} command is absent from the
+%###  LaTeX file.
+%###
+by \TitleLineBIGskip
+\ifthenelse{\equal{\@author}{}}
+{ \fbox{\large\bf Error: insert name in $\backslash$author\{\}} }
+{\@author} \\[1.2em]
+%###
+%###  The error command above covers the situation
+%###  where the \author{} command is absent from
+%###  the LaTeX file.
+%###
+} %%% ENDS TOP PORTION
+{  %%% BEGIN LOWER PORTION
+Submitted to the Graduate Faculty as partial fulfillment
+of the requirements for the \TitleLineSkip
+\DegreeLevel~Degree~in~\DegreeDiscipline \TitleLineBIGskip
+The University of Toledo \\
+\AwardMonth~\AwardYear \\[2.25em]
+}  %%% END LOWER PORTION \\
+\end{center}
+\end{singlespace}
+}  %%% END \abstractpage DEFINITION
+\def\endabstractpage{\mbox{} \clearpage }
+\title{Ensemble Optimization for Histological Image Classification}
+\author{Eid Alkhaldi}
+\restylefloat{table}
+\pagenumbering{roman}
+\author{Eid Alkhaldi}
+\date{}
+\title{Ensemble Optimization for Histological Images Classification}
+\begin{document}
+
+\maketitle
+\begin{acknowledgments}
+\noindent 
+\end{acknowledgments}
+\newpage
+  \tableofcontents
+\newpage
+
+\newpage
+  \listoftables
+\newpage
+
+\newpage
+  \listoffigures
+\newpage
+
+\begin{listofabbreviations}
+
+\abbreviation{AI}{Artificial Intelligence}
+\abbreviation{BASH}{BreAst Cancer Histology images}
+\abbreviation{CNN}{Convolutional Neural Network}
+\abbreviation{DL}{Deep Learning}
+\abbreviation{E\&S}{Hematoxylin and eosin}
+\abbreviation{EA}{Evolutionary Algorithms}
+\abbreviation{FIS}{Fuzzy Inference System}
+\abbreviation{GA}{Genetic Algorithm}
+\abbreviation{GP}{Genetic Programming}
+\abbreviation{ICIAR}{International Conference on Image Analysis and Recognition}
+\abbreviation{LR}{Learning Rate}
+\abbreviation{PSO}{Particle Swarm Optimization}
+
+\end{listofabbreviations}
+
+
+\begin{listofsymbols}
+
+\end{listofsymbols}
+\clearpage
+
+\begin{preface}
+\end{preface}
+
+
+\section*{Abstract}
+
+\quad The credibility of Computer-aided breast cancer diagnostic systems' relies profoundly upon the accuracy of the models correlating the various enigmatic descriptors to the correct class labels.
+Consequently, breast H\&E samples classification is one of the most crucial problems of computer vision in the medical field.
+As an outcome of the accelerated evolution in computational resources, Convolutional neural networks emerged to elicit more intricate features.
+Nonetheless, CNNs are data greedy and inclined to overfit in the medical field due to the deficient supply of labeled patches.
+Although Transfer Learning assists in reducing the massive training-data requirement of CNNs, it fails to separate domain-specific layers from the general ones, which often leads to worst accuracy on unseen samples.
+This is often attributable to the lack of interpretability of the features extracted at each layer.
+Moreover, the high number of hyper-parameters associated with ensembles of pre-trained models greatly magnifies the search space, which substantially increases the training time.
+
+\quad The high cost of acquiring annotated histological slides for breast specimens entails exploiting an ensemble of models appropriately trained on small datasets.
+Histological Image Classification ensembles strive to accurately detect abnormal tissues in the breast samples by determining the correlation between the predictions of its weak learners.
+Nonetheless, the state-of-the-art ensembling methods, such as boosting and bagging, count merely on manipulating the dataset and lack intelligent ensembling decision making.
+Furthermore, the methods mentioned above are short of the diversity of the weak models of the ensemble.  
+Likewise, other commonly used voting strategies, such as weighted averaging, are limited to how the classifiers' diversity and accuracy are balanced.
+
+\quad The main focus of this research is to enhance the reliability of automated cancer detection in histological images.  
+Several techniques are proposed in this dissertation for domain adaptation and ensemble hyperparameter selection and optimization using state-of-the-art biologically inspired algorithms
+
+\quad To solve these problems, we propose a fully automated multi-stage training of horizontally stacked ensemble of CNNs, which consists of two stages.
+First, we optimize the task-specific layers and the ensemble hyper-parameters on low-resolution images using the Genetic Algorithm during the meta-training stage.
+Secondly, we thoroughly train the ensemble using the optimal parameters on high-resolution images.
+Our model achieved 1\% more accuracy than the ICIAR 2018 Challenge winning approach.  
+The results of the proposed method have been compared to previously published methods and exceeded many of the state-of-art techniques by a substantial margin.
+
+
+\quad Furthermore, we propose an adaptive particle swarm optimization hyper-parameter selection method that focuses on deriving an ensemble rule for a fixed length of the best-trained models.
+We first fine-tune a set of pre-trained models on low-resolution images and determine the best combination of them based on the variance of classification errors amongst them rather than their validation loss.
+Then, we use a PSO whose learning rate is adjusted with a Mamdani fuzzy inference system to infer the ensemble policy. 
+Finally, we train the ensemble thoroughly as a noisy-student model using hyper-parameters obtained from the two search sessions with high-resolution and weakly classified images.  
+
+\quad Moreover, the performance of other biologically inspired algorithms such as the Genetic Programming are being examined for ensemble optimization.
+The Genetic Programming algorithm is being used for a systematic selection of models that would result in a better accuracy and more robustness when combined effectively.
+Hence, In this proposal, we propose assembling a Neural Network ensemble that integrates the models trained on small datasets by employing biologically-inspired methods.
+Our procedure comprises two stages. 
+First, we train multiple heterogeneous pre-trained models on the benchmark Breast Histopathology Images for Invasive Ductal Carcinoma (IDC) classification dataset. 
+In the second meta-training phase, we utilize the differential Cartesian Genetic Programming to generate a Neural Network that merges the trained models optimally.
+We compared the empirical outcomes with additional state-of-the-art techniques.
+Our results demonstrate that improvising a Neural Network ensemble using Cartesian Genetic Programming transcended formerly published algorithms on slim datasets.
+Finally, we propose Neural Network ensemble hyperparameter optimization using Clonal Selection Algorithm.
+
+\clearpage
+\pagenumbering{arabic} 
+
+\chapter{Introduction}
+\label{sec:org0d7669c}
+\label{org4f38416}
+\quad This Chapter provides an overview and an introduction to the classification of breast cancer histological images.
+
+Learning an accurate mapping between the complex feature representations of histology images and their labels can magnify the reliability of automated diagnostic systems.
+Hence, breast histology Image classification is a significant problem in medical image processing.  
+CNNs showed superiority in extracting beneficial features and became the most widely used image classification approach. 
+However, the current state-of-the-art CNN techniques, such as Transfer Learning, fail to generalize for small datasets with complex texture and high resolution due to insufficient domain-adaptation. 
+Furthermore, most ensembles of transfer learning models need manual parameter selection of the ensemble policy based solely on the accuracy of each classifier, without a guarantee of heterogeneity. 
+
+\quad Histological image classification is one of the most crucial problems of medical image processing, which demands extensive work and specialized expertise \cite{He2016,Ahmad2019,Pimkin2018,Pimkin2018}.
+Hence, An automated intelligent approach is needed to compensate for the time delay of analysis caused by the insufficient number of pathologists \cite{Cao2018}.
+Early diagnosis of breast malignancy through histology patches is of prominent clinical significance for detection, prognosis, therapy, and reducing healthcare costs \cite{Brancati2019d,AzevedoTosta2017}. 
+Breast histology image classification aims to identify abnormalities in the specimens' structures and specify their carcinogenic level \cite{antani2009}.
+Deep Learning (DL) showed remarkable competence in tackling image classification over the past years due to the accelerated developments in computational resources \cite{Brancati2019d,AzevedoTosta2017,Amidi2018,Pimkin2018}. 
+
+\quad Deep Learning techniques extract very complex features for images, which expands class separability considerably better than the conventional machine learning methods \cite{Ozturk2018}.
+Various DL approaches have been applied to categorize histology images. 
+CNNs are the most reliable DL models employed for Histology image labeling \cite{Aresta2019}.
+However, for CNNs to be accurate, they demand a high quantity of labeled images. 
+The more parameters a CNN holds, the larger the dataset needs to be, and the more training time is required, which is a limitation acknowledged in the DL research as the curse of dimensionality \cite{Zakerzadeh2014c}.
+Consequently, end-to-end training of CNNs suffered significantly, due to the scarcity of annotated hematoxylin and eosin (H\&E) stained histology images.
+
+\quad The trade-off between the scale of the model and the computational demands is often one of the issues hindering the performance of the state-of-art techniques. 
+The extent of the model depends on the depth of the network and the resolution of the input images. 
+The size of the input images is particularly crucial to histological image classification as a result of the enigmatic characteristics of these high-resolution images. 
+However, in many cases, computational capacity limitations constrain researchers to resize the patches to a shallower resolution, which negatively influences the accuracy of the model \cite{Pimkin2018}.
+
+\quad Several preprocessing methods were applied to improve the performance of CNNs such as image enhancement, thresholding, normalization, and spatial transformation \cite{AzevedoTosta2017,Ozturk2018}.
+Although preprocessing methods achieved a slight improvement, they failed to address the curse of dimensionality bottleneck.
+
+\quad Transfer Learning is the process of re-utilization of models' weights that were trained on benchmark datasets such as ImageNet \cite{Dengb,Hendrycks2019}.
+Transfer Learning proved to be a more reliable alternative to end-to-end training because it improves accuracy and robustness and reduces the training time significantly, particularly for small datasets \cite{Hendrycks2019}.
+Utilizing pre-trained models to extract features and fine-tuning the last densely connected layer remained the most two Transfer Learning approaches applied for image classification. 
+Although using pre-trained weights as initial weights performed better than end-to-end training, they overlooked domain transferability and determining the task-specific layers of the pre-trained model in histology images datasets \cite{Yosinski2014}.
+
+\quad Another attempt to improve the accuracy of models for small histology image dataset was by employing ensembles. 
+Ensembles are sets of CNNs whose predictions are joined in a particular fashion to produce a final prediction \cite{Dietterich2000}.
+Bayesian, majority voting, average voting are the most popular DL ensemble methods \cite{Dietterich2000,Nanni2018}.
+Although ensembles achieve higher accuracy than individual networks, they are computationally expensive due to the immense search space of hyper-parameters. 
+Besides, the extracted features of each classifier need to be distinct for an ensemble to generalize well on new unseen data \cite{Dietterich2000,Nanni2018}.
+Modern ensemble methods focus solely on the validation accuracy of the ensemble networks without approaching the heterogeneity of their features and variance of their errors, which frequently leads to over-fitting.
+
+\quad The epicenter of this dissertation is to increase the accuracy of cancerous labeling ensembles for histological patches obtained from breast specimens.  
+The structure of this dissertation is as follows:
+
+\quad Chapter \ref{org0aa2e29} provides an extensive literature review which explains the constraints of the problem and the state-of-the-art techniques that have been applied to solve it.
+Chapter \ref{org52b92ae} explains thoroughly the proposed Genetic Algorithm for ensemble optimization.  
+
+Chapter \ref{org7138f46} discusses the proposed the adaptive PSO algorithm for optimizing the ensemble rule. 
+This chapter presents the Mamdani FIS as the system that controls the evolution of the PSO.
+Chapter \ref{orgd4a56b4} and Chapter \ref{org26386ae} span the ongoing research of the performance of bio-inspired methods for ensemble optimization. 
+They will cover the details of the Genetic Programming (GP) and the Colonal Selection Algorithm (CSA) respectively.
+
+\chapter{Literature Review}
+\label{sec:orgff0f65d}
+\label{org0aa2e29}
+
+\quad This Chapter present an overview of the state-of-the-art literature of the classification of histological images for breast cancer detection.
+The techniques of microscopic classification of H\&E specimens of breast tissue aim to extract distinctive intensity-based determinants that make the cancerous classes more distinguishable \cite{Alkhaldi2019}.
+The abnormality detection task is driven by the spatial and spectral information content of the images. 
+As a consequence of the intricate landscape of this problem and its clinical significance, carcinomic stage identification is vital to the medical image processing area \cite{He2016,Ahmad2019,Pimkin2018,Alom2019,antani2009}.
+The hand-operated examination of the histopathology images demands an immense volume of labor and time of highly educated specialists who are limited and costly \cite{He2016,Ahmad2019,Pimkin2018}.
+Moreover, professionals often find the analysis of histology images challenging and may disagree on the cancerous level of a slide due to individual biases \cite{Ahmad2019,Brancati2019d}.
+The medical treatment and the future forecast of the malignancy behavior is reliant upon early diagnosis \cite{AzevedoTosta2017,Bardou2018,Ahmad2019,Brancati2019d}.
+The reasons above motivated researchers to exploit to a subset of Artificial Intelligent designs named computer-aided diagnostic systems (CAD) \cite{AzevedoTosta2017}.
+
+\quad Various studies verified that Deep Learning (DL) in histopathology had a competing performance to the domain experts \cite{Sidhom2018,Albarqouni2016}. 
+The success of DL is credited to its supremacy in deriving features that are deeply embedded into the image, which significantly grows the malignancy types boundary. 
+Besides, the extensive growth in Deep Learning and computational resources, such as GPUs, allowed researchers to devise profoundly sound predictive models for histopathology patches \cite{Amidi2018,Sidhom2018}. 
+Several DL schemes were adopted toward medical image classification. 
+One of the leading DL frameworks is the end-to-end training of Convolutional Neural Networks (CNNs) \cite{Oktay2018,Shi}. 
+End-to-end training of CNNs performed exceptionally well on benchmark image datasets such as MNIST and CIFAR, which combine millions of annotated images. 
+Even though training models end-to-end was remarkably beneficial and more precise in image classification, it is a data-greedy process that demands a massive dataset. 
+The insufficient quantity of marked samples will prompt the model to learn noise as the number of epochs increases. 
+Multiple studies in the histological images classification revealed that training a DL model using an insufficient number of classified examples is prone to overfitting regardless of how the weights were initialized. 
+The earlier asserted point is the central hindrance of the state-of-art end-to-end procedures, which negatively impairs its performance \cite{Pimkin2018}.
+
+\quad To overcome the deficiencies of the end-to-end CNNs training, Transfer Learning arose as a more hybrid alternative.
+Transfer learning is the reusing of a model trained on a large dataset for a different task \cite{Dengb,Hendrycks2019}.
+Several studies revealed a high correspondence between the accuracy of models trained on benchmark datasets and their performance on other
+domains \cite{Kornblith2018}.
+As an example, models that scored well on CIFAR will function well on medical datasets.
+This high correlation permits industries to incorporate the models that they previously trained into their pipelines for additional predictive tasks.
+The leading cause of this high correlation is the fact that most of the initial layers of the CNNs learn similar fundamental features that are universal to all images,
+ such as edges and basic shapes.
+ As a consequence, researchers adopted these pre-trained models as feature extractors that were utilized for training less intricate models such as Support Vector
+Machines (SVMs) \cite{Kornblith2018}.
+Despite its early success, feature engineering is very reliant on the knowledge of the data scientist and needs a substantial manual tuning of parameters based entirely on intuition \cite{Sun2019b,ElginChristo2019}.
+
+\quad A Different approach to transfer learning is fine-tuning.
+Fine-tuning a pre-trained model with the right parameters is a very time-efficient and had better performance than feature engineering  \cite{Houlsby2019,Tajbakhsh2016}.
+However, it is not efficient in terms of the number of parameters \cite{Houlsby2019}. The fact, as mentioned earlier, could result in overfitting, mainly when training the general layers \cite{Alkhaldi2019}.
+
+
+
+\quad Multiple methods consolidated preprocessing techniques such as thresholding, entropy maximization, fuzzy entropy, and sharpening to enhance the quality of segmentation and classification \cite{KrishnaPriya2015,AzevedoTosta2017,Ozturk2018}.
+Even though the methods stated earlier, marginally raised the labeling accuracy, they hold fewer peculiarities than what the classification task demands, which oversimplifies the feature space.
+Considering the fewer parameters, they furthermore tend to underfit significantly with small datasets. However, these methods are usually incorporated as a preprocessing step for a more complicated algorithm.
+
+
+\quad Analyzing the last layers of the pre-trained models is inefficient in terms of time since the number of trainable parameters change when fine-tuning.
+Therefore, ensembling a number of models proved to be very effective and more robust alternative \cite{Dietterich2000,Xie2019,Xie2013b,Levesque2016}. Ensembles are a vertical or cascaded combination of the features or the predictions of accurate models to produce a better performing model \cite{Dietterich2000,Xie2013b,Alkhaldi2019,Ye2017}.
+For ensembles to perform better than its individual model, the models have to be precise and heterogeneous \cite{Dietterich2000,Alkhaldi2019}.
+The heterogeneity condition ensures that the fused models don't make the same misclassifications, which implies that they learned different features \cite{Pimkin2018}.
+
+An active research field in Deep Learning has been dedicated to study the diversification of ensembles by using advanced optimization techniques such as Genetic Algorithm \cite{Alkhaldi2019}.
+Due to the time-consuming and the high computational power of ensemble methods, they are only viable for applications similar to medical image classification were time is not a major issue \cite{Levesque2016,Javeed2019,Claesen2015,Nakisa2018,Hinz2018a}. 
+
+\quad The volume of the different possible configurations of a particular ensemble model is massive which greatly complexifies the search of optimal settings \cite{Levesque2016,Hinz2018a}.
+Due to the impracticality of evaluating every possible ensemble configuration, multiple optimization methods were proposed. 
+Early methods for ensemble optimization were reliant on randomly evaluating a different set of configurations.
+The random search and the grid search algorithms were common examples of theses approaches \cite{Javeed2019,Claesen2015}.
+Other methods relied on the expert knowledge to manually select the hyper-parameters of the system \cite{Rate2017,Claesen2015}.
+These methods require extensive training and are not guaranteed to converge \cite{Claesen2015}.
+Furthermore, they lack the ability to intelligently evolve based on past trials.
+
+\quad Bio-inspired Computational algorithms proved to be very efficient in solving optimization problems \cite{Singh2018}.
+Particle Swarm Optimization (PSO) is one of the most popular techniques used in NP hard problems and optimization methods for non-convex search-space \cite{Escalante2009,Escalante2010}. 
+The simplicity and ease of implementation of PSO promoted its use across various domains \cite{Escalante2009,Zhang2013,Darzi2013}.
+However, the performance of PSO is heavily dependant on the balance between exploration and exploitation by properly setting the right parameters \cite{Zamli2018}.
+In this proposal presents several bio-inspired methods for ensemble enhancement.
+
+\quad Histopathological images carcinomic classification for breast
+specimens, stained with hematoxylin and eosin (H\&E), has been
+investigated broadly due to the significance of the problem, the
+shortage of annotated images, and the increased expense of hiring
+radiologists \cite{Alkhaldi2021,Alkhaldi2019,Cao2018,cruzroa2014}.
+Breast cancer is one of the most deadly types of cancer. Around
+four-fifths of the deaths induced by breast cancer are caused by
+Invasive Ductal Carcinoma (IDC) \cite{cruzroa2014}.  IDC's diagnosis
+and prognosis demand examining Whole Slide Images (WSI) of breast
+biopsies stained with H\&E for visual features improvements.  The WSI
+are high-resolution images of the sample, usually divided into smaller
+sub-images for training ML classifiers.
+
+\quad As a consequence of the issue's significance, several techniques
+and ML pipelines have been suggested in the histopathological images
+classification literature.  The earliest methods relied on uniting
+several useful features to represent the image better. These features
+are handcrafted by observing how the negative IDC patches differ
+visually from the positive ones \cite{cruzroa2014}.  Many of these
+approaches centered around the nuclei features via nuclei segmentation
+such as nuclei position, centroid, density, glands segmentation,
+Voronoi-based features, Gabor filter, and the HSI color space
+\cite{cruzroa2014}.  Most of the handcrafted-based approaches depended
+on a composite of numerous characteristics mentioned earlier that
+extend the distinguishability of the categories.  Cruz-Roa et
+al. \cite{cruzroa2014} presented one of the foremost CNN models to categorize the BHI
+samples with a CNN \cite{cruzroa2014}.  CNN revealed an unprecedented
+advancement over the handcrafted feature approaches in
+histopathological image classification \cite{Alkhaldi2021}.
+Nevertheless, the IDC classification of histopathological images stays
+challenging as a result of the insufficiency of data and the increased
+need of CNNs for labeled samples.  Accordingly, more evolved techniques
+are needed to fetch the most precise predictions, such as transfer
+learning, domain adaptation, and ensemble optimization
+\cite{Alkhaldi2021}.
+
+\quad Equivalent to blending the handcrafted features, ensemble learning
+is concentrated on integrating a set of diverse classifiers into a more
+accurate and robust model. The concept is to reduce variance and
+biases in the classifiers leading to a more generalized model that would
+function better on unseen samples.
+
+\quad Ensemble optimization has been successfully applied into
+numerous applications such as anomaly detection, cyber security, image
+classification and a diverse set of applications \cite{You2020}.
+Ensemble learning is one of the most successful machine learning
+practices \cite{Huang2017a}. Linking a group of complementary
+classifiers will generally result in a model that is at least more
+accurate than any of its components \cite{Dietterich2000}. Complementary
+classifiers have to be both diverse and accurate enough for the
+resulting ensemble to be more robust.
+
+While ensemble learning produces more accurate networks, training
+multiple classifiers is time-consuming \cite{Huang2017a}. To overcome
+this impediment, Huang et al. \cite{Huang2017a} proposed saving
+snapshots of the model during training instead of training multiple
+heterogenous models. Huang et al. method reduces the training time
+significantly by generating a group of the same model with different
+weights.  However, the problem with homogeneous classifiers is that
+they are more inclined to overfit the dataset's peculiarities and are
+deprived of the diversity of the models.
+
+Additional ensemble learning methods were presented in the literature, such as
+Bayesian Averaging, bagging, boosting, vertical voting, and horizontal
+stacking \cite{Xie2013b,Huang2017a,Dietterich2000,Liu2015}
+
+\quad Due to the successful implementations of Evolutionary Algorithms (EA) in optimizing stacked ensembles established in the literature, a more adaptable EA seems exceptionally advantageous \cite{Alkhaldi2019,Alkhaldi2021,Liu2015}. 
+This paper illustrates the utilization of an
+evolutionary algorithm to automate selecting the best NN configuration
+with its corresponding weights during meta-training. 
+The meta-training shrinks the hyper-parameters search space considerably, accelerating convergence during the comprehensive training
+stage. 
+It furthermore displays an intuitive measure of heterogeneity and automatic optimization of the horizontally stacked prediction vector's wights. 
+
+\quad The existing state-of-the-art transfer learning techniques for microscopy
+image classification lack the systematic detachment of the task-dependent
+layers from the transferrable ones, resulting in overfitting when training over
+a limited quantity of samples. Moreover, their ensembles have a high
+number of hyper-parameters, making it challenging and time-consuming to
+pick the optimal ones manually.
+
+\chapter{Genetically Optimized Heterogeneous Ensemble for Histological Image Classification}
+\label{sec:org3671655}
+\label{org52b92ae}
+
+\quad To solve the aforementioned problems, we propose a method that leverages the Genetic Algorithm to ascertain the task-specific layers of pre-trained networks on low-resolution images for optimal domain adaptation. 
+We use the confusion matrix of the models over the validation data to define the heterogeneity of CNNs. 
+Subsequently, we thoroughly train the most accurate models and with the most diverse errors on high-resolution images by applying the learned parameters. 
+Finally, we learn the ensemble rule that combines the horizontally stacked prediction vector.
+
+\quad This chapter explains is organized in the following way. Section \ref{orgae685fe} introduces the proposed method with a thorough explanation of the Genetic Algorithm and hyper-parameter optimization. 
+Section \ref{org55a73aa} discusses in detail the dataset, training, experimental setup, results,  and evaluation metrics employed.
+\section{Proposed Method}
+\label{sec:orgc17e73e}
+\label{orgae685fe}
+\subsection{Overview}
+\label{sec:orgdf4ffde}
+\label{org6018f81}
+  \quad The proposed method consists of meta-training and full training
+  stages. The meta-training phase, as shown in Figure \ref{fig:org54e4fbf}, begins with
+  statistical image preprocessing, augmentation, and low-resolution cropping.
+  Several image spatial transformations, such as flipping, rotation, and
+  shifting, lead to effective dataset enlargement, which contributes to
+  lowering overfitting \cite{Perez2017}. The augmented images are resized to
+  a lower resolution to expedite the meta-training. The resultant crops are
+  standardized by utilizing the ImageNet statistic to reduce the distribution
+  disparity between the image sources of the two domains. Image whitening
+  demonstrated efficacy in hastening convergence \cite{Lecun1998}. All of the
+  preprocessing procedures described above occur in real-time right before
+  the mini-batches are fed to the networks to be trained.
+
+\quad Gaussian Dropout is another technique that we implemented in our
+solution. Adding the gaussian noise to the hidden layer connecting the global
+averaging and the output layers is an added variation of stochastic
+regularization. The dropout layer restricts the classifier from learning the
+irrelevant particularities of an image \cite{Srivastava2014}.  Dropout involves
+blocking several units from firing during the feedforward and the
+backpropagation steps of training. The portion of the dropout units is governed
+by the gaussian distribution, whose standard deviation is expressed in equation
+(1). \begin{equation} \label{gaus} \(\sigma\) \_(gaussian)= \sqrt{rate/(1 - rate)}
+\end{equation} Where \textbf\{\textit{rate}\} denotes the user control parameter
+and \(\sigma _(gaussian)\) refers the dropout gaussian standard deviation.
+Setting the constant rate to 0.2 throughout the trials yielded an excellent
+performance.
+
+\quad Incrementally raising the learning rate at every batch accelerates the
+fine-tuning process by estimating the best base learning rate, as explained in
+subsection \ref{org83e8daf} \cite{Smith2017c}. During fine-tuning, all layers are
+frozen except the batch normalization and the last fully connected layer.
+Training the batch normalization weights reduces the needed training epochs
+substantially due to its capacity to lower the internal covariant shift during
+mini-batch training \cite{Ioffe2015a}. The validation loss of the fine-tuned
+model is the baseline used to compare the achievement of the Genetic Algorithm
+(GA) best solutions.
+
+\quad In this study, we propose GA to obtain the fittest estimation of the
+domain-specific layer, as illustrated thoroughly in subsection \ref{org0c08b4c}. The
+Cyclical learning rate and GA cooperatively evade the inconvenience of
+extravagantly experimenting with numerous freeze-layers and base learning
+rates. The intuition behind the proposed strategy relies on the fact that the
+domain-adaptation maximization is separable. The foreknowledge, as mentioned
+above, remarkably narrows the possible combinations of hyperparameters.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/repos/writings/paper1/diagrams/first/FC.png}
+\caption{\label{fig:org54e4fbf}The Flowchart of the meta-training phase}
+\end{figure}
+\subsection{Learning Rate Schedulers}
+\label{sec:org40925b8}
+\label{org83e8daf}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.97\columnwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/cyc.png}
+\caption{ High spikes of validiation loss and accuracy curves over exponential
+cyclical learning rate in a single epoch in ResNet50 with freeze layer = 141
+and a batch size = 32. The learning rate with the lowest validation loss at lr
+= 0.05 is chosen as the base lr for the full training.}
+\label{log_spikes}
+\end{figure}
+
+\quad Learning rate scheduling methods aim to minimize the cost function. It is
+unlikely to get trapped at local minima at high dimensional cost functions.
+Nevertheless, saddle points are more likely to occur.  Similar to local minima,
+saddle points slow down the training significantly, particularly if the LR is
+small \cite{Smith2017c}.  \quad Increasing the LR in this scenario could help
+the optimizer to escape the saddle point. However, over-increasing the LR will
+cause fluctuations with high spikes.  Hence, a cyclical LR scheduler
+facilitates picking the optimal LR by defining the scaling function, the upper,
+and the lower bounds  \cite{Smith2017c}.
+
+\begin{equation} \label{eq1}
+\begin{split}
+updated LR = base LR + (max LR - base LR) \\
+\times  \frac{\argmax(0, (1 - LR)) \times 1}{2^{LR-1}} \end{split}
+\end{equation}
+
+\subsection{Genetic Algorithm and Ensemble Optimization}
+\label{sec:orgdd6f9e1}
+   \label{org0c08b4c}
+\quad The objective of implementing the genetic algorithm is to evolve the solutions to
+  the task-specific layer problem by simulating the natural selection though
+  mating and mutation  \cite{Singh2018}.
+
+\quad Each possible solution to the domain-specific layer is represented by a
+chromosome. Any layer in the search space of the network is encoded into
+fixed-length nine binary numbers representing 512 possible solutions.  After
+calculating the initial fitnesses, the fittest layers are chosen to exchange
+genes at a predefined crossover probability \(P_c\) to produce better offsprings
+in the next generation.
+
+\quad We freeze all layers up to the decoded chromosome. Then, a cyclical
+learning scheduler learns the best base learning rate, as explained in the
+previous subsection. The model is then trained for more epochs, and the
+validation loss is used as the fitness function parameter to be minimized.
+
+After the completion of the meta-training, models that achieved the most
+reliable in terms of validation accuracy and loss are analyzed based on
+heterogeneity, as displayed in Figure \ref{fig:hetro}. The confusion matrix
+facilitates a valuable representation of the kind of misclassifications that
+the model makes. The models that produce similar misclassifications are
+discarded.
+
+\quad The predictions of the top-performing heterogeneous networks are then
+concatenated horizontally to form a pre-classification layer. We further train
+the weights of this layer while freezing the whole model to make the ensemble
+training efficient and more accurate than simple ensembling policies such as
+the majority and average voting. Adding the horizontal layer notably improved
+the generalizability of the model, as demonstrated in Table \ref{tab:org7414491}
+and Table \ref{tab:orgbcfe2f3}.
+\begin{figure}[htbp]
+    \centering
+    \subfloat[Xception network with GA block converges with a small number of epochs]{%
+        \includegraphics[width=0.4\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/xcepGA.png}%
+        \label{fig:a}%
+        }%
+    \hfill%
+    \subfloat[Xception network bottom-top training overfits due to the lack of proper domain adaptation]{%
+        \includegraphics[width=0.4\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/xcepNoGA.png}%
+        \label{fig:b}%
+        }%
+    \caption{The Effect of The GA Block on Convergence}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \subfloat[DenseNet201 confusion matrix]{%
+        \includegraphics[width=0.5\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/incepConf.png}%
+        \label{fig:c}%
+        }%
+    \hfill%
+    \subfloat[ResNet50 confusion matrix]{%
+        \includegraphics[width=0.5\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/dense3Conf.png}%
+        \label{fig:d}%
+        }%
+    \hfill%
+    \subfloat[InceptionResNetV2 confusion matrix]{%
+        \includegraphics[width=0.5\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/Dense2Conf.png}%
+        \label{fig:e}%
+        }%
+    \hfill%
+    \subfloat[Xception confusion matrix]{%
+        \includegraphics[width=0.5\textwidth]{/home/alkhaldieid/Dropbox/finalV/diagrams/first/denseConf.png}%
+        \label{fig:ee}%
+        }%
+
+    \caption{\small Error Type Visualization to Aim Choose Hetrougenous Models by Using the Confusion Matrix}
+\label{fig:hetro}
+\end{figure}
+
+\section{Experimental Setup}
+\label{sec:org2bd70f8}
+\label{org55a73aa}
+\subsection{Results and Discussion}
+\label{sec:org1cfa225}
+ \label{orgd99d1d0}
+\quad Domain adaptation is decisive for transfer learning. The Genetic
+Algorithm demonstrated supremacy in determining the transferable layers, as
+shown in Figure \ref{fig:a}.  As an example, the GA solution of the freeze
+layers of the Xception enabled the model to transfer swiftly and converge with
+few epochs. In contrast, the bottom-top strategy of fine-tuning failed to
+converge even with substantially more iterations. As the number of epochs
+increased, the training accuracy increased, but the validation loss increased
+as well. This phenomenon is referred to as overfitting since the model is not
+learning the characteristics that increase the class separability margin.
+Alternatively, the model is learning the dataset noise, which is profoundly
+undesirable. Hence, implementing GA for specifying the transferable features of
+the network was vital for convergence.
+
+\quad Besides, the effectiveness of the base learning rate is highly correlated
+to the level of transferability of layers. The more transferable the layer is,
+the higher the base learning rate needs to be and vice versa. The occasional
+divergence of the bottom-top training is a result of setting a high base
+learning rate for layers with low transferability.  Figure \ref{log_spikes}
+shows how quickly cyclical learning rate picks the most appropriate base LR
+with minimal time cost.
+
+\quad Our proposed approach shows notable improvements over earlier published
+schemes for ensemble learning. The optimized horizontally stacked predictions'
+vector exhibit increased classification accuracy and additional DL evaluation
+measures, as confirmed in Table \ref{tab:orgbcfe2f3}.
+
+\begin{table}[htbp]
+\caption{\label{tab:orgda2c429}Majority voting classification report}
+\centering
+\begin{tabular}{lrrr}
+\{Class. Report\} & precision & recall & f1-score\\
+Benign & 1.00 & 0.37 & 0.54\\
+InSitu & 0.60 & 1.00 & 0.75\\
+Invasive & 1.00 & 0.93 & 0.97\\
+Normal & 0.97 & 1.00 & 0.98\\
+micro avg & 0.82 & 0.82 & 0.82\\
+macro avg & 0.89 & 0.82 & 0.81\\
+weighted avg & 0.89 & 0.82 & 0.81\\
+samples avg & 0.82 & 0.82 & 0.82\\
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{\label{tab:orgfba0bae}Average Voting Classification Report}
+\centering
+\begin{tabular}{lrrr}
+\{Class. Report\} & precision & recall & f1-score\\
+Benign & 1.00 & 0.70 & 0.82\\
+InSitu & 0.97 & 1.00 & 0.98\\
+Invasive & 1.00 & 1.00 & 1.00\\
+Normal & 0.79 & 1.00 & 0.88\\
+micro avg & 0.93 & 0.93 & 0.93\\
+macro avg & 0.94 & 0.93 & 0.92\\
+weighted avg & 0.94 & 0.93 & 0.92\\
+samples avg & 0.93 & 0.93 & 0.93\\
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{\label{tab:org7414491}Proposed Voting Classification Report}
+\centering
+\begin{tabular}{lrrr}
+\{Class. Report\} & precision & recall & f1-score\\
+Benign & 1.00 & 0.73 & 0.85\\
+In Situ & 0.97 & 1.00 & 0.98\\
+Invasive & 1.00 & 1.00 & 1.00\\
+Normal & 0.81 & 1.00 & 0.90\\
+micro avg & 0.93 & 0.93 & 0.93\\
+macro avg & 0.94 & 0.93 & 0.93\\
+weighted avg & 0.94 & 0.93 & 0.93\\
+samples avg & 0.93 & 0.93 & 0.93\\
+\end{tabular}
+\end{table}
+
+
+\begin{table}[htbp]
+\caption{\label{tab:orgbcfe2f3}Evaluation of The Proposed Method Compared to Mavority and Average voting}
+\centering
+\begin{tabular}{lrrr}
+Eval. /method & Proposed & Maj. & Avg.\\
+P. auc roc & 0.9994 & 1.0 & 0.9934\\
+L. auc roc & 0.95556 & 0.8833 & 0.95\\
+L. accuracy & 0.933 & 0.825 & 0.925\\
+P. precision & 0.9985 & 1.0 & 0.988\\
+L. precision & 0.8946 & 0.760 & 0.883\\
+L. log loss & 2.302 & 6.0442 & 2.590\\
+L. coverage error & 1.2 & 1.525 & 1.225\\
+P. coverage error & 1.116 & 1.25 & 1.133\\
+L. LRAP & 0.95 & 0.868 & 0.943\\
+P. LRAP & 0.9583 & 0.899 & 0.9527\\
+ranking loss & 0.066 & 0.175 & 0.075\\
+ICIAR acc. & \textbf{88\%} & 85\% & 87\%\\
+\end{tabular}
+\end{table}
+
+\chapter{Adaptive PSO-Based Ensemble Optimization for Histology Image Classification}
+\label{sec:org8eb5358}
+\label{org7138f46}
+
+\quad Another proposed generic method is to incorporate the Particle Swarm
+Optimization (PSO) to speed up the hyper-parameter selection process of the optimum
+ensemble of the best pre-trained CNN models. The proposed methodology enable us
+to have more control over the training process and minimize errors especially
+between classes that are less distinguishable. Our method selects models based
+on features that are more sophisticated than the validation loss of individual
+models. The proposed method automate the dynamic adjustment of the PSO learning
+rate by implementing a Mamdani Fuzzy Inference System (FIS). Furthermore, our
+method address the limitation of labeled images and utilizes the noisy student
+model approach on the weakly labeled data. Even though this method outperformed
+many of the state-of-the-art techniques, it is very time-consuming. To the best
+of our knowledge, this study is one of the first implementations of PSO to learn
+ensemble hyper-parameters for small histological images dataset.
+
+  This chapter is organized in the following order.
+Section \ref{orga91c263} describes the proposed method in detail. A thorough overview of
+the methodology is presented in subsection \ref{org02a0c24}. The subsections
+\ref{org09efcb6} and \ref{orgd1b3a27} exhibit the preliminaries of PSO and the
+Mamdani FIS, respectively. Subsection \ref{orga8d8ff5} explains the adaptive PSO
+using the Mamdani FIS. Section \ref{org7748a1d} illustrates the experimental setup, dataset,
+and implementation details. Section \ref{orgec53d26} offers an elaborate discussion of
+the experimental results.
+
+\section{Proposed Method}
+\label{sec:orgf64b99c}
+\label{orga91c263}
+\subsection{Overview}
+\label{sec:orgd3f9be0}
+\label{org02a0c24}
+
+\quad This section illustrates ensemble optimization, the overall protocol of the proposed method, PSO theory,  the Mamdani Fuzzy Inference System (FIS) and the adaptive PSO. 
+The main objective of Ensemble optimization is finding a robust composite of several classifiers in order to cultivate a single larger and more accurate model \cite{Escalante2010,Nanni2018,Alkhaldi2019,Xie2013b}. 
+Classical ensembling methods such as majority voting lack assumes the optimum weights of the classifiers to be uniform.
+This assumption undermines the complexity of medical applications.
+en cancer detection problems, the tissues are expected to be normal unless there is a region that could be classified otherwise.
+This observation lead to the conclusion that,  even weighting of classifiers could results in producing an ensemble with skewed classification towards abnormal labels. 
+
+
+\quad Our proposed method is composed of two main phases. The first phase is centered around training individual models using an adaptive learning rate scheduler to fine-tune networks pre-trained on ImageNet. 
+The second phase is training a linear combination function that combines the output of a fixed number of the best performing networks.
+
+
+\quad The preprocessing of images is an extremely crucial part of the training process \cite{Abdikenov2019,Tabik2017b,ElginChristo2019,Lecun1998}.
+Image augmentation is especially essential to increase the size of the datasets and consequently to increase the generalization of the model \cite{Cubuk2019a}. 
+One of the most widely used techniques to enlarge small datasets and increase the robustness of the Artificial Intelligent systems is to generate more data through data augmentation \cite{Shi,Cubuk2019a,Perez2017,Tabik2017b,Aresta2019,Touvron2020,Lata2019a}. 
+Many data augmentation techniques were proposed , however; different data augmentation strategies with different parameters is known to give varying performance on different domains.
+Therefore; it is important to search for the augmentation strategy that would yield the optimum performance. 
+However; searching for the parameters that give the optimum performance can add more complexity to the problem.
+Therefore, we decided to use the Rand-Augment method which eliminate the need to search for optimum parameters for the data augmentation strategy as explained in \ref{org91896df} \cite{Cubuk2019a}. 
+
+
+ \quad Another important aspect of the training is the proper choice of the optimizer. 
+AdaMax is a stochastic gradient decent algorithm that is used to optimize the categorical cross-entropy loss function. The categorical cross-entropy is defined as follows \cite{Amidi2018,Kingma2014}
+
+\begin{equation}
+\label{eq:org6c8de04}
+  Loss = - \sum_{\forall x \in {set}} \sum_{i = 1}^{4} w_i . \delta_{x,i} . \log (\hat p_x,i)
+\end{equation}
+
+Where \(set\) is the set of all training dataset images and \(i\) refers to the class index whose maximum value is four classes in this problem, \(\hat p_x\) is the model prediction of image \(x\) belonging to class \(i\), and  \(\delta\)\textsubscript{x,i} equals 1 when image \(x\) belong to class \(i\) and zero otherwise. 
+
+\quad The performance of AdaMax was compared on the inception model with and without an adaptive learning rate scheduler \cite{Szegedy2016}.
+Figure \ref{fig:org022eec5} shows the training of InceptionV3 model without adaptive learning rate scheduler, while figure \ref{fig:org5347e0f} shows the training history of the same network and optimizer with an adaptive learning rate scheduler. 
+As the figure \ref{fig:org022eec5} and \ref{fig:org5347e0f} show, the AdaMax proved to be more robust and with a steadily decreasing validation loss curve when the learning rate gets adjusted with accordance to how well it performed in previous epochs.
+The Adamax relies on initializing the bias correction based on the moving average \cite{Kingma2014}.
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/second_final/inceptionv3.png}
+\caption{\label{fig:org022eec5}The training history of the Pretrained InceptionV3 with ADAMAX and without learning rate adaptation}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/second_final/incepresv2.png}
+\caption{\label{fig:org5347e0f}The training history of the Pretrained InceptionV3 with learning rate adaptation}
+\end{figure}
+
+
+\quad CNNs have a massive search space of hyper-parameters that need to be tuned. The search of the most optimum set of hyper-parameters is often time-consuming \cite{Hinz2018a}. Another problem is that using high resolution images during training will reduce the maximum batch size allowed due to the limited memory available which reduces the generalization. In order to solve these problems, we used a lower-dimensional representation of the datasets during the first phase of the training in order to identify the most auspicious hyper-parameters. 
+
+
+\quad Furthermore; using a lower data representation during training than doesn't only reduce the search space complexity, but is also known to reduce the disparateness of the dimensions of distinct image components between training and testing \cite{Touvron2019,Touvron2020}. The details of the used resolutions are presented in \ref{org91896df}. 
+Besides, previous research was conducted to find the optimum freeze-layer. We found that the domain-specific layers typically include the last two fifths of the total number of the trainable parameters \cite{Alkhaldi2019}. Consequently, we fixed the freeze-layer as well as the length of the ensemble in this work due to time cost of their optimization.
+\subsection{Particle Swarm Optimization}
+\label{sec:org6bbe3ff}
+\label{org09efcb6}
+
+ \quad Extensive research was conducted to study the animals swarm societal behavior \cite{Ye2017,Clerc2004,Chunming2005,Escalante2010,KrishnaPriya2015}.
+Swarm-based optimization techniques were developed to mimic the social behaviour of groups of animals that are navigating their way cooperatively to find food resources for the sake of evolving optimum solution for NP-hard problems \cite{Zamli2018,Abdulgader2019,Ye2017}.  
+PSO is a biologically inspired heuristic stochastic optimization algorithm that aims at finding the global minimum of objective functions with complex search space \cite{Darzi2013,Clerc2004,Chunming2005,Ye2017,He2016,Tasgetiren2007,Strasser2016},
+It was first proposed by Eberhart and Kennedy in 1995 as a paradigm for Neural Networks weights optimization \cite{Eberhart1995}.
+Contrary to prior population-based approaches, PSO was motivated by the apprehension that the interaction of birds ameliorate their hunt for resources \cite{Eberhart1995} . 
+
+\quad Evolutionary computational algorithms showed superior performance in optimization problems both in terms of time-efficiency and loss minimization \cite{Eberhart1995}.
+       PSO in particular is one of the most effective of these methods \cite{Eberhart1995,Clerc2004,Zamli2018,Tasgetiren2007}.
+       For the those reasons, PSO has been successfully applied in numerous domains.    
+
+\quad Analogous to other evolutionary-based algorithms, PSO starts with initialization of a generation that has a specified number of candidate solutions called particles.
+The evolution of each generation of particles represent the pursuit of survival by a flock of birds. 
+Every particle is a vector that depicts a likely solution. 
+In each epoch, particles move in the defined finite search space of the problem based on how well the whole swarm of birds is performing.
+The swarm share the best position achieved by the whole swarm, which is the global best position and fitness.  
+The velocity and the position of the particle are each updated based on the equation \ref{eq:org4721fcc} and \ref{eq:orgea64caf}. 
+
+\begin{equation}
+\label{eq:org4721fcc}
+    V^{t+1}_{ij}=w V^{t}_{ij}+c_1 r^t_1\left(pbest_{ij}-X^t_{ij}\right) +c_2r^t_2\left(gbest_j-X^t_ij\right)
+\end{equation}
+
+\begin{equation}
+\label{eq:orgea64caf}
+  x^{t+1}=x^{t}+V^{t+1}
+\end{equation}
+
+where \(V^{t+1}_{ij}\) is the updated velocity, \(V^{t}\) is the current velocity, \(w\) is the inertia weight, \(c1\) and \(c2\) are acceleration constants referred to as the cognitive learning rate, \(gbest\) and \(pbest\) are the global and the population best positions respectively, and \(r1\), \(r2\) are random numbers evenly distributed between [0,1) \cite{He2016}.  
+
+
+\quad PSO has many advantages compared to other optimization methods. Some of these advantages of PSO are its robustness, ease of implementation and remarkable efficiency in reaching accurate approximations \cite{Ye2017}. 
+PSO was used to find the best linear combination weights of the horizontally stacked fine-tuned models. 
+
+\quad The convergence of PSO is highly reliant on the proper tuning of its learning  hyper-parameters.
+         In particular, PSO is highly sensitive to the Inertia Weight \(w\), the accelerate constants \(c1\) and \(c2\), the number of particles, the number of generations and the maximum velocity \cite{He2016,Zamli2018}.
+         These parameters have to be chosen delicately in order to avoid divergence or premature convergence. 
+ \quad The inertia weight variable \(w\) is the most important parameter to tune in order to avoid getting trapped in a local minima.
+ It regulates degree of the influence that the earlier velocity has on the  updated velocity \cite{Zamli2018}.
+  Therefore, it controls the speed at which a particle moves in the search space.
+ The larger the inertia weight is, the faster the particle moves and the less likely it will be to get trapped on a local minimum.
+ However, this could also means that the PSO can't find the global minimum if the \(w\) is too large.
+ In contrast, if \(w\) is too small, it is very likely for the PSO to converge prematurely.
+ This phenomenon is recognized in the literature as the exploitation and the exploration trade-off \cite{Zamli2018}. 
+ The ability of the particles to ameliorate the local solution is referred to as exploitation while  exploration refers to their ability to escape local minima \cite{Zamli2018}. 
+
+
+
+\quad The Inertia weight is not the only parameter that is accountable for governing the exploration during the PSO evolution. The accelerate parameters \(c1\) and \(c2\) also play a major role on managing the swiftness of the particles in the search space.
+The \(c1\), and the \(c2\) are often referred to as the cognitive and the social constants in the PSO literature \cite{Kennedy1997,Eberhart1995}.
+The cognitive constant \(c1\) controls the quantum of acceleration upon which the particle's velocity updated towards its personal best value.
+When \(c1\) = 0, the particle's is not aware of its personal best as can be seen in equation \ref{eq:org4721fcc}. It is evident that when both of the constants c1,c2 are set to zero, the particles has no knowledge of either the pbest and the gbest which decrease the likelihood to find the global minimum. 
+Similarly, c2 is named the social constant because it regulates the acceleration of the particle towards the global best \cite{He2016}. 
+The accelerate parameters were considerably researched in order to find a comprehensive balance between them. However, different applications yielded different results. In general it was proven in previous studies that the variation of the accelerate constants did not show improvements to the performance of the PSO \cite{He2016}.  
+
+
+\quad The number of swarms particles was not adapted with the FIS since it does not have a significant impact on the performance of the PSO when the size of population is above 50 \cite{Eberhart98,He2016}.  
+
+	\quad The tuning of \(V_{max}\) is another problem that deals with the exploration vs exploitation trade-off. As an illustration, when the \(v_{max}\) is too large the exploration capability is high and the particles might move away from the optimum region and vice versa. 
+Section \ref{orgd1b3a27} explains PSO parameters adaptation with more emphasis on the impact of the variation of the inertia weight on the momentum of the training. 
+
+ \quad PSO has many advantages compared to other optimization methods. Some of these advantages of PSO are its robustness, ease of implementation and remarkable efficiency in reaching accurate approximations \cite{Ye2017}. 
+PSO was used to find the best linear combination weights of the horizontally stacked fine-tuned models. 
+
+\subsection{Mamdani FIS}
+\label{sec:org0d97771}
+\label{orgd1b3a27}
+
+\quad Tuning the learning parameters has been a critical issue for the performance of PSO. Several methods were proposed to adaptivly control specific parameters optimization algorithms based on some inputs. 
+One of the most important methods to control the performance of evolutionary-based algorithms during the training process is the knowledge-based Fuzzy Inference System \cite{Abdulgader2019}. 
+
+\quad Unlike binary logic that assumes that a particular object either belongs or does not belong to a specific class, the fuzzy sets theory was introduced by Lotfi Zadah in the 1960s to describe things that belong to a multiple fuzzy sets with a varying degree of belongingness \cite{Singh2018,Abdulgader2019,Negnevitsky,Mei2019,Mazandarani2020}. 
+While probabilistic inference methods dealt with the randomness aspect of a particular system, Fuzzy Inference Systems (FIS) were designed to map fuzzy inputs that belong to fuzzy sets with varying degrees to fuzzy outputs.  
+Fuzzy inference deals with parameters that belong to classes that are not clearly defined, while probability deals with the uncertainty of association. 
+FIS has been extensively applied to the adaptation of parameters for numerous algorithms and has succeeded in incorporating the expert knowledge into the optimization process for applications where the rules are vague or hard to express mathematically. 
+
+A fuzzy set is a set whose elements have a degree of association to one or more fuzzy classes \cite{Chiu2019,Keneni2019,Negnevitsky}. 
+
+Hence, fuzzy inference refers to the steps of the procedure required to associate elements of fuzzy inputs to one or more fuzzy outputs \cite{Negnevitsky}.  
+
+\quad The first step for the Mamdani FIS is the fuzzification of the inputs and the outputs.
+Fuzzification is the process of converting the deterministic inputs into fuzzy elements \cite{Negnevitsky}. 
+The fuzzification is achieved by defining a membership function that draw soft boundaries between fuzzy classes.
+
+There are different types of membership functions that are used to model the sliding degree of membership of crisp input to all possible fuzzy sets.
+Some of these membership functions include the triangular, trapezoidal and Gaussian functions \cite{Guyon2006}. 
+
+Even though the Gaussian functions function is more accurate in describing the fuzziness of the inputs than triangular and trapezoidal, it is less time-efficient \cite{Guyon2006}.
+Equation \ref{eq:org7a4f17e} represent the membership used to fuzzify the inputs. 
+
+\begin{equation}
+\label{eq:org7a4f17e}
+   \mu(x,a,b,c) = \max(\min(\frac{x-a}{b-a},\frac{c-x}{c-b}),0)
+\end{equation}
+where \(a\) and \(b\) are the boundaries of the fuzzy set, \(c\) is its center and  \(a\) \(\neq\) \(b\) \(\neq\) \(c\) \cite{Guyon2006}. 
+
+\quad The fuzzy rules are formed in an IF-THEN linguistic format based on the experience. 
+The fuzzified inputs are evaluated against a set of antecedent rules.
+The fuzzy rules are either an intersection or a union of antecedents based on the correlation minimum or the correlation product to calculate the consequents \cite{Negnevitsky}. 
+The resultant consequents are cropped forms of the antecedents.  
+
+\quad These consequents  are then combined to form a unified aggregate fuzzy output. 
+The last step of the Mamdani FIS is to defuzzification of the aggregate fuzzy set.
+One of the most methods of defuzzification is to calculate the center of gravity shown at equation \ref{eq:org076629b} \cite{Negnevitsky}. 
+
+\begin{equation}
+\label{eq:org076629b}
+   Center of Gravity = \frac{\sum\limits_{x=a}^{b}\mu_A(x)x}{\sum\limits_{x=a}^{b}\mu_A(x)}
+\end{equation}
+
+The details of the implementation of the Mamdani FIS for the inertia weight adaptation based on the PSO performance is thoroughly explained in section \ref{orga8d8ff5}. 
+
+\quad As explained on section \ref{org09efcb6}, the inertia weight \(w\) is the most pivotal parameter to tune in order for the PSO to converge smoothly. Therefore, our approach will emphasize on creating fuzzy rules based on the previous finesses values to guide the adaptation of \(w\). 
+
+\subsection{Adaptive Particle Swarm Optimization}
+\label{sec:org5d7a7f5}
+\label{orga8d8ff5}
+
+\quad For practical considerations, the user usually chooses the hyper-parameters of the PSO prior to training.
+However, setting up the learning rates as constants might not lead to the best performance. 
+Many methods were proposed to control and adapt the hyper-parameters during the evolution of PSO in order to increase efficiency and accuracy without having to repeat the process multiple times. 
+As explained previously, the inertia weight has the most impact on the smoothness of PSO convergence.
+Our proposed method focuses on adapting the inertia weight by monitoring the previous fitness of the PSO as well as the normalized distances between the current particle and its  personal and global best positions. 
+Our method was inspired by Zamli's method to control the velocity by monitoring the PSO parameters \cite{Zamli2018}.  
+The Mamdani FIS has shown a great success in previous studies in controlling the PSO parameters, thus it is wise to think it will work in this problem as well. 
+This chapter demonstrate the effectiveness of the Mamdani FIS in controlling the PSO for finding the most optimum ensemble rule for histopathology image classification.  
+
+\quad The Mamdani FIS is one of the most effective in detecting the region that contains the optimum solutions.
+Ideally, the inertia weight \(w\) should be set to its highest value to increase the PSO exploration capacity.
+Once the region of interest in the search space is reached, the inertia weight should be set to a low value in order to refine the local solution and increase the PSO's exploitation capacity.
+If the Mamdani FIS detects the region of the optimum solution, the inertia weight get adapted with accordance to the evaluation metrics defined in equations \ref{eq:org3eb9e71}, \ref{eq:org6a88c2e} and \ref{eq:orga1a262b}. 
+
+The first metric based on which the performance of PSO is monitored is the Zamli Normalized Current Fitness (NCF)  which computes the current fitness of the particle relative to the maximum and the minimum finesses as shown in equation \ref{eq:orga1a262b} \cite{Zamli2018}.  
+The other two monitoring metrics are the Minkowaski distances of the particle's current position and the personal best position and the global best position as shown in equation \ref{eq:org3eb9e71} and equation \ref{eq:org6a88c2e} respectively. 
+
+\begin{equation}
+\label{eq:orga1a262b}
+  NCF = \frac{CF-MinF}{MaxF-MinF}\times 100
+\end{equation}
+where CF is the current fitness, MinF is the minimum fitness and maxF is the maximum fitness. 
+The distance metrics were chosen to be the Minkowaski distance since it was proven to be the most accurate distance metric compared to the Manhattan and the Euclidean distances \cite{Shahid2009}. The Manhattan distance gives more approximate value than the real value while the Euclidean usually gives less value.
+Several studies were conducted to investigate the optimal values of the 
+\begin{equation}
+\label{eq:org3eb9e71}
+dp =\frac{[pbest - x ]^p}{Dmax}
+\end{equation}
+\begin{equation}
+\label{eq:org6a88c2e}
+dg =\frac{[gbest - x ]^p}{Dmax}
+\end{equation}
+where \(pbest\) is the personal best position, gbest is the global best position and  \(p\) is the parameter that specifies the type of the used distance. For the Euclidean distance, \(p\) = 2 while it is unity for the Manhattan distance.
+The Minkowski distance uses any value between 1 and 2 for \(p\). 
+The comparison of distance metrics studies recommended \(p\) = 1.54, however we set \(p\) = 1.5  which is the middle value between the Manhattan and Euclidean distances for the sake of simplicity \cite{Shahid2009}. 
+
+For the optimum region detection, the following Mamdani fuzzy rules were defined as shown in table \ref{tab:orgde15b59}.
+\begin{table}[htbp]
+\caption{\label{tab:orgde15b59}The Mamdani Fuzzy Rules}
+\centering
+\begin{tabular}{rll}
+Rule number & antecedents & consequent\\
+\hline
+1 & d1 = high, d2 = high,   NCF = high & w = high\\
+2 & d1 = low , d2 = medium, NCF = medium & w = high\\
+3 & d1 = low, d2 = low,   NCF = medium & w = high\\
+4 & d1 = low, d2 = low,   NCF = low & w = low\\
+\end{tabular}
+\end{table}
+
+\quad When all the metrics are low, the optimal solution is close.
+Therefore, the value of \(w\) is set to low in order to increase the exploitation to refine the local search.
+Otherwise, the region of interest is not near yet.
+As a result, the exploration is increased by giving a high value for \(w\). 
+Figure \ref{fig:org60d1ae7} shows the fuzzy membership functions of the antecedents and the consequents anf the FIS. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/second_final/fuzzy2.png}
+\caption{\label{fig:org60d1ae7}The Mamdani FIS membership functions for the fuzzification of the PSO Inertia Weight}
+\end{figure}
+
+\begin{algorithm}
+\caption{Calculate $y = x^n$}
+\begin{algorithmic}
+\REQUIRE $MaxIter$, $c1$, $c2$, $targetError$ , $numParticles$ , $numVariables$, $r1$ and $r2$
+\STATE Define Mamdani Fuzzy Rules
+\STATE Initialize the PSO population positions
+\STATE Initialize best particle positions
+\STATE Initialize best particle fitness
+\STATE Initialize best global positions
+\STATE Initialize best global fitness
+\STATE Initialize best velocity
+\WHILE{$Iter$ < $MaxIter$}
+\FOR{particle in swarm}
+\STATE Calculate fitness
+\STATE Calculate Relative Fitness
+\STATE Calculate the Minkowaski distance index$
+\STATE Get the fuzzy block action $w$
+\STATE Update the particle best fitness
+\STATE Update the global best fitness
+\STATE Update the velocity vector
+\STATE Update the position
+\STATE $Iter +=1
+\ENDFOR
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+\section{Experimental Setup}
+\label{sec:orgde9106a}
+\label{org7748a1d}
+
+\subsection{Datasets}
+\label{sec:orgbaa2e0e}
+\label{orgd2d2c78}
+
+\quad We conducted our experiments using the PyTorch library; which is available on the public domain with NVIDIA Geo-Force RTX 2080 GPU that is connected to an AMD Ryzen Threadripper 1950X 16-Core processor operated with Linux OS. The validation of our technique was performed on a publicly available benchmark dataset as detailed in \ref{orgd2d2c78}. 
+
+
+\quad To empirically assess the performance of our proposed method, we used the ICIAR 2018 dataset. 
+There are various histology images datasets available for the public domain.
+Nevertheless; the ICIAR is the most realistic datasets due to the fact that it contains a very small number of labeled data which resembles the practical problem encountered in this field.
+
+
+\quad The ICIAR 2018 datasets contain 400 patches that are labeled into four classes as shown in figure \ref{fig:org3b0aaa6}.
+The test data contain 100 unclassified patches that are used by the competition for algorithms evaluation \cite{Aresta2019}. 
+
+
+The objective of the dataset is to motivate research for the breast cancer detection problem which is one of the leading causes of death amongst women worldwide \cite{Aresta2019}. 
+ICIAR 2018 also aims at the overcoming the manual analysis of images which requires very specialized knowledge and often lead to non-consensual diagnoses \cite{Cao2018}. 
+Examples of the labeled patches are shown in figure \ref{fig:org3b0aaa6}. 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/second_final/data.png}
+\caption{\label{fig:org3b0aaa6}Benign, InSitu, Invasive and Normal H\&E stained breast samples (from top left to bottom right)}
+\end{figure}
+\subsection{Implementation Details}
+\label{sec:org5bcd87c}
+\label{org91896df}
+
+\quad This section exhibits the implementation details and considerations that were not covered on section \ref{orga91c263}. 
+One of the implemented techniques that proved to increase the generalization in immense CNNs is the early stopping of training \cite{Caruana2001}.  
+Furthermore; increasing the momentum to 90\% of the batch normalization layers while freezing the general layers improved the speed of convergence of fine-tuning of the individual models \cite{Ioffe2015a,Huangi2018}. 
+
+\quad For cross-validation the dataset was initially divided  into training, validation and testing datasets with 90\%, 5\% and 5\% of the labeled data respectively \cite{Kohavi1995}. 
+Cross-validation was used for training the individual models in the first phase.
+For the ensemble training with the adaptive PSO, the noisy student self-training method was used \cite{Xie2019}.
+The noisy student semi-supervised method aims at increasing the accuracy of the training by increasing the size of the labeled data by weakly labeling a portion of the actual test data. 
+The student model; which is the PSO ensemble; is then trained on the whole training data as well as the new weakly noisy labeled data. 
+Adding noise to the labels acquired by the semi-supervised method proved to increase the overall robustness of the model \cite{Xie2019}.  
+Affine transformation, rand-Augment and other known augmentation method were implemented to increase the dataset after normalization \cite{Cubuk2019a,PalKuntalKumarandSudeep2016,Perez2017}.
+
+
+\quad The size of the patches is key to the accuracy and the robustness of the CNN models.
+However; training the images using a lower dimensional representation than that of the test data proved to increase the robustness of the models  \cite{Touvron2019,Touvron2020}. 
+The images size during the training and testing was 600\texttimes{}600 and 800\texttimes{}800 respectively. 
+
+\section{Results and Discussion}
+\label{sec:org8e6b209}
+\label{orgec53d26}
+
+\quad To empirically assess the performance proposed method, we used various evaluation metrics to compare our approach to other state-of-the-art methods. 
+F1-score, precision, recall, AUC and other widely known measures in the DL field \cite{Flach2003,Dengb}. 
+The results attained by our method are shown in table \ref{tab:org89495b8}, \ref{tab:org222dd9a} and \ref{tab:org3cae5a8}. 
+The baseline model to which we compare our results was an ensemble with the same fine-tuned models.   
+The results show that optimizing the ensemble with the adaptive PSO improved results significantly compared to the baseline model.
+The precision, recall and F1-score improved were specifically enhanced in the normal patches.
+It is evident that the skewed classification due to the high rate of false positives was an obstacle faced by most classifiers. 
+Table \ref{tab:org3cae5a8} show that our approach outperformed the weighted average method by 2\% accuracy. 
+
+\begin{table}[H]
+\caption{\label{tab:org89495b8}Majority Voting Classification Report}
+\centering
+\begin{tabular}{lrrr}
+\{Class. Report\} & precision & recall & F1-score\\
+\hline
+Benign & 1.00 & 0.37 & 0.54\\
+InSitu & 0.60 & 1.00 & 0.75\\
+Invasive & 1.00 & 0.93 & 0.97\\
+Normal & 0.97 & 1.00 & 0.98\\
+micro avg & 0.82 & 0.82 & 0.82\\
+macro avg & 0.89 & 0.82 & 0.81\\
+weighted avg & 0.89 & 0.82 & 0.81\\
+samples avg & 0.82 & 0.82 & 0.82\\
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{\label{tab:org222dd9a}Proposed Voting Classification Report}
+\centering
+\begin{tabular}{lrrr}
+\{Class. Report\} & precision & recall & F1-score\\
+\hline
+Benign & 1.00 & 0.73 & 0.85\\
+In Situ & 0.97 & 1.00 & 0.98\\
+Invasive & 1.00 & 1.00 & 1.00\\
+Normal & 0.81 & 1.00 & 0.90\\
+micro avg & 0.93 & 0.93 & 0.93\\
+macro avg & 0.94 & 0.93 & 0.93\\
+weighted avg & 0.94 & 0.93 & 0.93\\
+samples avg & 0.93 & 0.93 & 0.93\\
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[H]
+\caption{\label{tab:org3cae5a8}Evaluation of The Proposed Method Compared to Average voting}
+\centering
+\begin{tabular}{lrr}
+Eval. metric & Proposed & Avg.\\
+\hline
+P. AUC ROC & 0.9983 & 0.9934\\
+L. AUC ROC & 0.966 & 0.95\\
+L. accuracy & 0.951 & 0.925\\
+P. precision & 0.99 & 0.988\\
+L. precision & 0.9033 & 0.883\\
+L. log loss & 2.108 & 2.590\\
+L. coverage error & 1.157 & 1.225\\
+P. coverage error & 1.109 & 1.133\\
+L. LRAP & 0.963 & 0.943\\
+P. LRAP & 0.959 & 0.9527\\
+ranking loss & 0.052 & 0.075\\
+ICIAR acc. & 89\% & 87\%\\
+\end{tabular}
+\end{table}
+
+\chapter{Cartesian Genetic Programming for Ensemble Optimization}
+\label{sec:orgeb026a2}
+\label{orgd4a56b4}
+
+
+\quad Due to the successful implementations of Evolutionary Algorithms
+(EA) in optimizing stacked ensemble demonestrated in earlier chapters,
+a more flexible EA appears very promising.  This chapter presents the
+utilization of another evolutionary algorithm to automate the
+selection of the best candidate their corrisponding weights and during
+meta-training. The meta-training shrinks the hyper-parameters search
+space considerably, yielding an accelerated convergence during the
+comprehensive training stage. Also, it exhibits an intuitive measure
+of heterogeneity and automatic optimization of the horizontally
+stacked prediction vector's wights. The preliminary experimental
+outcomes of other EAs proposed earlier in this manuscript, confirm the
+potential GP has in terms of robustness and training time efficiency.
+
+This chapter presents briefly our undergoing research on the
+utilization of the Cartesian Genetic Programming Algorithm (CGP) for
+stacked ensemble optimization.  It is orginized as follows: Section
+\ref{org97116a6} exhibits an introduction to the chapter while
+section \ref{orgb2510f5} presents the preliminaries of the proposed
+method under investigation.
+
+\section{Introduction}
+\label{sec:org3fa698b}
+   \label{org97116a6}
+\quad The current state-of-the-art transfer learning methods for microscopy
+image classification lack the systematic separation between task-dependent
+layers and transferrable ones, resulting in overfitting when training over
+a limited amount of samples. Moreover, their ensembles have a massive
+number of hyper-parameters, making it challenging and time-consuming to
+choose the optimal ones manually.
+
+It was established in earlier chapters that the ensemble learning is
+essential for increasing accuracy of the overall system. The aim of
+ensemble learning is to enhance the performance of a meta-classifier
+which is composed of weak classifiers. The performance of the
+meta-classifier gives better prediction accuracy than any of the
+individual models.  This chapter shifts the focus from finding the
+optimum voting parameters of the ensemble to evolving its topology.
+
+\section{Proposed Method}
+\label{sec:orge673c53}
+\label{orgb2510f5}
+\subsection{Overview}
+\label{sec:org872fb3e}
+\quad This section comprehensively describe the differential Cartesian
+Genetic Programming Artificial Network (dCGPANN) and how it was employed to acquire the optimum topology and utilize the gradients
+for error back-propagation to update the weights and biases. It also
+examines the implementation details of the individual classifier's training. Besides, it depicts the multiple
+stages of training the ensemble.  
+
+\quad Evolutionary Algorithms, in general,
+are used to optimize the hyperparameters of a particular system or to
+conceive a better architecture \cite{Sekanina}. The principal emphasis of the
+earlier proposed methods was to fine-tune the hyperparameters of the
+ensemble strategy. In numerous algorithms, the numbers of nodes and the connections are fixed, while the ANN weights are evolved. Different algorithms only evolve the weights of the ANN using EA. Nonetheless, stochastic gradient descent is far more potent in correcting the weights in the course of training than any other technique. 
+
+
+\quad For the ensemble to be more accurate than its composing
+classifiers, it must be diverse and accurate. Nevertheless, diverse
+and accurate classifiers do not always guarantee a better performing
+ensemble \cite{You2020}. Assembling a diversity-accuracy balanced
+ensemble is not a straightforward process. Thus, a more advanced
+ensemble technique is needed. This chapter concentrates on deciding the
+most optimum architecture of the stacked ensemble as well as its
+weights and biases through the standard error back-propagation using
+the gradient information obtained by the dCGPANN algorithm
+\cite{Izzo2017,Martens2019,Izzo2020}.
+
+\quad The proposed method is composed of two stages. The first stage
+is to fine-tune and train end-to-end multiple heterogeneous
+classifiers on the training datasets to ensure diversity amongst
+models. Then we select the best-performing models. The test dataset 
+patches are then augmented to 5000 images. The classifiers'
+predictions of the 5000 images are used to train the stacked ensemble
+using dCGPANN. The CGP inputs are an 8x1 vector of stacked prediction
+of the best performing models. The test dataset is used to
+evaluate the performance of our method against different cutting-edge
+algorithms.
+
+\quad The genes are then evolved using crossover and mutation
+operators based on predefined parameters as explained in \ref{org429c085}.
+The motive of this method is to overcome the limitation that the
+previous methods had by using the derivatives of the loss function.
+We believe that the reduction of software bloat and the
+representational capability of the dCGPANN can produce
+state-of-the-art competitive ensemble topologies.
+\subsection{The Differential Cartesian Genetic Programming}
+\label{sec:org618d0ad}
+\label{org429c085}
+
+\quad Genetic Programming is one of the most successfully applied
+Evolutionary Algorithm in the optimization domain \cite{Liu2015}. It is
+exceptionally suitable for binary classification problems due to its
+syntax \cite{Liu2015}. One of the constraints that impede the
+performance of GP is program bloat and duplicative calculation of the
+same node every time it is needed \cite{Turner2015}. Another
+drawback is their lack of ability to evolve topologies. Since its
+invention, researchers have developed numerous versions of GP. Several
+GP algorithms have been developed such as stacking, tree-based Genetic
+Programming, Grammatical Evolution, linear Genetic Programming and
+CGP.
+
+\quad The Cartesian Genetic Programming (CGP) was first formed to evolve
+circuit design in the late 90s \cite{Miller2020a,Turner2017,Turner2015a}. The CGP technique
+offers more flexibility to realize better ensemble topologies. The most prominent advantage of
+CGP over other variants of Genetic Programming is its ability to
+express the solution candidates as acyclic graphs rather than the tree-based variant in the standard GP. CGP is known to reduce redundant
+computations \cite{Turner2017}. Unlike standard tree-based GP, a
+solution can be represented in a Cartesian form, as shown in Figure
+\ref{fig:orgf78c63c}. Figure \ref{fig:orgf78c63c} displays a randomly generated ensemble topology
+by the Cartesian Genetic Programming.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/ensemble_gene3.png}
+\caption{\label{fig:orgf78c63c}A randomly generated ensemble topology by CGP}
+\end{figure}
+
+\quad The capacity of the CGP to represent a candidate solutiona in
+two-dimensional gene was revolutionary. Comparable to electrical
+circuits for which the CGP was used to evolve, the evolution of an ANN
+was investigated. Figure \ref{fig:orgd54e0b2} portrays the standard CGP encoding of
+the ANN where Miller et al. used CGP to evolve the ANN architecture
+\cite{Miller2011}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/cgp.png}
+\caption{\label{fig:orgd54e0b2}The standard CGP representation of the Neural Network and the encoded gene \cite{Miller2011}}
+\end{figure}
+
+Where \(r\) is the number of the rows, \(c\) is the number of the columns,
+\(n\) is the number of the features, and \(m\) is the number of the
+classes.
+
+However, the weights are better updated using the gradient descent
+methods which established its supremacy over the past decades
+\cite{Izzo2017}. Another deficiency of the original use of CGP is the
+absence of biases which is vital to the learning process. Izzo et
+al. \cite{Martens2019,Izzo2017,Izzo2020} established a remarkably innovative idea that permits the evolution of the
+topology with CGP and updating the weights and biases using Stochastic
+Gradient Descent at the same time \cite{Martens2019}. The concept is
+to split the gene into two parts. The first portion encodes the
+neural network nodes, connections, and activation functions. The second portion of the gene encodes the weights and the biases of the ANN
+connections \cite{Martens2019}.  Figure \ref{fig:orgfdd4a07} pictures how the modified
+CGP incorporated the weights and biases.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/dcgp.png}
+\caption{\label{fig:orgfdd4a07}The dCGP representation of the Neural Network and the additions of weights and biases to the encoded gene \cite{Martens2019}}
+\end{figure}
+
+In the dCGPANN variant, a gene \(X\) representing a candidate solution consists of two portions. \(X_I\) contains the evolutionary part
+of the gene which is evolved by the CGP, while \(X_R\) contains the
+weights and biases of the ANN as indicated in equation \ref{eq:orgb1a00f4} and \ref{eq:org202f961}
+respectively \cite{Martens2019}.
+
+\begin{equation}
+\label{eq:orgb1a00f4}
+  X_I = [F_0,C_{0,0},C_{0,1},...,C_{0,a},F_1,C_{1,0},...,C_{1,a},..., O_1,...,O_m]
+\end{equation}
+
+\begin{equation}
+\label{eq:org202f961}
+  X_R = [b_0,w_{0,0},w_{0,1},...,w_{0,a_0},b_1,w_{1,0},...,w_{1,a_1},...]
+\end{equation}
+
+where \(X_I\) \(\in\) natural number is a vector that encodes the evolutionary
+part of the ANN, \(X_R\) \(\in\) real numbers is a vector for the biases \(b\)
+and weights \(w\), \(F\) represents functions, \(C\) represent the
+connections and \(O\) represent the terminal nodes.
+
+Based on the dCGPANN, the output of each node in the ANN is expressed
+in equation \ref{eq:org99a49a7} \cite{Martens2019}.
+
+
+\begin{equation}
+\label{eq:org99a49a7}
+  N_i =  F_i ( \sum_{j=0}^{a_i} w_{i,j} C_N_{i,j} + b_i )
+\end{equation}
+
+Where \(N_i\) is the output of the node \(N\) with id \(i\), \(F_i\) is the
+activation function, \(a_i\) is the arity of the node \(i\) which is the
+number of connections to that node, \(C_{i,j}\) is the connection
+between note \(i\) in the current layer and node \(j\) in the previous
+layer and \(b_i\) is the bias associated with the activation function
+\(F_i\) in node \(N_i\). The number of connections to each node, arity, is
+assumed equal by default in all nodes unless it gets defined by a list
+that specifies the number of connections each node should have in a
+particular layer. The arity list is a \{1X\(c\)\} vector that
+assignes the arity of the nodes in each column \(c\).
+
+  \quad The evolutionary operators \(\mu\)\textsubscript{c} and \(\mu\)\textsubscript{a} are applied on the \(X_I\)
+part of the gene that expresses the dCGPANN. \(\mu\)\textsubscript{c} and \(\mu\)\textsubscript{a} are fractions to be mutated in active connections gene and active function genese respectively. Each mutant goes through
+a predefined number of stochastic gradient descent training
+epochs during which only \(X_R\) is learned, and \(X_I\) is fixed. Algorithm
+\ref{algo} illustrates the steps of how the dCGPANN was operated to
+optimize the structure of the ensemble as well as its weights and
+biases \(\theta\).
+
+\begin{algorithm}
+\caption{dCGPANN}
+\label{algo}
+\begin{algorithmic}
+\REQUIRE $r$ , $c$ , $n$ , $m$ , $l$ , $a$ , $Kernels$, $epochs$, $cycles$
+\STATE Randomly Initialize N dCGPANNs
+\FOR{dCGPANN in population N}
+\STATE Compute the Loss
+\ENDFOR
+\FOR{j in cycles}
+\STATE Select the best dCGPANN of the previous generation
+\STATE Delete other dCGPANNs
+\FOR{i in population N}
+\STATE{ Mutate the best dCGPANN's functions using $\mu_a$}
+\STATE{Mutate the best dCGPANN's connections using $\mu_c$}
+\FOR{epoch in epochs}
+\STATE Run SGD on dCGPANN_i
+\ENDFOR
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+\subsection{Implementation Details}
+\label{sec:orgcf8186b}
+\label{org2fab046}
+
+\quad This section outlines the implementation details and the handpicked classifiers' and the dCGPANN's learning hyperparameters. Table \ref{tab:orgba045e8}, \ref{tab:orgbdcb91b}, \ref{tab:org845a0ab} and \ref{tab:org39db8e6} tabulate the classifiers' hyperparameters used for the first phase of our approach. Table \ref{tab:org2def12b} lists the  the dCGPANN hyperparameters used for the ensemble optimization in the second phase of the proposed method.
+The first stage of the training, multiple classifiers with different configurations were trained on the IDC dataset. Amongst the trained classifiers, the best four performing models were chosing to construct the ensemble. The first model was a Resnet50 pretrained on ImagNet which was trained using Transfer Learning \cite{He2016a,Dengb,Long2015}. We froze all layers except the last 69 layer which included the last new fully connected layer that was adopted to the new binary labels. The learning rate (lr) was high due to the fact that most of the domain-specific layers were frozen. The second model was also a Resnet50 but was trained end-to-end. The third and the fourth models were Nasnetlarge and Densenet201 respectively whose training parameters are shown in Table \ref{tab:org845a0ab} and Table \ref{tab:org39db8e6} \cite{Zoph2018}. 
+
+\begin{table}[htbp]
+\caption{\label{tab:orgba045e8}Hyperparameters for Classifier 1}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & Resnet50 \cite{He2016a}\\
+Training & Transfer Learning using ImagNet weights \cite{Dengb}\\
+Total params & 23,595,908\\
+trainable residual blocks & 10\\
+trainable conventional blocks & 20\\
+trainable layers & 69\\
+trainable params & 18,605,572\\
+Non-trainable params & 4,990,336\\
+lr & 0.0001\\
+lr scheduler & Cyclic LR  \cite{Smith2017c}\\
+Objective function & Adamax    \cite{Kingma2014}\\
+epochs & 200 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:orgbdcb91b}Hyperparameters for Classifier 2}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & ResNet50\\
+Training & end-to-end\\
+Total params & 23,595,908\\
+trainable layers & All\\
+trainable params & 23,595,908\\
+lr & 0.0001\\
+lr scheduler & Cyclic LR\\
+Objective function & SGD\\
+epochs & 400 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:org845a0ab}Hyperparameters for Classifier 3}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & NasNetLarge     \cite{Zoph2018}\\
+Pre-trained & Transfer Learning using ImagNet weights\\
+Total params & 84,932,950\\
+trainable layers & 662\\
+trainable params & 68,365,924\\
+Non-trainable params & 16,567,026\\
+lr & 1e-5\\
+Objective function & Adamax\\
+epochs & 200 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:org39db8e6}Hyperparameters for Classifier 4}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & DenseNet201 \cite{Zhu2018}\\
+Training & Transfer Learning using ImagNet weights\\
+Total params & 18,329,668\\
+trainable layers & 570\\
+trainable params & 4,705,668\\
+Non-trainable params & 13,624,000\\
+lr & 0.0001\\
+Objective function & Adamax\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:org2def12b}dCGP parameters}
+\centering
+\begin{tabular}{lr}
+Paramter & value\\
+\hline
+r number of rows & 20\\
+c number of columns & 5\\
+m input features & 8\\
+l level-back allowed connections & 2\\
+possible kernels & sig, ReLu, tanh, ELU, ISRU\\
+Basis function arity & [5, 20, 18, 16, 10]\\
+l level-back & 1\\
+population & 7\\
+\(\mu\)\textsubscript{a} & 0.05\\
+\(\mu\)\textsubscript{c} & 0.05\\
+number of iters & 100\\
+number of epochs & 15\\
+active \(w\) & 1088\\
+unique active  \(w\) & 727\\
+active nodes & 83\\
+\end{tabular}
+\end{table}
+
+\FloatBarrier 
+ The possible kernels used for the dCGPANN are the Sig, ReLu, tanh, ELU and ISRU functions
+ which are defined by equations \ref{eq:org4329620}, \ref{eq:org5d2a1e6}, \ref{eq:org4a9aabd}, \ref{eq:org86fc02d}
+ and \ref{eq:org090f381} respectively \cite{Nwankpa2018,Carlile2017}. 
+
+\begin{equation}
+\label{eq:org4329620}
+Sig(x) = \frac{1}{1+\exp(-x)}
+\end{equation}
+\begin{equation}
+\label{eq:org5d2a1e6}
+ReLu(x) = max(0,x) =  
+      \begin{cases} 
+      x_i & if\  x_i\geq 0 \\
+      0 & if\ x_i < 0
+   \end{cases}
+\end{equation} 
+\begin{equation}
+\label{eq:org4a9aabd}
+tanh(x) = \frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}
+\end{equation}
+
+\begin{equation}
+\label{eq:org86fc02d}
+ELU(x) = 
+      \begin{cases} 
+      x & if\  x > 0 \\
+      \alpha \exp(x) -1 & if\ x_i \leq 0
+   \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:org090f381}
+ISRU(x) = x \frac{1}{\sqrt(1 + \alpha x^2)}
+\end{equation}
+
+\section{Experimental Setup}
+\label{sec:orgaa3d2ec}
+\label{org9b3878e}
+\subsection{Dataset and The Experimental Setup}
+\label{sec:org17f695d}
+\qquad The dataset contains patches extracted from the whole slides of
+Two hundred seventy-nine patients were diagnosed with IDC. The total
+number of the extracted non-overlapping of 50x50 pixels patches is
+277524, which are labeled into IDC and non-IDC regions. The number of
+patches and the percentage of IDC annotations per patient vary
+significantly; thus, the labels of the images are not equal. Fig
+\ref{fig:org9327a71} shows the patches and IDC annotation percentage
+histogram. Some visual features distinguish IDC from non-IDC patches,
+such as tissue coloration as shown in Figure \ref{fig:org7a83285} and figure
+\ref{fig:org52f804d}, which shows negative and positive IDC, respectively. Figure
+\ref{fig:org6ae9cae} shows the color maps of annotated whole slides, and figure
+\ref{fig:org606dca4} shows a whole slide that was reconstructed using the
+coordinates information provided by the dataset. The darker mask
+points to the IDC regions on the whole slide image (WSI).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/datasethists.png}
+\caption{\label{fig:org9327a71}Dataset Statistics}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcnp.png}
+\caption{\label{fig:org7a83285}IDC negative samples}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcpp.png}
+\caption{\label{fig:org52f804d}IDC positive samples}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idccmap.png}
+\caption{\label{fig:org6ae9cae}IDC Colormap in a WSI}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/annotatedWSI.png}
+\caption{\label{fig:org606dca4}Reconstructed Annotated WSI}
+\end{figure}
+
+
+
+The dataset was divided into three sets. 70\% of the patients' slides were used as a training dataset, and the remaining patients' slides were
+divided into a validation dataset and a test dataset with 15\%
+of the slides each. Our model and the base models to which our method
+was compared to were implemented using PyTorch, dcgpy and scikit-learn
+\cite{Paszke2019,Izzo2020,pedregosa2011scikit}.
+Our method was compared to three voting strategies. 
+\subsection{Evaluation Metrics}
+\label{sec:org3b0155a}
+The evaluation metrics used for our assessment are the
+F1-score, the Balanced Accuracy and the overall accuracy as defined in equations \ref{eq:orgc406da3}, \ref{eq:org3efbfd0} and \ref{eq:org3975d8f} respectively \cite{Duchesnay2019,Javeed2019}.
+\begin{equation}
+\label{eq:orgc406da3}
+F_1 = \frac{2}{\frac{1}{Recall} + \frac{1}{Precision}} = \frac{2 Precision \times Recall}{Precision+Recall}
+\end{equation}
+Where \(Recall\) and \(Precesion\) are defined in \ref{eq:orgcb35ef2} and \ref{eq:org79bf511} \cite{Duchesnay2019}.
+\begin{equation}
+\label{eq:orgcb35ef2}
+Recall = Sensitivity = \frac{TP}{TP+ FP}
+\end{equation}
+Note that \(TP\) is number of correctly positively classified samples and
+\(FP\) is the incorrectly positively classified ones.
+
+\begin{equation}
+\label{eq:org79bf511}
+Precision = \frac{TP}{TP+ FN}
+\end{equation}
+
+\begin{equation}
+\label{eq:org3975d8f}
+BAC = \frac{Sensitivity + Specificity}{2}
+\end{equation}
+where Specivity is defined by equation \ref{eq:org3111632}.
+
+\begin{equation}
+\label{eq:org3111632}
+Specivity = \frac{TN}{TN+FP}
+\end{equation}
+
+\begin{equation}
+\label{eq:org3efbfd0}
+Accuracy = \frac{TP+TN}{TP+TN+FP+FN}
+\end{equation}
+
+\section{Results}
+\label{sec:org9dcb507}
+\label{orga6eaf24}
+
+\qquad This section shows the results of our experiments. The performance of phase 1 trained classifiers as well as the base models on the validation set are shown in table \ref{tab:org6e4350a}.
+\begin{table}[!hbt]
+\caption{\label{tab:org6e4350a}Performance of various models on the validation set}
+\centering
+\begin{tabular}{lrr}
+\hline
+classifier 1 & Predicted IDC & Predicted Non-IDC\\
+\hline
+actual IDC & 0.904239 & 0.095761\\
+actual Non-IDC & 0.240137 & 0.759863\\
+\hline
+classifier 2 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.920932 & 0.079068\\
+actual Non-IDC & 0.257888 & 0.742112\\
+\hline
+classifier 3 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.931916 & 0.068084\\
+actual Non-IDC & 0.320158 & 0.679842\\
+\hline
+classifier 4 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+Average Voting & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+Maximum Voting & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.931916 & 0.068084\\
+actual Non-IDC & 0.320158 & 0.679842\\
+\hline
+Random Forest & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+dCGPANN & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.961916 & 0.038084\\
+actual Non-IDC & 0.120158 & 0.879842\\
+\hline
+\end{tabular}
+\end{table}
+
+
+Our method was compared to the weighted voting, the majority voting
+and the random forest tree-based ensemble and the outcomes on the
+held-out test dataset are reported in Table \ref{tab:orged71d43} , \ref{tab:orgded9f14} ,
+\ref{tab:orgcccb5e9} and \ref{tab:org7586324}.
+The results demonstrate a clear advantage of the dCGPANN ensemble over all other voting strategies, as shown in table \ref{tab:org7586324}.
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:orged71d43}Performance of the weighted voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.84 & 0.93 & 0.89 & 0.80588 & 0.84\\
+actual cancer & 0.84 & 0.68 & 0.75 &  & \\
+macro avg & 0.84 & 0.81 & 0.82 &  & \\
+weighted avg & 0.84 & 0.84 & 0.84 &  & \\
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:orgded9f14}Performance of the majority voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.84 & 0.93 & 0.89 & 0.805879 & 0.84\\
+actual cancer & 0.84 & 0.68 & 0.75 &  & \\
+macro avg & 0.84 & 0.81 & 0.82 &  & \\
+weighted avg & 0.84 & 0.84 & 0.84 &  & \\
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\caption{\label{tab:orgcccb5e9}Performance of the Random Forest voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.87 & 0.90 & 0.89 & 0.8320 & 0.85\\
+actual cancer & 0.81 & 0.76 & 0.78 &  & \\
+macro avg & 0.84 & 0.83 & 0.84 &  & \\
+weighted avg & 0.85 & 0.85 & 0.85 &  & \\
+\end{tabular}
+\end{table}
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:org7586324}Performance of dCGPANN voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.96 & 0.94 & 0.95 & 0.87618 & 0.96\\
+actual cancer & 0.93 & 0.88 & 0.93 &  & \\
+macro avg & 0.95 & 0.91 & 0.92 &  & \\
+weighted avg & 0.95 & 0.96 & 0.95 &  & \\
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\label{tab:org6f50435}
+\centering
+\begin{tabular}{lll}
+ & F-measure & Balanced accuracy\\
+\hline
+[Cruz-Roa 2014]: & 71.80\%, & 84.23\%\\
+\end{tabular}
+\end{table}
+\FloatBarrier 
+
+\chapter{Ensemble Optimization Using Colonal Selection Algorithm}
+\label{sec:org93d3c47}
+\label{org26386ae}
+\quad The Clonal Selection Algorithm (CSA) is an Artificial Immunity optimization method that is inspired by how the immune systems in mammals respond to foreign harmful object like virsus and bacteria in the body \cite{Alalade2020,Bataineh2019,Keneni2019}.
+The immune systems have the capacity to learn virus recognition and to produce antibodies which fight the foreign antigens \cite{Khang2016}. 
+The objective of the clonal selection is to produce a variety of antibodies to combat antigens \cite{CarkliYavuz2018}. 
+CSA has been applied in the optimization field for decades and has shown remarkable performance. 
+It has also considerably been used to evlove the training hyperparameters of CNNs \cite{Keneni2019,Bataineh2019}. 
+Antigens and antibodies define possible solution to the optimization problem.  
+The algorithm start with randomly generating a set of antigens and antibodies. 
+The degree of how the antibodies recognizes the antigens is calculated with a metric called affinity. 
+The antibodies with the highest affinity scores are cloned and mutated. The mutated cloned antibodies are then used as antigens for the next epoch. 
+These steps are repeated for a predefined number of iteration or until a threshold is met. 
+We strongly believe that this approach is ideal for automating the selection of various ensemble learning hyperparameters such as the number of hidden layers, conventional layers, epochs, batch size and the type of optimizer. 
+
+\section{Proposed Method}
+\label{sec:org3b0ea06}
+\label{org3c45715}
+\quad Similar to earlier proposed methods, several heterogeneous models will be trained on the histological image train dataset.
+The best performing models on the validation dataset will be picked to form an ensemble.
+The test dataset will be further split into 70\% training and 30\% validation for training the ensemble.
+For training, the images will be augmented, pre-processed and classified using the chosen models.
+The prediction set is then used to train a neural network whose hyper-parameters and weights are optimized using CSA which has been implemented successfully for that purpose \cite{CarkliYavuz2018,Ichimura2012,Khang2016,Bataineh2019}.
+
+\chapter{Conclusion and Future Work}
+\label{sec:org3501ad4}
+\quad In this manuscript, we proposed several knowledge-based evolutionary optimization algorithms for learning the ensemble rule. 
+Our approach aimed at decreasing the number of trials of ensemble optimization with different hyper-parameters by leveraging the fuzzy sets theory and Evolutionary Algorithms. 
+The performance analysis of our approach demonstrated that ensemble optimization of properly fine-tuned models has potentially increased the accuracy of the networks. 
+Even though leveraging the predictions of fine-tuned networks is important to the overall accuracy of the ensemble, it is limited to the degree of error variance amongst the chosen models.
+Furthermore, the ensemble optimization and the proper choice of the freeze-layer are considered separately which decreases the training time significantly. 
+Our future research will focus on incorporating the knowledge-base Fuzzy Inference Systems into the  tuning of the learning rate and the number of trainable weights concurrently and the application of more advaced and flexible evolutionary algorithms to the optimization of stacked ensembles for small datasets.
+
+\bibliographystyle{ieeetr}
+\bibliography{cited}
+\end{document}
