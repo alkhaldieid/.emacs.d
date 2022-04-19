@@ -1,0 +1,28 @@
+(use-package python-mode)
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(use-package eglot
+  :ensure t)
+;;;  (add-hook 'foo-mode-hook 'eglot-ensure)
+(add-hook 'python-mode-hook 'eglot-ensure)
+
+;; Make C-c C-c behave like C-u C-c C-c in Python mode
+(require 'python)
+(define-key python-mode-map (kbd "C-c C-c")
+  (lambda () (interactive) (python-shell-send-buffer t)))
+
+(use-package pyvenv
+  :ensure t)
+(setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
+(setq python-shell-virtualenv-path "/home/alkhaldieid/anaconda3/")
+(setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")

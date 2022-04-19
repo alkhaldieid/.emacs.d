@@ -436,9 +436,12 @@ translation, synonyms and other useful tools needed for writing efficiency.
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package mw-thesaurus
     :ensure t)
+  (use-package flyspell-correct-ivy
+    :ensure t)
 
   (define-key evil-normal-state-map (kbd "T") 'mw-thesaurus-lookup-at-point)
-  (define-key evil-normal-state-map (kbd "t") 'ispell-word)
+  ;; (define-key evil-normal-state-map (kbd "t") 'ispell-word)
+  (define-key evil-normal-state-map (kbd "t") 'flyspell-correct-at-point)
 
 #+END_SRC 
 
@@ -577,6 +580,8 @@ Things I want flyspell to do automatically:
                                 ("\\.mkv\\'" "mpv" (file))
                                 ("\\.webm\\'" "mpv" (file))
                                 ("\\.html\\'" "brave" (file))
+                                ("\\.png\\'" "sxiv" (file))
+                                ("\\.svg\\'" "sxiv" (file))
                                 ))
 #+END_SRC
 
@@ -604,12 +609,244 @@ Things I want flyspell to do automatically:
     (global-company-mode)
   #+END_SRC
 
+* Python old
+** pyenv
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package pyvenv
+    :ensure t)
+  (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
+  (setq conda-env-home-directory "/home/alkhaldieid/anaconda3/")
+  (setq conda-anaconda-home "/home/alkhaldieid/anaconda3/")
+  ;; workon home
+  (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
+  ;; (setq python-shell-interpreter "ipython")
+  ;;   python-shell-interpreter-args "--simple-prompt -i")
+
+  ;; ;; 
+  ;; (setq python-shell-interpreter "python3")
+  ;; (setq python-shell-interpreter "python")
+  ;; This works only with torch
+  ;; (setq python-shell-interpreter "jupyter"
+  ;;     python-shell-interpreter-args "console --simple-prompt"
+  ;;     python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+	     "jupyter")
+
+
+  ;; clear the python inferior output buffer
+  (defun my-clear ()
+    (interactive)
+    (let ((comint-buffer-maximum-size 0))
+      (comint-truncate-buffer)))
+  (add-hook 'python-mode-hook
+	    (lambda ()
+	      (define-key evil-normal-state-local-map
+			  (kbd "o") 'evil-org-open-below)
+			  (kbd "O") 'evil-org-open-above))
+#+END_SRC
+
+#+RESULTS:
+| (lambda nil (define-key evil-normal-state-local-map (kbd o) 'evil-org-open-below) (kbd O) 'evil-org-open-above) | yasnippet-snippets--fixed-indent | my/python-mode-hook | jedi:setup |
+** lsp
+#+BEGIN_SRC emacs-lisp
+
+(use-package lsp-mode
+  :demand t
+  :config
+  (defun md/lsp-setup()
+    ;; recommended by LSP docs for performance
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+    (lsp-enable-imenu)
+    (setq
+          lsp-auto-configure t
+          lsp-enable-dap-auto-configure nil ; Don't try to auto-enable dap: this creates a lot of binding clashes
+          lsp-auto-guess-root t ; Uses projectile to guess the project root.
+          lsp-before-save-edits t
+          lsp-eldoc-enable-hover t
+          lsp-eldoc-render-all nil
+          lsp-completion-enable t
+          lsp-completion-show-detail t
+          lsp-completion-show-kind t
+          lsp-enable-file-watchers t
+          lsp-file-watch-threshold 100
+          lsp-enable-folding t
+          lsp-enable-imenu t
+          lsp-enable-indentation t
+          lsp-enable-links t
+          lsp-clients-python-library-directories `("/usr/" ,(expand-file-name "~/.virtualenvs")) ; This seems appropriate
+          lsp-enable-on-type-formatting nil
+          lsp-enable-snippet nil  ;; Not supported by company capf, which is the recommended company backend
+          lsp-enable-symbol-highlighting nil
+          lsp-enable-text-document-color nil
+          lsp-enable-xref t
+          lsp-flycheck-live-reporting nil
+          lsp-idle-delay 0.5
+          lsp-imenu-show-container-name t
+          lsp-imenu-sort-methods '(position kind name)
+          lsp-pyls-plugins-flake8-enabled t
+          lsp-signature-auto-activate t
+          lsp-signature-render-documentation t
+          lsp-signature-doc-lines 10)
+    (lsp-register-custom-settings
+     '(("pyls.plugins.pyls_mypy.enabled" t t)
+       ("pyls.plugins.pyls_mypy.live_mode" nil t)
+       ("pyls.plugins.pyls_black.enabled" t t)
+       ("pyls.plugins.pyls_isort.enabled" t t)
+
+       ;; Disable these as they're duplicated by flake8
+       ("pyls.plugins.pycodestyle.enabled" nil t)
+       ("pyls.plugins.mccabe.enabled" nil t)
+       ("pyls.plugins.pyflakes.enabled" nil t))))
+  :hook
+   ;; NOTE: we don't have a python-mode hook - it gets handled by pyvenv-track-virtualenv
+  (;;(js-mode . lsp)
+   ;;(web-mode . lsp)
+   (lsp-mode . lsp-enable-which-key-integration)
+   (lsp-before-initialize . md/lsp-setup))
+  :bind (:map evil-normal-state-map
+              ("gh" . lsp-describe-thing-at-point)
+              ("gr" . lsp-find-references)
+              ("gD" . xref-find-apropos)
+              ("gd" . lsp-find-definition)))
+#+END_SRC
+
+#+RESULTS:
+: lsp-find-definition
+
+** Elpy
+
+#+BEGIN_SRC emacs-lisp :tangle nil
+(use-package python-mode)
+
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+  (add-hook 'elpy-mode-hook 'flycheck-mode)
+
+(use-package company-jedi)
+(add-to-list 'company-backends 'company-jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** eglot
+ #+BEGIN_SRC emacs-lisp :tangle nil
+   (use-package eglot
+     :ensure t)
+   ;;;  (add-hook 'foo-mode-hook 'eglot-ensure)
+   (add-hook 'python-mode-hook 'eglot-ensure)
+ #+END_SRC
+
+ #+RESULTS:
+ | eglot-ensure | my/python-mode-hook | jedi:setup | elpy-mode |
+
+** make C-u C-c C-c behave like C-c C-c in python-mode
+#+BEGIN_SRC emacs-lisp :tangle nil
+;; Make C-c C-c behave like C-u C-c C-c in Python mode
+(require 'python)
+(define-key python-mode-map (kbd "C-c C-c")
+  (lambda () (interactive) (python-shell-send-buffer t)))
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (python-shell-send-buffer t) |
+
+** scimax-jupyter integration
+#+BEGIN_SRC emacs-lisp
+(use-package major-mode-hydra
+  :ensure t
+  :bind
+  ("M-SPC" . major-mode-hydra))
+;; (load-file "/home/alkhaldieid/.emacs.d/scimax/scimax-ob.el")
+;; (load-file "/home/alkhaldieid/.emacs.d/scimax/scimax-jupyter.el")
+(use-package jupyter
+  :ensure t)
+#+END_SRC
+
+#+RESULTS:
+: t
+
 * Python
 ** switch to a conda env
-#+BEGIN_SRC emacs-lisp :results silent
+#+BEGIN_SRC emacs-lisp :results silent :tangle nil
   (use-package pyvenv
     :ensure t)
   (setq python-shell-virtualenv-root "/home/alkhaldieid/anaconda3/")
   (setq python-shell-virtualenv-path "/home/alkhaldieid/anaconda3/")
   (setenv "WORKON_HOME" "/home/alkhaldieid/anaconda3/envs/")
 #+END_SRC
+
+** lsp
+#+BEGIN_SRC emacs-lisp
+
+(use-package lsp-mode
+  :demand t
+  :config
+  (defun md/lsp-setup()
+    ;; recommended by LSP docs for performance
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+    (lsp-enable-imenu)
+    (setq
+          lsp-auto-configure t
+          lsp-enable-dap-auto-configure nil ; Don't try to auto-enable dap: this creates a lot of binding clashes
+          lsp-auto-guess-root t ; Uses projectile to guess the project root.
+          lsp-before-save-edits t
+          lsp-eldoc-enable-hover t
+          lsp-eldoc-render-all nil
+          lsp-completion-enable t
+          lsp-completion-show-detail t
+          lsp-completion-show-kind t
+          lsp-enable-file-watchers t
+          lsp-file-watch-threshold 100
+          lsp-enable-folding t
+          lsp-enable-imenu t
+          lsp-enable-indentation t
+          lsp-enable-links t
+          lsp-clients-python-library-directories `("/usr/" ,(expand-file-name "~/.virtualenvs")) ; This seems appropriate
+          lsp-enable-on-type-formatting nil
+          lsp-enable-snippet nil  ;; Not supported by company capf, which is the recommended company backend
+          lsp-enable-symbol-highlighting nil
+          lsp-enable-text-document-color nil
+          lsp-enable-xref t
+          lsp-flycheck-live-reporting nil
+          lsp-idle-delay 0.5
+          lsp-imenu-show-container-name t
+          lsp-imenu-sort-methods '(position kind name)
+          lsp-pyls-plugins-flake8-enabled t
+          lsp-signature-auto-activate t
+          lsp-signature-render-documentation t
+          lsp-signature-doc-lines 10)
+    (lsp-register-custom-settings
+     '(("pyls.plugins.pyls_mypy.enabled" t t)
+       ("pyls.plugins.pyls_mypy.live_mode" nil t)
+       ("pyls.plugins.pyls_black.enabled" t t)
+       ("pyls.plugins.pyls_isort.enabled" t t)
+
+       ;; Disable these as they're duplicated by flake8
+       ("pyls.plugins.pycodestyle.enabled" nil t)
+       ("pyls.plugins.mccabe.enabled" nil t)
+       ("pyls.plugins.pyflakes.enabled" nil t))))
+  :hook
+   ;; NOTE: we don't have a python-mode hook - it gets handled by pyvenv-track-virtualenv
+  (;;(js-mode . lsp)
+   ;;(web-mode . lsp)
+   (lsp-mode . lsp-enable-which-key-integration)
+   (lsp-before-initialize . md/lsp-setup))
+  :bind (:map evil-normal-state-map
+              ("gh" . lsp-describe-thing-at-point)
+              ("gr" . lsp-find-references)
+              ("gD" . xref-find-apropos)
+              ("gd" . lsp-find-definition)))
+#+END_SRC
+
+#+RESULTS:
+: lsp-find-definition
