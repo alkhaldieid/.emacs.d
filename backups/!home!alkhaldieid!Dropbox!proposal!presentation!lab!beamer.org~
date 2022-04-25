@@ -141,9 +141,9 @@
 
 * Full Training
 ** Ensemble 
-   + 4 of the best performing models heterogeneous models are chosen based on their accuracy and misclassification diversity
-   + The predictins are stacked horizontally by a flat layer and densely connected to the labels
-   + the weights are then trained on the heldout dataset with a much higher resolution 
+   + 4 of the best performing models heterogeneous models are chosen based on their accuracy and misclassifications diversity
+   + The predictions are stacked horizontally by a flat layer and densely connected to the labels
+   + the weights are then trained on the holdout dataset with a much higher resolution 
 * Adaptive PSO-Based Ensemble Optimization for Histology Image Classification
   :PROPERTIES:
   :Effort:   3
@@ -389,7 +389,7 @@ Unlabeled test images = 100
 #+CAPTION: IDC negative samples 
 #+LABEL: fig:idcnp
 [[~/Dropbox/third/idcnp.png]]
-** Hardware and Sofrware
+** Hardware and Software
  * The experiments are run on:
    - NVIDIA Geo-Force RTX 2080 GPU
    - AMD Ryzen Threadripper 1950X 16-Core processor

@@ -1,0 +1,784 @@
+% Created 2022-03-25 Fri 09:35
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage[top=0.5in]{geometry}
+\usepackage[section]{placeins}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{minted}
+{\setlength{\parindent}{0cm}
+\usepackage{adjustbox}
+\usepackage{float}
+\restylefloat{table}
+\author{Eid Alkhaldi, Ezzatollah Salari}
+\date{\today}
+\title{Ensemble Optimization for IDC Classification Using Differential Cartesian Genetic Programming}
+\hypersetup{
+ pdfauthor={Eid Alkhaldi, Ezzatollah Salari},
+ pdftitle={Ensemble Optimization for IDC Classification Using Differential Cartesian Genetic Programming},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.4)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\begin{ABSTRACT}
+\textbf{Abstract} \label{org5c66de3}
+
+\quad The high cost of acquiring annotated histological slides for
+breast specimens entails exploiting an ensemble of models
+appropriately trained on small datasets.  Histological Image
+Classification ensembles strive to accurately detect abnormal tissues
+in the breast samples by determining the correlation between the
+predictions of its weak learners.  Nonetheless, the state-of-the-art
+ensembling methods, such as boosting and bagging, count merely on
+manipulating the dataset and lack intelligent ensembling decision
+making.  Furthermore, the methods mentioned above are short of the
+diversity of the weak models of the ensemble.  Likewise, other
+commonly used voting strategies, such as weighted averaging, are
+limited to how the classifiers' diversity and accuracy are balanced.
+Hence, In this paper, we assemble a Neural Network ensemble that
+integrates the models trained on small datasets by employing
+biologically-inspired methods.  Our procedure comprises two stages.
+First, we train multiple heterogeneous pre-trained models on the
+benchmark Breast Histopathology Images for Invasive Ductal Carcinoma
+(IDC) classification dataset.  In the second meta-training phase, we
+utilize the differential Cartesian Genetic Programming to generate a
+Neural Network that merges the trained models optimally.  We compared
+the empirical outcomes with additional state-of-the-art techniques.
+Our results demonstrate that improvising a Neural Network ensemble
+using Cartesian Genetic Programming transcended formerly published
+algorithms on slim datasets.
+
+\textbf{\emph{Keywords}}---  \emph{Cartesian Genetic Programming, hyparameters optimization, Ensemble, CNNs, Histolpathaological Image Classification}
+\end{ABSTRACT}
+\section{Introduction}
+\label{sec:org3ae13f3}
+\label{orgcd64b4d}
+
+\quad Histopathological images carcinomic classification for breast
+specimens, stained with hematoxylin and eosin (H\&E), has been
+investigated broadly due to the significance of the problem, the
+shortage of annotated images, and the increased expense of hiring
+radiologists \cite{Alkhaldi2021,Alkhaldi2019,Cao2018,cruzroa2014}.
+Breast cancer is one of the most deadly types of cancer. Around
+four-fifths of the deaths induced by breast cancer are caused by
+Invasive Ductal Carcinoma (IDC) \cite{cruzroa2014}.  IDC's diagnosis
+and prognosis demand examining Whole Slide Images (WSI) of breast
+biopsies stained with H\&E for visual features improvements.  The WSI
+are high-resolution images of the sample, usually divided into smaller
+sub-images for training ML classifiers.
+
+\quad As a consequence of the issue's significance, several techniques
+and ML pipelines have been suggested in the histopathological images
+classification literature.  The earliest methods relied on uniting
+several useful features to represent the image better. These features
+are handcrafted by observing how the negative IDC patches differ
+visually from the positive ones \cite{cruzroa2014}.  Many of these
+approaches centered around the nuclei features via nuclei segmentation
+such as nuclei position, centroid, density, glands segmentation,
+Voronoi-based features, Gabor filter, and the HSI color space
+\cite{cruzroa2014}.  Most of the handcrafted-based approaches
+depended on a composite of numerous characteristics mentioned earlier
+that extend the distinguishability of the categories.  Cruz-Roa et
+al. \cite{cruzroa2014} presented one of the foremost CNN models to
+categorize the BHI samples with a CNN \cite{cruzroa2014}.  CNN
+revealed an unprecedented advancement over the handcrafted feature
+approaches in histopathological image classification
+\cite{Alkhaldi2021}.  Nevertheless, the IDC classification of
+histopathological images stays challenging as a result of the
+insufficiency of data and the increased need of CNNs for labeled
+samples.  Accordingly, more evolved techniques are needed to fetch the
+most precise predictions, such as transfer learning, domain
+adaptation, and ensemble optimization \cite{Alkhaldi2021}.
+
+\quad Equivalent to blending the handcrafted features, ensemble
+learning is concentrated on integrating a set of diverse classifiers
+into a more accurate and robust model. The concept is to reduce
+variance and biases in the classifiers leading to a more generalized
+model that would function better on unseen samples.
+
+\quad Ensemble optimization has been successfully applied into
+numerous applications such as anomaly detection, cyber security, image
+classification and a diverse set of applications \cite{You2020}.
+Ensemble learning is one of the most successful machine learning
+practices \cite{Huang2017a}. Linking a group of complementary
+classifiers will generally result in a model that is at least more
+accurate than any of its components
+\cite{Dietterich2000}. Complementary classifiers have to be both
+diverse and accurate enough for the resulting ensemble to be more
+robust.
+
+While ensemble learning produces more accurate networks, training
+multiple classifiers is time-consuming \cite{Huang2017a}. To
+overcome this impediment, Huang et al. \cite{Huang2017a} proposed
+saving snapshots of the model during training instead of training
+multiple heterogenous models. Huang et al. method reduces the training
+time significantly by generating a group of the same model with
+different weights.  However, the problem with homogeneous classifiers
+is that they are more inclined to overfit the dataset's peculiarities
+and are deprived of the diversity of the models.
+
+Additional ensemble learning methods were presented in the literature,
+such as Bayesian Averaging, bagging, boosting, vertical voting, and
+horizontal stacking
+\cite{Xie2013b,Huang2017a,Dietterich2000,Liu2015}.
+
+\quad Due to the successful implementations of Evolutionary Algorithms
+(EA) in optimizing stacked ensembles established in the literature, a
+more adaptable EA seems exceptionally advantageous
+\cite{Alkhaldi2019,Alkhaldi2021,Liu2015}.  This paper illustrates
+the utilization of an evolutionary algorithm to automate selecting the
+best NN configuration with its corresponding weights during
+meta-training.  The meta-training shrinks the hyper-parameters search
+space considerably, accelerating convergence during the comprehensive
+training stage.  It furthermore displays an intuitive measure of
+heterogeneity and automatic optimization of the horizontally stacked
+prediction vector's wights.
+
+\quad The existing state-of-the-art transfer learning techniques for
+microscopy image classification lack the systematic detachment of the
+task-dependent layers from the transferrable ones, resulting in
+overfitting when training over a limited quantity of
+samples. Moreover, their ensembles have a high number of
+hyper-parameters, making it challenging and time-consuming to pick the
+optimal ones manually.
+
+It was established in earlier research that ensemble learning is
+indispensable for improving the accuracy of the overall
+system. Ensemble learning aspires to enhance the performance of a
+meta-classifier which is composed of weak classifiers. The arrangement
+of the meta-classifier delivers more acceptable prediction accuracy
+than any of the individual models.
+
+\quad This paper presents a novel approach of utilizing the Cartesian
+Genetic Programming Algorithm (CGP) for stacked ensemble optimization.
+Our pipeline consists of two primary elements. The first part deals
+with training Convolutional Neural Networks with different setups on
+the Breast Histopathology Imaging (BHI) dataset.  In the second
+portion, we define a cartesian Neural Network with a number of the NN
+topology parameters and evolve them using the Differential Cartesian
+Genetic Programming. Section \ref{org56964a3} describes our proposed
+methods. Our approach outperforms previously published algorithms as
+demonstrated in section \ref{orgcf28d66}.
+
+\quad The remaining sections are arranged as follows: Section
+\ref{org56964a3} elaborates on the training of individual
+classifiers and the meta-training of the ensemble strategy. Section
+\ref{orgcf28d66} illustrates in detail the experimental setup, the
+evaluation metrics, the benchmark dataset and the used computational
+resources. Section \ref{org6f936c0} exhibits the experimentations and
+their results compared with diverse state-of-the-art published
+methodologies.  Section \ref{orge33fb61} concludes the paper with our
+findings, the constraints of our approach, and future research
+suggestions.
+
+\section{Proposed Method}
+\label{sec:org4409261}
+\label{org56964a3}
+\subsection{Overview}
+\label{sec:org38e9eb3}
+\quad This section comprehensively describe the differential Cartesian
+Genetic Programming Artificial Network (dCGPANN) and how it was
+employed to acquire the optimum topology and utilize the gradients for
+error back-propagation to update the weights and biases. It also
+examines the implementation details of the individual classifier's
+training. Besides, it depicts the multiple stages of training the
+ensemble.
+
+\quad Evolutionary Algorithms, in general, are used to optimize the
+hyperparameters of a particular system or to conceive a better
+architecture \cite{Sekanina}. The principal emphasis of the earlier
+proposed methods was to fine-tune the hyperparameters of the ensemble
+strategy. In numerous algorithms, the numbers of nodes and the
+connections are fixed, while the ANN weights are evolved. Different
+algorithms only evolve the weights of the ANN using EA. Nonetheless,
+stochastic gradient descent is far more potent in correcting the
+weights in the course of training than any other technique.
+
+
+\quad For the ensemble to be more accurate than its composing
+classifiers, it must be diverse and accurate. Nevertheless, diverse
+and accurate classifiers do not always guarantee a better performing
+ensemble \cite{You2020}. Assembling a diversity-accuracy balanced
+ensemble is not a straightforward process. Thus, a more advanced
+ensemble technique is needed. This paper concentrates on deciding the
+most optimum architecture of the stacked ensemble as well as its
+weights and biases through the standard error back-propagation using
+the gradient information obtained by the dCGPANN algorithm
+\cite{Izzo2017,Martens2019,Izzo2020}.
+
+\quad The proposed method is composed of two stages. The first stage
+is to fine-tune and train end-to-end multiple heterogeneous
+classifiers on the training datasets to ensure diversity amongst
+models. Then we select the best-performing models. The test dataset
+patches are then augmented to 5000 images. The classifiers'
+predictions of the 5000 images are used to train the stacked ensemble
+using dCGPANN. The CGP inputs are an 8x1 vector of stacked prediction
+of the best performing models. The test dataset is used to evaluate
+the performance of our method against different cutting-edge
+algorithms.
+
+\quad The genes are then evolved using crossover and mutation
+operators based on predefined parameters as explained in \ref{orgf099886}.
+The motive of this method is to overcome the limitation that the
+previous methods had by using the derivatives of the loss function.
+We believe that the reduction of software bloat and the
+representational capability of the dCGPANN can produce
+state-of-the-art competitive ensemble topologies.
+\subsection{The Differential Cartesian Genetic Programming}
+\label{sec:org7aa1caa}
+\label{orgf099886}
+
+\quad Genetic Programming is one of the most successfully applied
+Evolutionary Algorithm in the optimization domain
+\cite{Liu2015}. It is exceptionally suitable for binary
+classification problems due to its syntax \cite{Liu2015}. One of
+the constraints that impede the performance of GP is program bloat and
+duplicative calculation of the same node every time it is needed
+\cite{Turner2015}. Another drawback is their lack of ability to
+evolve topologies. Since its invention, researchers have developed
+numerous versions of GP. Several GP algorithms have been developed
+such as stacking, tree-based Genetic Programming, Grammatical
+Evolution, linear Genetic Programming and CGP.
+
+\quad The Cartesian Genetic Programming (CGP) was first formed to
+evolve circuit design in the late 90s
+\cite{Miller2020a,Turner2017,Turner2015a}. The CGP technique
+offers more flexibility to realize better ensemble topologies. The
+most prominent advantage of CGP over other variants of Genetic
+Programming is its ability to express the solution candidates as
+acyclic graphs rather than the tree-based variant in the standard
+GP. CGP is known to reduce redundant computations
+\cite{Turner2017}. Unlike standard tree-based GP, a solution can be
+represented in a Cartesian form, as shown in Figure
+\ref{fig:org65099dc}. Figure \ref{fig:org65099dc} displays a randomly generated ensemble
+topology by the Cartesian Genetic Programming.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/ensemble_gene3.png}
+\caption{\label{fig:org65099dc}A randomly generated ensemble topology by CGP}
+\end{figure}
+
+\quad The capacity of the CGP to represent a candidate solutiona in
+two-dimensional gene was revolutionary. Comparable to electrical
+circuits for which the CGP was used to evolve, the evolution of an ANN
+was investigated. Figure \ref{fig:orgef13849} portrays the standard CGP
+encoding of the ANN where Miller et al. used CGP to evolve the ANN
+architecture \cite{Miller2011}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/cgp.png}
+\caption{\label{fig:orgef13849}The standard CGP representation of the Neural Network and the encoded gene \cite{Miller2011}}
+\end{figure}
+
+Where \(r\) is the number of the rows, \(c\) is the number of the columns,
+\(n\) is the number of the features, and \(m\) is the number of the
+classes.
+
+However, the weights are better updated using the gradient descent
+methods which established its supremacy over the past decades
+\cite{Izzo2017}. Another deficiency of the original use of CGP is the
+absence of biases which is vital to the learning process. Izzo et
+al. \cite{Martens2019,Izzo2017,Izzo2020} established a remarkably innovative idea that permits the evolution of the
+topology with CGP and updating the weights and biases using Stochastic
+Gradient Descent at the same time \cite{Martens2019}. The concept is
+to split the gene into two parts. The first portion encodes the
+neural network nodes, connections, and activation functions. The second portion of the gene encodes the weights and the biases of the ANN
+connections \cite{Martens2019}.  Figure \ref{fig:org0c3905b} pictures how the modified
+CGP incorporated the weights and biases.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/dcgp.png}
+\caption{\label{fig:org0c3905b}The dCGP representation of the Neural Network and the additions of weights and biases to the encoded gene \cite{Martens2019}}
+\end{figure}
+
+In the dCGPANN variant, a gene \(X\) representing a candidate solution
+consists of two portions. \(X_I\) contains the evolutionary part of the
+gene which is evolved by the CGP, while \(X_R\) contains the weights and
+biases of the ANN as indicated in equation \ref{eq:org5679cd3} and \ref{eq:org1354f29}
+respectively \cite{Martens2019}.
+
+\begin{equation}
+\label{eq:org5679cd3}
+  X_I = [F_0,C_{0,0},C_{0,1},...,C_{0,a},F_1,C_{1,0},...,C_{1,a},..., O_1,...,O_m]
+\end{equation}
+
+\begin{equation}
+\label{eq:org1354f29}
+  X_R = [b_0,w_{0,0},w_{0,1},...,w_{0,a_0},b_1,w_{1,0},...,w_{1,a_1},...]
+\end{equation}
+
+where \(X_I\) \(\in\) natural number is a vector that encodes the
+evolutionary part of the ANN, \(X_R\) \(\in\) real numbers is a vector for
+the biases \(b\) and weights \(w\), \(F\) represents functions, \(C\)
+represent the connections and \(O\) represent the terminal nodes.
+
+Based on the dCGPANN, the output of each node in the ANN is expressed
+in equation \ref{eq:org5b424e3} \cite{Martens2019}.
+
+
+\begin{equation}
+\label{eq:org5b424e3}
+  N_i =  F_i ( \sum_{j=0}^{a_i} w_{i,j} C_N_{i,j} + b_i )
+\end{equation}
+
+Where \(N_i\) is the output of the node \(N\) with id \(i\), \(F_i\) is the
+activation function, \(a_i\) is the arity of the node \(i\) which is the
+number of connections to that node, \(C_{i,j}\) is the connection
+between note \(i\) in the current layer and node \(j\) in the previous
+layer and \(b_i\) is the bias associated with the activation function
+\(F_i\) in node \(N_i\). The number of connections to each node, arity, is
+assumed equal by default in all nodes unless it gets defined by a list
+that specifies the number of connections each node should have in a
+particular layer. The arity list is a \{1X\(c\)\} vector that assignes the
+arity of the nodes in each column \(c\).
+
+  \quad The evolutionary operators \(\mu\)\textsubscript{c} and \(\mu\)\textsubscript{a} are applied on the
+\(X_I\) part of the gene that expresses the dCGPANN. \(\mu\)\textsubscript{c} and \(\mu\)\textsubscript{a} are
+fractions to be mutated in active connections gene and active function
+genese respectively. Each mutant goes through a predefined number of
+stochastic gradient descent training epochs during which only \(X_R\) is
+learned, and \(X_I\) is fixed. Algorithm \ref{algo} illustrates the
+steps of how the dCGPANN was operated to optimize the structure of the
+ensemble as well as its weights and biases \(\theta\).
+
+\begin{algorithm}
+\caption{dCGPANN}
+\label{algo}
+\begin{algorithmic}
+\REQUIRE $r$ , $c$ , $n$ , $m$ , $l$ , $a$ , $Kernels$, $epochs$, $cycles$
+\STATE Randomly Initialize N dCGPANNs
+\FOR{dCGPANN in population N}
+\STATE Compute the Loss
+\ENDFOR
+\FOR{j in cycles}
+\STATE Select the best dCGPANN of the previous generation
+\STATE Delete other dCGPANNs
+\FOR{i in population N}
+\STATE{ Mutate the best dCGPANN's functions using $\mu_a$}
+\STATE{Mutate the best dCGPANN's connections using $\mu_c$}
+\FOR{epoch in epochs}
+\STATE Run SGD on dCGPANN_i
+\ENDFOR
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+\subsection{Implementation Details}
+\label{sec:orgb6e1fba}
+\label{org9eea67f}
+
+\quad This section outlines the implementation details and the
+handpicked classifiers' and the dCGPANN's learning
+hyperparameters. Table \ref{tab:orgf5d0082}, \ref{tab:org9721d2f},
+\ref{tab:orgca16f7e} and \ref{tab:orgce17188} tabulate the
+classifiers' hyperparameters used for the first phase of our
+approach. Table \ref{tab:orga3d11d2} lists the the dCGPANN
+hyperparameters used for the ensemble optimization in the second phase
+of the proposed method.  The first stage of the training, multiple
+classifiers with different configurations were trained on the IDC
+dataset. Amongst the trained classifiers, the best four performing
+models were chosing to construct the ensemble. The first model was a
+Resnet50 pretrained on ImagNet which was trained using Transfer
+Learning \cite{He2016a,deng2009imagenet,Long2015}. We froze all
+layers except the last 69 layer which included the last new fully
+connected layer that was adopted to the new binary labels. The
+learning rate (lr) was high due to the fact that most of the
+domain-specific layers were frozen. The second model was also a
+Resnet50 but was trained end-to-end. The third and the fourth models
+were Nasnetlarge and Densenet201 respectively whose training
+parameters are shown in Table \ref{tab:orgca16f7e} and Table
+\ref{tab:orgce17188} \cite{Zoph2018}.
+
+\begin{table}[htbp]
+\caption{\label{tab:orgf5d0082}Hyperparameters for Classifier 1}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & Resnet50 \cite{He2016a}\\
+Training & Transfer Learning using ImagNet weights \cite{deng2009imagenet}\\
+Total params & 23,595,908\\
+trainable residual blocks & 10\\
+trainable conventional blocks & 20\\
+trainable layers & 69\\
+trainable params & 18,605,572\\
+Non-trainable params & 4,990,336\\
+lr & 0.0001\\
+lr scheduler & Cyclic LR  \cite{Smith2017c}\\
+Objective function & Adamax    \cite{Kingma2014}\\
+epochs & 200 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:org9721d2f}Hyperparameters for Classifier 2}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & ResNet50\\
+Training & end-to-end\\
+Total params & 23,595,908\\
+trainable layers & All\\
+trainable params & 23,595,908\\
+lr & 0.0001\\
+lr scheduler & Cyclic LR\\
+Objective function & SGD\\
+epochs & 400 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:orgca16f7e}Hyperparameters for Classifier 3}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & NasNetLarge     \cite{Zoph2018}\\
+Pre-trained & Transfer Learning using ImagNet weights\\
+Total params & 84,932,950\\
+trainable layers & 662\\
+trainable params & 68,365,924\\
+Non-trainable params & 16,567,026\\
+lr & 1e-5\\
+Objective function & Adamax\\
+epochs & 200 with earlystopping\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:orgce17188}Hyperparameters for Classifier 4}
+\centering
+\begin{tabular}{ll}
+hyper-parameter & value\\
+\hline
+Name & DenseNet201 \cite{Zhu2018}\\
+Training & Transfer Learning using ImagNet weights\\
+Total params & 18,329,668\\
+trainable layers & 570\\
+trainable params & 4,705,668\\
+Non-trainable params & 13,624,000\\
+lr & 0.0001\\
+Objective function & Adamax\\
+\end{tabular}
+\end{table}
+\begin{table}[htbp]
+\caption{\label{tab:orga3d11d2}dCGP parameters}
+\centering
+\begin{tabular}{lr}
+Paramter & value\\
+\hline
+r number of rows & 20\\
+c number of columns & 5\\
+m input features & 8\\
+l level-back allowed connections & 2\\
+possible kernels & sig, ReLu, tanh, ELU, ISRU\\
+Basis function arity & [5, 20, 18, 16, 10]\\
+l level-back & 1\\
+population & 7\\
+\(\mu\)\textsubscript{a} & 0.05\\
+\(\mu\)\textsubscript{c} & 0.05\\
+number of iters & 100\\
+number of epochs & 15\\
+active \(w\) & 1088\\
+unique active  \(w\) & 727\\
+active nodes & 83\\
+\end{tabular}
+\end{table}
+
+The possible kernels used for the dCGPANN are the Sig, ReLu, tanh, ELU
+and ISRU functions which are defined by equations \ref{eq:org1eccbe7},
+\ref{eq:orgcfeca2c}, \ref{eq:orga8bd905}, \ref{eq:org8cb936b} and \ref{eq:orgd6885e3} respectively
+\cite{Nwankpa2018,Carlile2017}.
+
+\begin{equation}
+\label{eq:org1eccbe7}
+Sig(x) = \frac{1}{1+\exp(-x)}
+\end{equation}
+\begin{equation}
+\label{eq:orgcfeca2c}
+ReLu(x) = max(0,x) =  
+      \begin{cases} 
+      x_i & if\  x_i\geq 0 \\
+      0 & if\ x_i < 0
+   \end{cases}
+\end{equation} 
+\begin{equation}
+\label{eq:orga8bd905}
+tanh(x) = \frac{\exp(x)-\exp(-x)}{\exp(x)+\exp(-x)}
+\end{equation}
+
+\begin{equation}
+\label{eq:org8cb936b}
+ELU(x) = 
+      \begin{cases} 
+      x & if\  x > 0 \\
+      \alpha \exp(x) -1 & if\ x_i \leq 0
+   \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:orgd6885e3}
+ISRU(x) = x \frac{1}{\sqrt(1 + \alpha x^2)}
+\end{equation}
+
+\section{Experimental Setup and Results}
+\label{sec:orgb57cfe4}
+\label{orgcf28d66}
+\subsection{Dataset and The Experimental Setup}
+\label{sec:orgc41beb1}
+\qquad The dataset contains patches extracted from the whole slides of
+Two hundred seventy-nine patients were diagnosed with IDC. The total
+number of the extracted non-overlapping of 50x50 pixels patches is
+277524, which are labeled into IDC and non-IDC regions. The number of
+patches and the percentage of IDC annotations per patient vary
+significantly; thus, the labels of the images are not equal. Fig
+\ref{fig:org490bbd4} shows the patches and IDC annotation percentage
+histogram. Some visual features distinguish IDC from non-IDC patches,
+such as tissue coloration as shown in Figure \ref{fig:orgbaa1fba} and figure
+\ref{fig:orgfea5648}, which shows negative and positive IDC,
+respectively. Figure \ref{fig:org9122ddb} shows the color maps of annotated
+whole slides, and figure \ref{fig:org8c86a6a} shows a whole slide that was
+reconstructed using the coordinates information provided by the
+dataset. The darker mask points to the IDC regions on the whole slide
+image (WSI).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/datasethists.png}
+\caption{\label{fig:org490bbd4}Dataset Statistics}
+\end{figure}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcnp.png}
+\caption{\label{fig:orgbaa1fba}IDC negative samples}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idcpp.png}
+\caption{\label{fig:orgfea5648}IDC positive samples}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/idccmap.png}
+\caption{\label{fig:org9122ddb}IDC Colormap in a WSI}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{/home/alkhaldieid/Dropbox/third/annotatedWSI.png}
+\caption{\label{fig:org8c86a6a}Reconstructed Annotated WSI}
+\end{figure}
+
+
+
+The dataset was divided into three sets. 70\% of the patients' slides were used as a training dataset, and the remaining patients' slides were
+divided into a validation dataset and a test dataset with 15\%
+of the slides each. Our model and the base models to which our method
+was compared to were implemented using PyTorch, dcgpy and scikit-learn
+\cite{Paszke2019,Izzo2020,pedregosa2011scikit}.
+Our method was compared to three voting strategies. 
+\subsection{Evaluation Metrics}
+\label{sec:org1defb7c}
+The evaluation metrics used for our assessment are the F1-score, the
+Balanced Accuracy and the overall accuracy as defined in equations
+\ref{eq:org277563c}, \ref{eq:org5686ddd} and \ref{eq:orgbe62d93} respectively
+\cite{Duchesnay2019,Javeed2019}.
+\begin{equation}
+\label{eq:org277563c}
+F_1 = \frac{2}{\frac{1}{Recall} + \frac{1}{Precision}} = \frac{2 Precision \times Recall}{Precision+Recall}
+\end{equation}
+Where \(Recall\) and \(Precesion\) are defined in \ref{eq:org1548101} and
+\ref{eq:org803c77e} \cite{Duchesnay2019}.
+\begin{equation}
+\label{eq:org1548101}
+Recall = Sensitivity = \frac{TP}{TP+ FP}
+\end{equation}
+Note that \(TP\) is number of correctly positively classified samples
+and \(FP\) is the incorrectly positively classified ones.
+
+\begin{equation}
+\label{eq:org803c77e}
+Precision = \frac{TP}{TP+ FN}
+\end{equation}
+
+\begin{equation}
+\label{eq:orgbe62d93}
+BAC = \frac{Sensitivity + Specificity}{2}
+\end{equation}
+where Specivity is defined by equation \ref{eq:org25e6002}.
+
+\begin{equation}
+\label{eq:org25e6002}
+Specivity = \frac{TN}{TN+FP}
+\end{equation}
+
+\begin{equation}
+\label{eq:org5686ddd}
+Accuracy = \frac{TP+TN}{TP+TN+FP+FN}
+\end{equation}
+
+\section{Results}
+\label{sec:org660db7b}
+\label{org6f936c0}
+
+\qquad This section shows the results of our experiments. The
+performance of phase 1 trained classifiers as well as the base models
+on the validation set are shown in table \ref{tab:org791899b}.
+\begin{table}[!hbt]
+\caption{\label{tab:org791899b}Performance of various models on the validation set}
+\centering
+\begin{tabular}{lrr}
+\hline
+classifier 1 & Predicted IDC & Predicted Non-IDC\\
+\hline
+actual IDC & 0.904239 & 0.095761\\
+actual Non-IDC & 0.240137 & 0.759863\\
+\hline
+classifier 2 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.920932 & 0.079068\\
+actual Non-IDC & 0.257888 & 0.742112\\
+\hline
+classifier 3 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.931916 & 0.068084\\
+actual Non-IDC & 0.320158 & 0.679842\\
+\hline
+classifier 4 & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+Average Voting & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+Maximum Voting & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.931916 & 0.068084\\
+actual Non-IDC & 0.320158 & 0.679842\\
+\hline
+Random Forest & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.936776 & 0.063224\\
+actual Non-IDC & 0.324413 & 0.675587\\
+\hline
+dCGPANN & Predicted IDC & Predicted Non-IDC\\
+actual IDC & 0.961916 & 0.038084\\
+actual Non-IDC & 0.120158 & 0.879842\\
+\hline
+\end{tabular}
+\end{table}
+
+
+Our method was compared to the weighted voting, the majority voting
+and the random forest tree-based ensemble and the outcomes on the
+held-out test dataset are reported in Table \ref{tab:org379b2da} ,
+\ref{tab:org11ccf81} , \ref{tab:org91ae5fc} and \ref{tab:org8b9c52e}.  The results
+demonstrate a clear advantage of the dCGPANN ensemble over all other
+voting strategies, as shown in table \ref{tab:org8b9c52e}.
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:org379b2da}Performance of the weighted voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.84 & 0.93 & 0.89 & 0.80588 & 0.84\\
+actual cancer & 0.84 & 0.68 & 0.75 &  & \\
+macro avg & 0.84 & 0.81 & 0.82 &  & \\
+weighted avg & 0.84 & 0.84 & 0.84 &  & \\
+\end{tabular}
+\end{table}
+
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:org11ccf81}Performance of the majority voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.84 & 0.93 & 0.89 & 0.805879 & 0.84\\
+actual cancer & 0.84 & 0.68 & 0.75 &  & \\
+macro avg & 0.84 & 0.81 & 0.82 &  & \\
+weighted avg & 0.84 & 0.84 & 0.84 &  & \\
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\caption{\label{tab:org91ae5fc}Performance of the Random Forest voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.87 & 0.90 & 0.89 & 0.8320 & 0.85\\
+actual cancer & 0.81 & 0.76 & 0.78 &  & \\
+macro avg & 0.84 & 0.83 & 0.84 &  & \\
+weighted avg & 0.85 & 0.85 & 0.85 &  & \\
+\end{tabular}
+\end{table}
+
+
+\begin{table}[!hbt]
+\caption{\label{tab:org8b9c52e}Performance of dCGPANN voting on the held-out test dataset}
+\centering
+\begin{tabular}{lrrrrr}
+ & precision & recall & f1-score & BAC & accuracy\\
+\hline
+actual no cancer & 0.96 & 0.94 & 0.95 & 0.87618 & 0.96\\
+actual cancer & 0.93 & 0.88 & 0.93 &  & \\
+macro avg & 0.95 & 0.91 & 0.92 &  & \\
+weighted avg & 0.95 & 0.96 & 0.95 &  & \\
+\end{tabular}
+\end{table}
+
+\begin{table}[!hbt]
+\label{tab:orgf1b74f3}
+\centering
+\begin{tabular}{lll}
+ & F-measure & Balanced accuracy\\
+\hline
+[Cruz-Roa 2014]: & 71.80\%, & 84.23\%\\
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+\section{Conclusion}
+\label{sec:org5ee5c84}
+\label{orge33fb61}
+
+\quad The accuracy of the Deep Learning models is a cornerstone to the
+CAD systems.  It is evident that the advancements of Deep Learning and
+GPUs enabled computers to perform better or at least equal to human
+experts.  Thus, computerized cancer detection can at the very least
+increase the speed of diagnosis.  Our proposed method addresses the
+scarcity of labeled data by implementing a bio-inspired algorithm to
+construct a more reliable ensemble. The ensemble learns the correct
+class based on the misclassifications of the pre-trained models.  The
+differential Cartesian Genetic Programming was used to acquire the
+most optimum ensemble rule to compensate for the insufficient quantity
+of images available for multi-stage training, which is required to
+infer accurate mapping between intricate features and correct
+classes. Due to its cabability to assign weights and biases to ANNs
+and to use SGD for learning them, the dCGPANN proves to be a powerful
+tool to optimize the ensemble topology as well as its hyperparameters.
+The experimental results exceeded previous hyperparameters search
+methods.  Our future research will pay more emphasis on the
+optimization of the hyperparameters of the ensemble network.
+\bibliographystyle{ieeetr}
+\bibliography{../../../../../../home/alkhaldieid/work/res/cited_lib}
+\end{document}
