@@ -183,10 +183,10 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      "-" 'text-scale-decrease
 
      ;; syn layer  keybindings
-     "ss" 'synonyms
-     "sl" 'synosaurus-lookup
-     "sr" 'synosaurus-choose-and-replace
-     "si" 'synosaurus-choose-and-insert
+     ;; "ss" 'synonyms
+     ;; "sl" 'synosaurus-lookup
+     ;; "sr" 'synosaurus-choose-and-replace
+     ;; "si" 'synosaurus-choose-and-insert
      ;; org-recoll keys
      "ps" 'org-recoll-search
      "pu" 'org-recoll-update-index
@@ -297,7 +297,8 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
  #+BEGIN_SRC emacs-lisp :results silent
 
    (evil-leader/set-key-for-mode 'org-mode
-     "e" 'my/org-set-effort-in-pomodoros)
+     "e" 'my/org-set-effort-in-pomodoros
+     "s" 'org-toggle-narrow-to-subtree)
    (defun my/org-set-effort-in-pomodoros (n)
      (interactive "nHow many pomodoros: ")
      (let ((mins-per-pomodoro 50))
