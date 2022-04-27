@@ -15,19 +15,29 @@
 * Motivation and Challenges
 ** Importance of Breast Histological image classification
     * Breast cancer is the most common type of cancer amongst women worldwide
-    * More than 10% of women in the U.S. will be diagnosed with breast cancer 
-    * Microscopic analysis of biopsy is the most accurate diagnosis method
-    * Demands extensive work
-** Importance of Breast Histological image classification
-    * Requires specialized expertise (pathologists)
-    * Time consuming due to scarcity of pathologists
-    * Expensive to hire 
-    * Pathologists often disagree
-** Importance of Breast Histological image classification
- Early diagnosis is important for:
-  - Prognosis
-  - Reducing healthcare costs
+    * leading cause of cancer-related deaths
+    * More than 10% of women in the U.S. will be diagnosed with breast cancer
+    * most prevalent amongst women in the US
+      + 252,000 invasive carcinoma new cases
+      + 63,000 In Situ carcinoma
+      + 40,000 deaths
+      ***_Yearly!_*** [[cite:&Aresta2019]] 
+    * Rare in men
+** Early Diagnosis   
+ *Early diagnosis* is important for:
+  - Reduces Disease Progression
+  - Reduce Morbidity rate, increase survival
+  - Prognosis and treatment plan
   - Better chance of recovery
+  - Reducing healthcare costs
+  - Self check-ups!
+** Importance of Breast Histological image classification
+    * Microscopic analysis of biopsy is the *most accurate* diagnosis method
+    * Demands *extensive* work
+    * Requires *specialized* expertise (pathologists)
+    * *Time consuming* due to *scarcity of pathologists*
+    * Expensive to hire 
+    * Pathologists often *disagree*
 ** Importance of Breast Histological image classification
  * An automated intelligent approach is needed to compensate for the time delay of analysis caused by the insufficient number of pathologists 
  * The aim of histology image classification methods is to identify abnormalities in the specimens' structures and specify their carcinogenic level
@@ -75,7 +85,8 @@
     + Ensemble training
    The meta-training is composed of three stages:
       + Preprocessing
-      + Transfer Learning
+      + GA block
+      + Transfer Learning and one cycle policy
 ** Preprocessing
    + The aim of preprocessing is to augment the dataset
    + The histological datasets are usually small due to the lack of data
@@ -86,7 +97,6 @@
      * vertical/horizontal flipping
    + Resizeing and cropping to a lower resoluiton
    + Normalization
-* Transfer Learning
 ** Introduction 
    + Transfer Learning is the process of re-utilization of models' weights that were trained on benchmark datasets such as ImageNet
      * More reliable, robust and accurate than end-to-end
@@ -103,34 +113,37 @@
 | gaussian_dropout         | (None, 2048) |                 0 |
 | dense                    | (None, 4)    |              8196 |
 ** Gaussian Dropout
++ Why?
++ restricts the classifier from learning the irrelevant particularities of an image
+  + standard dropout Blocking several units from firing during the feedforward and the backpropagation steps of training
+  + Gaussian Dropout is a combination of dropout at percentage = $rate$ and Gaussian noise addition with $mean$ = 1 and std described in [[eqn:gaus]].
+  + to avoid weight scaling during testing
+#+NAME: eqn:gaus 
  \begin{equation} \label{gaus} \sigma _(gaussian)= \sqrt{rate/(1 - rate)}
    \end{equation} 
    Where /rate/ denotes the user control parameter
-   and \(\sigma _(gaussian)\) refers the dropout gaussian standard deviation
-+ Why?
-  +  Blocking several units from firing during the feedforward and the backpropagation steps of training
-+ restricts the classifier from learning the irrelevant particularities of an image
- 
+   and \(\sigma _(gaussian)\) refers the dropout Gaussian std
 ** Learning Rate Scheduler
      Why LRS?
      + Aims to minimize the cost function
      + Avoids saddle points in the search spaces which are common in high dimensional problems when LR is too small
      + However, over-increasing the LR will cause fluctuations with high spikes as shown in figure [[fig:LR]]
-** Cyclical Learning Rates
-#+NAME: fig:LR
-#+ATTR_LATEX: :center :width 12cm :height 4cm
-#+CAPTION: High spikes of validiation loss and accuracy curves over exponential cyclical learning rate in a single epoch in ResNet50 with freeze layer = 141 and a batch size = 32. The learning rate with the lowest validation loss at lr = 0.05 is chosen as the base lr for the full training.
-[[/home/alkhaldieid/Dropbox/finalV/diagrams/first/cyc.png]]
 ** One Cycle Policy
 Triangular Cyclical Learning Rates and illustrated by smith in figure [[fig:tri]]. 
 #+NAME: fig:tri
 #+Caption: Smith's Triangular Cyclical Learning Rates Method.
 [[~/repos/writings/proposal/paper/second_draft/tri.png]]
+** Cyclical Learning Rates
+#+NAME: fig:LR
+#+ATTR_LATEX: :center :width 12cm :height 4cm
+#+CAPTION: High spikes of validiation loss and accuracy curves over exponential cyclical learning rate in a single epoch in ResNet50 with freeze layer = 141 and a batch size = 32. The learning rate with the lowest validation loss at lr = 0.05 is chosen as the base lr for the full training.
+[[/home/alkhaldieid/Dropbox/finalV/diagrams/first/cyc.png]]
 
 ** GA for optimum freeze layer selection
     + The objective of implementing the genetic algorithm is to evolve the solutions to the fittest task-specific layer 
     + GA is an optimization method inspired by simulating the natural selection through crossover and mutation cite:Singh2018
-    + The possible layers can't be batch normalizaiton layers or the first 20% of layers
+    + The possible layers can't be batch normalizaiton layers
+#    + or the first 20% of layers
     + Each possible layer is encoded by a binary chromosome
     + After calculating the initial population fitnesses, the fittest layers are chosen for crossover at a predefined crossover probability Pc to produce better offsprings in the next generation.
     + All layers, except BN, are frozen upto the decoded layer
@@ -140,6 +153,23 @@ Triangular Cyclical Learning Rates and illustrated by smith in figure [[fig:tri]
     + The cross-entropy loss is then calculated on the validation dataset
     + The fittest model is then trained thoroughly with higher resultion images
 #    + The proposed method Flowchart is shown in figure [[fig:meta]].
+** GA Steps
+1. Population and empty best solution chromosome and cost Initialization
+2. Calculate cost for each chromosome and *cache*
+3. update best solution and best cost
+4. Parent Selection by Roulette Wheel
+5. Crossover & Mutate offsprings
+6. Combine Off-springs with selected parents
+7. sort costs with ascending order
+8. Eliminate chromosomes with highest cost
+9. Criterion met? --> terminate, else: go to 3
+** Objective Function
+1. Check if chromosome is cached
+2. decode chromosome
+3. freeze layers up to the decoded chromosome
+4. pick LR based on one cycle policy [[cite:&smith2018]]
+5. train for a few epochs on low resolution images
+6. Cost = categorical cross-entropy over the validation set
 ** The Flowchart of the meta-training phase                       :noexport:
 #+NAME: fig:meta
 #+ATTR_LATEX: :width 12cm :height 6.5cm
@@ -153,25 +183,30 @@ Triangular Cyclical Learning Rates and illustrated by smith in figure [[fig:tri]
 #+CAPTION: Xception network with GA block converges with a small number of epochs
 #+ATTR_LATEX: :width 12cm :height 5.5cm
 [[~/Dropbox/finalV/diagrams/first/xcepGA.png]] 
-** Confusion Matrices of the best performing models.
+** Confusion Matrices of the best performing models.              :noexport:
 
 #+NAME: fig:confs
 #+CAPTION: Error Type Visualization aim to choose hetrogenous models using the confusion matrix
 #+ATTR_LATEX: :width 0.45\textwidth
 [[~/Dropbox/proposal/presentation/lab/confs.png]]
 
-* Full Training
-** Ensemble 
+** Full Training of Ensemble 
    + 4 of the best performing models heterogeneous models are chosen based on their accuracy and misclassifications diversity
    + The predictions are stacked horizontally by a flat layer and densely connected to the labels
    + the weights are then trained on the holdout dataset with a much higher resolution 
 
-* Experimental Setup
-** Dataset
-The images are classified according to their predominant cancer type into 4 classes:
-   
-#+NAME: tbl:bach
+* Experimental Setup and Results
+** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
+     - ICIAR 2018 dataset
+     - The histology patches dataset consist of 400 labeled training images 
+     - 2048 x 1536 pixels resolution
+     - cancerous classes of the images is uniform distribution, as shown in Table [[tbl:bach]]
+     - Highly experienced medical specialists classified the images
+     - Classes are shown in Table [[tbl:bach]].
+** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
 #+CAPTION: BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
+#+NAME: tbl:bach
+The images are classified according to their predominant cancer type into 4 classes:
 +--------+--------+---------+----------+
 |   Non-carcinoma |    Carcinoma       |
 +--------+--------+---------+----------+
@@ -179,6 +214,12 @@ The images are classified according to their predominant cancer type into 4 clas
 +--------+--------+---------+----------+
 | 100    |   100  |  100    |  100     | 
 +--------+--------+---------+----------+
+Unlabeled test images = 100
+** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
+#+NAME:   fig:dataset
+#+ATTR_LATEX: :width 12cm :height 5cm
+#+CAPTION: Benign, InSitu, Invasive and Normal H&E stained breast samples (from top left to bottom right)
+[[/home/alkhaldieid/Dropbox/second_final/data.png]]
 ** For training
 #+NAME: tbl:dataset
 #+CAPTION: The Distribution of the ICIAR Dataset 
@@ -187,7 +228,7 @@ The images are classified according to their predominant cancer type into 4 clas
 | Train         |     90 |     90 |     90 |       90 |
 | validation    |      5 |      5 |      5 |        5 |
 | Held-out test |      5 |      5 |      5 |        5 |
-| Test          |     25 |     25 |     25 |       25 |
+Test = 100 unlabeled
 ** Models The constructed the ensemble
 #+NAME: tbl:gamodels
 #+CAPTION: The models used to construct the ensemble.
@@ -213,7 +254,7 @@ Precision = \frac{TP}{TP+ FN}
 
 #+NAME: eq:recall1
 \begin{equation}
-Precision = \frac{TP}{TP+ FN}
+Recall = \frac{TP}{TP+ FN}
 \end{equation}
 
 ** Evaluation Metrics
@@ -222,9 +263,9 @@ Precision = \frac{TP}{TP+ FN}
    F1 score = 2 \times \frac{Precision \times Recall}{(Precision + Recall)}
    \end{equation}
    * log-loss: the cross-entropy loss, which is the negative log-likelihood of the class labels given predictions [[cite:&Duchesnay2019]]
-   * Macro-average: is the sum of each class' precision divided by the number of classes.
-   * Micro-average: is the sum of the true positives of all classes divided by the number of samples.
-   * Area under the ROC curve.
+#   * Macro-average: is the sum of each class' precision divided by the number of classes.
+#   * Micro-average: is the sum of the true positives of all classes divided by the number of samples.
+#   * Area under the ROC curve.
 
 ** Results
 
@@ -259,8 +300,8 @@ Precision = \frac{TP}{TP+ FN}
 #+NAME: tab:prpcr2
 #+CAPTION: Evaluation of The Proposed Method Compared to Maximum and Average voting
 | Eval. /method                |      Proposed |   Max. |   Avg. |
-| Probabilities auc roc        |        0.9994 |    1.0 | 0.9934 |
-| Labels auc roc               |       0.95556 | 0.8833 |   0.95 |
+# | Probabilities auc roc        |        0.9994 |    1.0 | 0.9934 |
+# | Labels auc roc               |       0.95556 | 0.8833 |   0.95 |
 | Labels accuracy              |         0.933 |  0.825 |  0.925 |
 | Probabilities precision      |        0.9985 |   0.94 |  0.988 |
 | Labels precision             |        0.8946 |  0.760 |  0.883 |
@@ -293,9 +334,15 @@ Majority and Maximum voting
 | global_average_pooling2d | (None, 2048) |                 0 |
 | gaussian_dropout         | (None, 2048) |                 0 |
 | dense                    | (None, 4)    |              8196 |
- * RandAugment for data augmentation
-   * why Rand-Augment?
  * One Policy Strategy to find proper initial LR
+
+** Rand-Augment
+ * RandAugment for data augmentation
+   * randomly select $m$ number of augmentation operators to apply sequentially
+ * why Rand-Augment?
+   * simple
+   * computationally efficient (no need to search for policy)
+   * reported to yield better performance than deterministic or learned policies [[cite:&Cubuk2019a]].
 ** PSO
    + Bio-inspired Computational algorithms proved to be very efficient in solving optimization problems
    + Particle Swarm Optimization (PSO) is one of the most popular techniques used in NP hard problems and optimization methods for non-convex search-space
@@ -319,6 +366,12 @@ Majority and Maximum voting
     3. The $W1$ vector holds the [1x128] weights that connects the input layer to the hidden layer.
     4. $W2$ contains the weights connecting the hidden layer to the output.
     5. The output of the hidden layer is the output $a1$ of the hyperbolic tan applied on the logits  vector defined in equation [[eqn:tanh]]. 
+
+** PSO particle
+#+NAME:  fig:pso_nn 
+#+ATTR_LATEX: :width 0.3\textwidth
+#+CAPTION: The proposed NN that combine the predictions of the four models to the final prediction
+[[~/Dropbox/proposal/presentation/lab/psoNN.png]]
 
 ** NN encoding for PSO
 #+NAME: eqn:tanh
@@ -351,12 +404,6 @@ The proposed NN is shown in Figure [[fig:pso_nn]].
 \begin{equation}
   Loss = - \sum_{i=1}^N \sum_{j=1}^C y_{i,j} \times \log \hat{y_{i,j}}
 \end{equation}
-** PSO particle
-#+NAME:  fig:pso_nn 
-#+ATTR_LATEX: :width 0.3\textwidth
-#+CAPTION: The proposed NN that combine the predictions of the four models to the final prediction
-[[~/Dropbox/proposal/presentation/lab/psoNN.png]]
-
  
    
 ** PSO Velocity and Position update
@@ -401,6 +448,7 @@ The velocity and the position of the particle are each updated based on the equa
    * A fuzzy set is a set whose elements have a degree of association to one or more fuzzy classes
 * Mamdani FIS steps
 ** fuzzification of the inputs and the outputs
+Triangular membership function [[cite:&Singh2018]] 
       \begin{equation}
       \begin{gathered}[b]
 	  \mu(x,a,b,c) = \max(\min(\frac{x-a}{b-a},\frac{c-x}{c-b}),0)
@@ -480,8 +528,8 @@ The crisp output of the FIS is calculated using equation [[eqn:gravity]].
 #+ATTR_LATEX: :center t :placement [H]
 | Eval. metric      | Proposed |   Avg. |
 |-------------------+----------+--------|
-| P. AUC ROC        |   0.9983 | 0.9934 |
-| L. AUC ROC        |    0.966 |   0.95 |
+# | P. AUC ROC        |   0.9983 | 0.9934 |
+# | L. AUC ROC        |    0.966 |   0.95 |
 | L. accuracy       |    0.951 |  0.925 |
 | P. precision      |     0.99 |  0.988 |
 | L. precision      |   0.9033 |  0.883 |
@@ -529,13 +577,42 @@ The crisp output of the FIS is calculated using equation [[eqn:gravity]].
 *** Stage 2
    1. The classifiers' predictions of the 5000 images are used to train the stacked ensemble using dCGPANN.
    2. the inputs of the dCGPANN is [8x1] vector which is the output of the individual models
+   3. The outputs of the ANN is the ensemble final output with two labels
 
-** Cartesian Genetic Programming
+** Cartesian Genetic Programming                                  :noexport:
  * The predictions of the 5000 images are used to train the stacked ensemble using CGP
  * CGP inputs are a 16x1 vector
- * The solutions are then evolved using crossover and mutation operators based on predefined parameters.
+ * The solutions are then evolved using crossover and mutation operators based on predefined parameters
+* Experimental Setup
+** Dataset 2 IDC
+ * Extracted from 279 patients
+ * 277524 non-overlapping 50x50 patches
+ * Binary Classes
+** Dataset 2 IDC statistics
+#+CAPTION: Dataset Statistics
+#+LABEL: fig:bhistats
+ [[~/Dropbox/third/datasethists.png]]
+  
+** Dataset 2 IDC Positive Samples
+#+CAPTION: IDC positive samples 
+#+LABEL: fig:idcpp
+[[~/Dropbox/third/idcpp.png]]
+** Dataset 2 IDC Negative Samples
+#+CAPTION: IDC negative samples 
+#+LABEL: fig:idcnp
+[[~/Dropbox/third/idcnp.png]]
+** IDC Colormap in a WSI
+#+CAPTION: IDC Colormap in a WSI
+#+LABEL: fig:idccmap
+#+ATTR_LATEX: :width 10cm :height 5cm
+[[~/Dropbox/third/idccmap.png]]
+** Reconstructed Annotated WSI
+#+CAPTION: Reconstructed Annotated WSI
+#+LABEL: fig:idcrec
+#+ATTR_LATEX: :width 10cm :height 5cm
+[[~/Dropbox/third/annotatedWSI.png]]
 * Ensemble Optimization Using CSA
-** Immunecomputing  
+** Immune computing
    - Colonal Selection Algorithm is bio-inspired by the immune systems in mammals
    - Immune systems has the capacity to identify harmful infected cells (antigens)
    - In response, the immune system produces antibodies to fight antigens
@@ -554,8 +631,17 @@ The crisp output of the FIS is calculated using equation [[eqn:gravity]].
      + number of Convolutional layers
      + number of epochs
      + batch size
-     + Type of optimizers
-** rephrase                                                        :noexport:
+     + Type of optimizes
+** CSA steps
+1. Initialize Antigen
+2. Initialize Antibody
+3. Affinity calculation
+4. Select a number of Antibodies
+5. Clone and Mutate
+6. Choose the best antibody
+7. criterion met? terminate, else go to 1  [[cite:&Bataineh2019]] 
+
+** rephrase                                                       :noexport:
    - The inspiration of natural biological systems is frequently used as a source to solve engineering problems in different domains
    - proposed several different artificial immune models inspired by biological immune system to find global optima for various real-world applications.
    - The human body’s immune system can identify foreign cells that invade the human body, which can be harmful and can cause infections or diseases. These foreign cells are known as Antigens
@@ -568,12 +654,12 @@ The crisp output of the FIS is calculated using equation [[eqn:gravity]].
    - The final antibody is the solution and provides the structure of CNN in terms of hyperparameters. 
 * dCGPANN template                                                 :noexport:
 ** DONE Introduce the use of EA in ensemble optimizatino
-** Introduce the GP
+** CANCELLED Introduce the GP
 ** Introduce CGP
 ** Introduce the dCGP and how it is different that standard CGP
-** include the the dCGPANN algorithm
+** DONE include the the dCGPANN algorithm
 * Experimental Setup
-** Evaluation Metrics
+** Evaluation Metrics                                             :noexport:
       <<first:eval>>
    
        + Accuracy:  the rate of correct predictions to the total number of samples [[cite:&Duchesnay2019;&Javeed2019]].
@@ -597,30 +683,7 @@ The crisp output of the FIS is calculated using equation [[eqn:gravity]].
       \end{equation}
        +  log-loss: the cross-entropy loss, which is the negative log-likelihood of the class labels given predictions [[cite:&Duchesnay2019;&Javeed2019]]
        + The area under the ROC curve
-** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
-     - ICIAR 2018 dataset
-     - The histology patches dataset consist of 400 labeled training images 
-     - 2048 x 1536 pixels resolution
-     - cancerous classes of the images is uniform distribution, as shown in Table [[tab:dataset]]
-     - Highly experienced medical specialists classified the images
-     - Classes are shown in Table [[tbl:bach]].
-** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
-#+CAPTION: BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
-#+LABEL: tbl:bach
-+--------+--------+---------+----------+
-|   Non-carcinoma |    Carcinoma       |
-+--------+--------+---------+----------+
-| Normal | Benign | In Situ | Invasive |
-+--------+--------+---------+----------+
-| 100    |   100  |  100    |  100     | 
-+--------+--------+---------+----------+
-Unlabeled test images = 100
-** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
-#+NAME:   fig:dataset
-#+ATTR_LATEX: :width 12cm :height 5cm
-#+CAPTION: Benign, InSitu, Invasive and Normal H&E stained breast samples (from top left to bottom right)
-[[/home/alkhaldieid/Dropbox/second_final/data.png]]
-** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images
+** Dataset 1 BACH: ICIAR 2018 Grand Challenge on *BreAst Cancer Histology* images :noexport:
 #+CAPTION: The Distribution of the ICIAR Dataset in our Study.
 #+NAME: tab:dataset
 | Type          | Normal | Benign | InSitu | Invasive |
@@ -628,23 +691,6 @@ Unlabeled test images = 100
 | validation    |      5 |      5 |      5 |        5 |
 | Held-out test |      5 |      5 |      5 |        5 |
 | Test          |     25 |     25 |     25 |       25 |
-** Dataset 2 IDC
- * Extracted from 279 patients
- * 277524 non-overlapping 50x50 patches
- * Binary Classes
-** Dataset 2 IDC statistics
-#+CAPTION: Dataset Statistics
-#+LABEL: fig:bhistats
- [[~/Dropbox/third/datasethists.png]]
-  
-** Dataset 2 IDC Positive Samples
-#+CAPTION: IDC positive samples 
-#+LABEL: fig:idcpp
-[[~/Dropbox/third/idcpp.png]]
-** Dataset 2 IDC Negative Samples
-#+CAPTION: IDC negative samples 
-#+LABEL: fig:idcnp
-[[~/Dropbox/third/idcnp.png]]
 ** Hardware and Software
  * The experiments are run on:
    - NVIDIA Geo-Force RTX 2080 GPU
@@ -658,16 +704,6 @@ Unlabeled test images = 100
    - PySwarm
    - Artix Linux
    - NEAT
-*** rephrase                                                       :noexport:
-The GA begins by creating a random population of weight distribution vectors. The evaluation of
-each population member is done by evaluating the corresponding meta-classifier created by
-using its weight distribution vector on the holdout subset. The fitness of each member is then
-calculated to be the prediction accuracy of that meta-classifier on the holdout subset. Using the
-fitness of each population member, the GA then performs the tournament selection to select
-members for the next generation. It then applies the crossover and mutation operators to create a
-new generation of weight distribution vectors. The above process is repeated for 3000
-generations, and the best weight distribution vector from its final population is selected to create
-the meta-classifier. cite:Sikora2016 
 * Suggested Dissertation Outline
 
 #+CAPTION: The anticipated dissertation contents part 1
@@ -694,13 +730,15 @@ the meta-classifier. cite:Sikora2016
 |---------+----------------------------------------------|
                                                        
 ** Dissertation-related Research Publications
-     [1] Alkhaldi, E. & Salari, E. (2019) Genetically Optimized
+     [1] Alkhaldi, E. & Salari, E. (2019) "Genetically Optimized
      Heterogeneous Ensemble for Histological Image
-     Classification. International Journal of Science and
+     Classification". International Journal of Science and
      Engineering Investigations (IJSEI), 8(95), 113-118.
 
      [2] E. Alkhaldi and E. Salari, “Adaptive PSO-Based Ensemble Optimization for Histology
      Image Classification,”. International Journal of Computer Science and Technology (IJCST), vol. 8491, pp. 26–34, 2021.
+
+     [3] (Under review) Alkhaldi, E. & E. Salari (2022) "Ensemble Optimization for IDC Classification Using Differential Cartesian Genetic Programming" 
 * Academic Progress and Research Timeline                          :noexport:
 ** GANTT Chart
 #+CAPTION: 2017-2018 GANNT Chart

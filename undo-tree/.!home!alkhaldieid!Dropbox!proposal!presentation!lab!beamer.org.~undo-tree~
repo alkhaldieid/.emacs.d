@@ -1,5 +1,5 @@
 (undo-tree-save-format-version . 1)
-"47d111a42e112a2666cda5bda86fe2b457dfb1a6"
-[nil nil nil nil (25193 11025 465585 13000) 0 nil]
-([nil current ((1 . 37183) (t . 0)) nil (25193 11025 465578 471000) 0 nil])
+"f708ee810b15c7d3b2d5164074a9153e3729a7fb"
+[nil nil nil nil (25193 23057 499696 749000) 0 nil]
+([nil current ((1 . 36864) (t . 0)) nil (25193 23057 499690 337000) 0 nil])
 nil
