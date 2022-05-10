@@ -1,0 +1,14 @@
+
+*Abstract* <<third:abstract>>
+
+\qquad The high cost of acquiring annotated histological slides for breast specimens entails exploiting an ensemble of models appropriately trained on small datasets.  
+Histological Image Classification ensembles strive to accurately detect abnormal tissues in the breast samples by determining the correlation between the predictions of its weak learners.  
+Nonetheless, the state-of-the-art ensemble methods, such as boosting and bagging, count merely on manipulating the dataset and lack intelligent ensemble decision making.  
+Furthermore, the methods mentioned above are short of the diversity of the weak models of the ensemble.  
+Likewise, other commonly used voting strategies, such as weighted averaging, are limited to how the classifiers' diversity and accuracy are balanced.
+Hence, In this paper, we assemble a Neural Network ensemble that integrates the models trained on small datasets by employing biologically-inspired methods.  
+Our procedure comprises two stages.
+First, we train multiple heterogeneous pre-trained models on the benchmark Breast Histopathology Images for Invasive Ductal Carcinoma (IDC) classification dataset.  
+In the second meta-training phase, we utilize the differential Cartesian Genetic Programming to generate a Neural Network that merges the trained models optimally.  
+We compared the empirical outcomes with additional state-of-the-art techniques.
+Our results demonstrate that improvising a Neural Network ensemble using Cartesian Genetic Programming transcended formerly published algorithms on slim datasets.

@@ -522,6 +522,11 @@ Things I want flyspell to do automatically:
    :init
    (yas-global-mode 1))
  #+END_SRC
+** line numbers
+#+BEGIN_SRC emacs-lisp :results silent
+
+(setq display-line-numbers-type 'relative)
+#+END_SRC
 * Editor Related Configurations
 ** auto-save and backup files
    To avoid cluttering directories you work on with FILENAME~ files, save your auto-save, backup and undo-tree files in specific directories.
