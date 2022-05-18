@@ -253,7 +253,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      ;; "owpp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
      "owpp" '(lambda() (interactive) (find-file "~/repos/writings/proposal/paper/second_draft/paper.org"))
      "owps" '(lambda() (interactive) (find-file "~/Dropbox/proposal/presentation/lab/beamer.org"))
-     "owc" '(lambda() (interactive) (find-file "~/Dropbox/conference/paper.org"))
+     "owc" '(lambda() (interactive) (find-file "~/repos/cv/cv.tex"))
      "owa" '(lambda() (interactive) (find-file
 				     "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
      "owd" '(lambda() (interactive) (find-file
@@ -415,12 +415,16 @@ installed them through melpa
 
 *** latex classes
       #+begin_src emacs-lisp :results silent
-	(add-to-list 'org-latex-classes
-		       '("draft"
-			 "\\documentclass[12pt]{report}"
-			 ("\\chapter{%s}" . "\\chapter*{%s}")
-			 ("\\section{%s}" . "\\section*{%s}")
-			 ("\\subsection{%s}" . "\\subsection*{%s}")))
+        (add-to-list 'org-latex-classes
+                       '("draft"
+                         "\\documentclass[12pt]{report}"
+                         ("\\chapter{%s}" . "\\chapter*{%s}")
+                         ("\\section{%s}" . "\\section*{%s}")
+                         ("\\subsection{%s}" . "\\subsection*{%s}"))
+                       '("lukecv"
+                         "\documentclass[letterpaper,%twocolumn,10pt]{article}")
+                       '("ieee"
+		 
       #+end_src
 *** LaTex export process
     #+BEGIN_SRC emacs-lisp
