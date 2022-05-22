@@ -13,7 +13,7 @@
  '(global-company-mode t)
  '(org-agenda-files '("~/repos/org/agenda/monthly.org"))
  '(package-selected-packages
-   '(flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))
+   '(auctex flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

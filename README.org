@@ -422,9 +422,14 @@ installed them through melpa
                          ("\\section{%s}" . "\\section*{%s}")
                          ("\\subsection{%s}" . "\\subsection*{%s}"))
                        '("lukecv"
-                         "\documentclass[letterpaper,%twocolumn,10pt]{article}")
-                       '("ieee"
-		 
+                         "\documentclass[letterpaper,%twocolumn,10pt]{article}"))
+
+        (add-to-list 'org-latex-classes
+                       '("ieeeaccess"
+                         "\\documentclass{ieeeaccess}"
+                         ("\\chapter{%s}" . "\\chapter*{%s}")
+                         ("\\section{%s}" . "\\section*{%s}")
+                         ("\\subsection{%s}" . "\\subsection*{%s}")))
       #+end_src
 *** LaTex export process
     #+BEGIN_SRC emacs-lisp

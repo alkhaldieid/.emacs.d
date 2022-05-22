@@ -1,5 +1,5 @@
 (undo-tree-save-format-version . 1)
-"35015a1eb26b9686d0f6a762bbaf3c598eabe138"
+"64eafb6300cee137053c5d87c2d9e3539b1ff36a"
 [nil nil nil nil (25152 19077 767153 651000) 0 nil]
 ([nil nil ((744 . 983) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -384,7 +384,7 @@
  '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
  '(package-selected-packages
    '(lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 1077 (fontified nil)) . -1) (t 25181 5291 94500 116000)) nil (25181 5344 187218 25000) 0 nil])
-([nil current ((1105 . 1459) (#("(custom-set-faces
+([nil nil ((1105 . 1459) (#("(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
@@ -409,4 +409,29 @@
  '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
  '(package-selected-packages
    '(elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 1082 (fontified nil)) . -1) (t 25181 5344 244497 794000)) nil (25182 14072 541638 763000) 0 nil])
+([nil current ((1112 . 1466) (#("(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family \"Source Code Pro\" :foundry \"ADBO\" :slant normal :weight normal :height 103 :width normal)))))" 0 354 (fontified nil)) . -1112) (1109 . 1111) (#("
+" 0 1 (fontified nil)) . -1109) (769 . 1110) (#(" " 0 1 (fontified nil)) . 769) (624 . 770) (#("
+" 0 1 (fontified nil)) . -624) (476 . 625) (#(" " 0 1 (fontified nil)) . 476) (453 . 477) (#("
+" 0 1 (fontified nil)) . -453) (368 . 454) (#(" " 0 1 (fontified nil)) . 368) (340 . 369) (#("
+" 0 1 (fontified nil)) . -340) (272 . 341) (#(" " 0 1 (fontified nil)) . 272) (1 . 273) (#("(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   [\"black\" \"red3\" \"ForestGreen\" \"yellow3\" \"blue\" \"magenta3\" \"DeepSkyBlue\" \"gray50\"])
+ '(custom-safe-themes
+   '(\"aba75724c5d4d0ec0de949694bce5ce6416c132bb031d4e7ac1c4f2dbdd3d580\" \"67f0f440afa2e68d9d00219b5a56308761af45832fb60769d2b2fd36e3fead45\" default))
+ '(evil-undo-system 'undo-tree)
+ '(global-company-mode t)
+ '(org-agenda-files '(\"~/repos/org/agenda/monthly.org\"))
+ '(package-selected-packages
+   '(flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))" 0 1103 (fontified nil)) . -1) (t 25182 14072 587935 602000)) nil (25223 47604 406162 235000) 0 nil])
 nil
