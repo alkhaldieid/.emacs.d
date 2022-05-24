@@ -269,6 +269,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
      "oat" '(lambda() (interactive) (find-file "~/repos/org/agenda/TODOs.org"))
      "oam" '(lambda() (interactive) (find-file "~/repos/org/agenda/monthly.org"))
+     "oay" '(lambda() (interactive) (find-file "~/repos/org/agenda/yearly.org"))
      "oar" '(lambda() (interactive) (find-file "~/repos/org/agenda/research.org"))
 
      ;; cf files
@@ -571,7 +572,6 @@ Things I want flyspell to do automatically:
   (load-theme 'leuven)
   (set-scroll-bar-mode nil)
 #+END_SRC
-
 ** Org-babel
 #+BEGIN_SRC emacs-lisp :results silent
   (unless (package-installed-p 'ob-ipython)
