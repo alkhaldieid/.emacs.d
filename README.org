@@ -311,8 +311,9 @@ There are several things that I need in my writing workflow.
 ** DONE A reliable note taking system that binds the notes files to the pdfs automatically. > org-roam
 ** DONE Reliable org-latex-export and \LaTeX settings
 ** DONE translation and synonyms finding at point
-** TODO spell-checking and grammar correction
-** [#A] Handling bibliographies
+** DONE spell-checking 
+** TODO grammar correction
+** DONE [#A] Handling bibliographies
 *** Org-ref
  Package-Requires: ((org "9.4") (dash "0") (s "0") (f "0") (htmlize "0") (hydra "0") (avy "0") (parsebib "0") (bibtex-completion "0") (citeproc "0"))
 installed them through melpa
@@ -371,7 +372,7 @@ installed them through melpa
 	org-ref-cite-onclick-function (lambda (_) (org-ref-citation-hydra/body)))
 
 #+end_src
-** [#A] Taking Notes
+** DONE [#A] Taking Notes
 *** Org-Roam-Mode
 #+begin_src emacs-lisp :results silent
 (use-package org-roam
@@ -397,7 +398,7 @@ installed them through melpa
   (use-package org-roam-bibtex
     :ensure t)
 #+END_SRC
-** search notes
+** DONE search notes
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package deft
     :ensure t)
@@ -515,7 +516,6 @@ Things I want flyspell to do automatically:
      (add-hook 'org-mode-hook 'org-indent-mode)
      (add-hook 'org-mode-hook 'evil-org-mode)
    #+END_SRC
-
 * Misc less important comfy stuff
 ** try
    #+begin_src emacs-lisp
@@ -534,7 +534,6 @@ Things I want flyspell to do automatically:
  #+END_SRC
 ** line numbers
 #+BEGIN_SRC emacs-lisp :results silent
-
 (setq display-line-numbers-type 'relative)
 #+END_SRC
 * Editor Related Configurations
@@ -600,7 +599,7 @@ Things I want flyspell to do automatically:
                                 ))
 #+END_SRC
 
-* Magit
+* TODO Magit
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package magit
     :ensure t)
@@ -624,6 +623,11 @@ Things I want flyspell to do automatically:
     (global-company-mode)
   #+END_SRC
 
+  
+* Merge Python
+Merge the old python configs with the new one gradually.
+The main functionalities I need in the Python section is as follow:
+1. 
 * Python old
 ** pyenv
 #+BEGIN_SRC emacs-lisp :results silent
@@ -865,3 +869,33 @@ Things I want flyspell to do automatically:
 
 #+RESULTS:
 : lsp-find-definition
+
+* Dmenu 
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq dmenu-cfg " | dmenu -i -l 20 -p .")
+  (defun dmenu-ag ()
+    (interactive)
+
+    (setq my_shell_output (shell-command-to-string (concat "ag . " dmenu-cfg)))
+    (setq splitted (split-string my_shell_output ":"))
+
+    (when (> (length splitted) 1)
+      (find-file (car splitted))
+      (goto-line (string-to-number (nth 1 splitted)))))
+  (defun dmenu-find-file (&optional dir)
+    (interactive)
+
+    (setq command (concat "ls -a" dmenu-cfg))
+    (setq output (shell-command-to-string command))
+
+    (when (> (length output) 1)
+      (find-file (substring output 0 -1))))
+
+  (defun dmenu-switch-buffer (&optional dir)
+    (interactive)
+
+    (setq command (concat (format "%s" (buffer-list)) dmenu-cfg))
+    (setq splitted (split-string my_shell_output ":"))
+
+    (message command))
+#+END_SRC
