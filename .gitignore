@@ -7,5 +7,5 @@ README.org~
 init.el~
 org-roam.db
 \#.gitignore#
-undo-tree/*
-auto-save-list/*
+undo-tree/
+auto-save-list/
