@@ -1,5 +1,0 @@
-(undo-tree-save-format-version . 1)
-"4e1b465d71b1fae622fccedaa3cff62eca435a97"
-[nil nil nil nil (25158 62857 292143 996000) 0 nil]
-([nil current ((79 . 87) (#("over" 0 4 (fontified t line-prefix "" wrap-prefix "" font-lock-fontified t face org-meta-line)) . -79) (undo-tree-id0 . -4) (undo-tree-id1 . -4) 83 (79 . 83) (70 . 79) (#("STA" 0 3 (fontified t line-prefix "" wrap-prefix "" font-lock-fontified t face org-meta-line)) . -70) (undo-tree-id2 . -3) (undo-tree-id3 . -3) 73 (68 . 73) (68 . 69) 70 (t 25055 45424 523584 49000)) nil (25158 62857 292136 983000) 0 nil])
-nil

@@ -1,5 +1,0 @@
-(undo-tree-save-format-version . 1)
-"cb40db1708b38c86bed92a9733b27b78811c21e2"
-[nil current nil nil (25154 47038 126577 42000) 0 nil]
-([nil nil ((2623 . 2625) (#("ranger" 0 6 (fontified t)) . 2623) (t 25125 49513 780363 587000)) ((2623 . 2629) (#("lf" 0 2 (fontified t)) . 2623) (undo-tree-id0 . -1) (undo-tree-id1 . -1) (undo-tree-id2 . -1) (t 25154 47028 411198 983000)) (25154 47028 370970 925000) 0 nil])
-nil

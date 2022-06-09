@@ -7,7 +7,11 @@ README.org~
 init.el~
 org-roam.db
 \#.gitignore#
-undo-tree/
+undo-tree/*
 auto-save-list/
 backups/
 elpa/
+elpy/
+[00;39m#s(lsp-session ("/home/alkhaldieid/repos/csa" "/home/alkhaldieid/repos/investments" "/home/alkhaldieid/repos/yarpiz/YPGA191215/Python") nil #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ()) #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ()) #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ()))
+eshell/
+.lsp-session-v1

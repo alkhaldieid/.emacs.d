@@ -1,7 +1,0 @@
-(undo-tree-save-format-version . 1)
-"64b64dca5361d30b1492a9ec02935effdfc6109c"
-[nil nil nil nil (25161 34464 28504 351000) 0 nil]
-([nil nil ((5970 . 5971) (t 25161 23343 796085 811000)) nil (25161 34464 28498 319000) 0 nil])
-([nil current ((#("    
-" 0 5 (fontified t line-prefix #("      " 0 6 (face org-indent)) wrap-prefix #("          " 0 6 (face org-indent) 6 10 (face org-indent)) org-category "aresta2019")) . 4309) (undo-tree-id0 . -3) 4312 (t 25161 34464 69068 846000)) nil (25161 34496 798301 721000) 0 nil])
-nil
