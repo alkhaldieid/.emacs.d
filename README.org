@@ -26,7 +26,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
   #+END_SRC 
 
 ** Evil Mode
-   Can't function without vim motion keys. So, Evil mode and evil stuff have to be setup first!.
+Can't function without vim motion keys. So, Evil mode and evil stuff have to be setup first!.
 *** Evil Mode
     Install and enable evil-mode 
    #+BEGIN_SRC emacs-lisp :results silent
@@ -40,7 +40,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
    #+END_SRC
 
 *** Undo
-    Replicate the undo/redo functionality in vim. 
+Replicate the undo/redo functionality in vim. 
    #+BEGIN_SRC emacs-lisp :results silent
      (use-package undo-tree
 	 :ensure t)
@@ -136,12 +136,14 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      "fs" 'save-buffer
      "ff" 'counsel-find-file
      "fr" 'ranger
+     "fS" 'bookmark-set
+     "fj" 'bookmark-jump
      ;; frames
      "Fd" 'delete-frame
      "Fn" 'make-frame
      ;; buffers
      ;; "bb" 'switch-to-buffer
-     "bb" 'ibuffer
+     "bb" 'ivy-switch-buffer
      "bd" 'kill-buffer
      "bp" 'previous-buffer
      "bn" 'next-buffer
@@ -188,10 +190,10 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      ;; "sr" 'synosaurus-choose-and-replace
      ;; "si" 'synosaurus-choose-and-insert
      ;; org-recoll keys
-     "ps" 'org-recoll-search
-     "pu" 'org-recoll-update-index
+     ;; "p" 'projectile-mode-map
+     ;"pu" 'org-recoll-update-index
      ;; evil-commentry
-     ;; ";" evil-commentry-line
+     ;; ";" evil-commentry-line		;
      ;; bookmarks 
 
 
@@ -534,7 +536,13 @@ Things I want flyspell to do automatically:
  #+END_SRC
 ** line numbers
 #+BEGIN_SRC emacs-lisp :results silent
-(setq display-line-numbers-type 'relative)
+  (setq display-line-numbers-type 'relative)
+#+END_SRC
+** rainbow-mode
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package rainbow-mode
+    :ensure t)
+  (rainbow-mode 1)
 #+END_SRC
 * Editor Related Configurations
 ** auto-save and backup files
@@ -568,8 +576,10 @@ Things I want flyspell to do automatically:
 #+END_SRC
 ** Themes and fonts
 #+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'leuven)
+  (load-theme 'modus-vivendi)
   (set-scroll-bar-mode nil)
+  (use-package leuven-theme
+    :ensure t)
 #+END_SRC
 ** Org-babel
 #+BEGIN_SRC emacs-lisp :results silent
@@ -599,12 +609,20 @@ Things I want flyspell to do automatically:
                                 ))
 #+END_SRC
 
-* Magit
+* Version Control
+** Magit
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package magit
     :ensure t)
 #+END_SRC
-
+** Git-gutter 
+The purpose of git gutter is to be able to see uncommitted changes made to a git repo. 
+I need this feature in order to get used to using magit more often and illuminate the need to sync git repos with bash scripts automatically. 
+#+BEGIN_SRC emacs-lisp :results silent
+  (unless (package-installed-p 'git-gutter+)
+      (package-install 'git-gutter+))
+  (global-git-gutter+-mode)
+#+END_SRC
 * Marginalia
   Rich Annotations for candidates. 
   The ivy window in the minubuffer is too small for this to be useful. 
@@ -623,6 +641,20 @@ Things I want flyspell to do automatically:
     (add-hook 'after-init-hook 'global-company-mode)
     (setq company-idle-delay 0)
   #+END_SRC
+
+** company quick help
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package company-quickhelp
+    :ensure t)
+  (company-quickhelp-mode 1)
+#+END_SRC
+
+** company stats
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package company-statistics
+    :ensure t)
+  (add-hook 'after-init-hook 'company-statistics-mode)
+#+END_SRC
 * Merge Python
 Merge the old python configs with the new one gradually.
 I need a minimal setup that works. No fancy IDE things are required. Anything that will distract me from getting things done will be omitted. 
@@ -642,4 +674,62 @@ The configuration of lsp is found here  https://emacs-lsp.github.io/lsp-mode/pag
 (use-package lsp-mode
     :hook (python-mode . lsp)
     :commands lsp)
+#+END_SRC
+** Clear the python inferior output buffer
+#+BEGIN_SRC emacs-lisp :results silent
+  (defun my-clear ()
+    (interactive)
+    (let ((comint-buffer-maximum-size 0))
+      (comint-truncate-buffer)))
+#+END_SRC
+** Python mode hooks
+#+BEGIN_SRC emacs-lisp :results silent
+  (add-hook 'python-mode-hook
+	    (lambda ()
+	      (define-key evil-normal-state-local-map
+			  (kbd "o") 'evil-org-open-below)
+			  (kbd "O") 'evil-org-open-above))
+#+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package projectile
+    :ensure t)
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+#+END_SRC
+* Useful funcs
+** Bionic Reading
+source http://xahlee.info/emacs/emacs/elisp_bionic_reading.html
+#+BEGIN_SRC emacs-lisp :results silent
+(defvar infu-bionic-reading-face nil "a face for `infu-bionic-reading-region'.")
+
+(setq infu-bionic-reading-face 'bold)
+;; try
+;; 'bold
+;; 'error
+;; 'warning
+;; 'highlight
+;; or any value of M-x list-faces-display
+
+(defun infu-bionic-reading-buffer ()
+  "Bold the first few chars of every word in current buffer.
+Version 2022-05-21"
+  (interactive)
+  (infu-bionic-reading-region (point-min) (point-max)))
+
+(defun infu-bionic-reading-region (Begin End)
+  "Bold the first few chars of every word in region.
+Version 2022-05-21"
+  (interactive "r")
+  (let (xBounds xWordBegin xWordEnd  )
+    (save-restriction
+      (narrow-to-region Begin End)
+      (goto-char (point-min))
+      (while (forward-word)
+        ;; bold the first half of the word to the left of cursor
+        (setq xBounds (bounds-of-thing-at-point 'word))
+        (setq xWordBegin (car xBounds))
+        (setq xWordEnd (cdr xBounds))
+        (setq xBoldEndPos (+ xWordBegin (1+ (/ (- xWordEnd xWordBegin) 2))))
+        (put-text-property xWordBegin xBoldEndPos
+                           'font-lock-face infu-bionic-reading-face)))))
 #+END_SRC

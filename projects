@@ -1,0 +1,5 @@
+;;; -*- lisp-data -*-
+(("~/repos/csa/")
+ ("~/repos/Ensemble-Pytorch/")
+ ("~/repos/genetic_programming/")
+ ("~/.emacs.d/"))

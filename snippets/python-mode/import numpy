@@ -1,0 +1,5 @@
+# key: in
+# name: import numpy
+# --
+import numpy as np
+$0
