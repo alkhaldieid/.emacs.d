@@ -26,7 +26,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
   #+END_SRC 
 
 ** Evil Mode
-   Can't function without vim motion keys. So, Evil mode and evil stuff have to be setup first!.
+Can't function without vim motion keys. So, Evil mode and evil stuff have to be setup first!.
 *** Evil Mode
     Install and enable evil-mode 
    #+BEGIN_SRC emacs-lisp :results silent
@@ -40,7 +40,7 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
    #+END_SRC
 
 *** Undo
-    Replicate the undo/redo functionality in vim. 
+Replicate the undo/redo functionality in vim. 
    #+BEGIN_SRC emacs-lisp :results silent
      (use-package undo-tree
 	 :ensure t)
@@ -188,8 +188,8 @@ My Personal Emacs configs for note-taking workflow, coding, managing daily agend
      ;; "sr" 'synosaurus-choose-and-replace
      ;; "si" 'synosaurus-choose-and-insert
      ;; org-recoll keys
-     "ps" 'org-recoll-search
-     "pu" 'org-recoll-update-index
+     ;; "p" 'projectile-mode-map
+     ;"pu" 'org-recoll-update-index
      ;; evil-commentry
      ;; ";" evil-commentry-line
      ;; bookmarks 
@@ -534,7 +534,13 @@ Things I want flyspell to do automatically:
  #+END_SRC
 ** line numbers
 #+BEGIN_SRC emacs-lisp :results silent
-(setq display-line-numbers-type 'relative)
+  (setq display-line-numbers-type 'relative)
+#+END_SRC
+** rainbow-mode
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package rainbow-mode
+    :ensure t)
+  (rainbow-mode 1)
 #+END_SRC
 * Editor Related Configurations
 ** auto-save and backup files
@@ -568,8 +574,10 @@ Things I want flyspell to do automatically:
 #+END_SRC
 ** Themes and fonts
 #+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'leuven)
+  ;;  (load-theme 'leuven)
   (set-scroll-bar-mode nil)
+  (use-package leuven-theme
+    :ensure t)
 #+END_SRC
 ** Org-babel
 #+BEGIN_SRC emacs-lisp :results silent
@@ -623,6 +631,20 @@ Things I want flyspell to do automatically:
     (add-hook 'after-init-hook 'global-company-mode)
     (setq company-idle-delay 0)
   #+END_SRC
+
+** company quick help
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package company-quickhelp
+    :ensure t)
+  (company-quickhelp-mode 1)
+#+END_SRC
+
+** company stats
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package company-statistics
+    :ensure t)
+  (add-hook 'after-init-hook 'company-statistics-mode)
+#+END_SRC
 * Merge Python
 Merge the old python configs with the new one gradually.
 I need a minimal setup that works. No fancy IDE things are required. Anything that will distract me from getting things done will be omitted. 
@@ -642,4 +664,22 @@ The configuration of lsp is found here  https://emacs-lsp.github.io/lsp-mode/pag
 (use-package lsp-mode
     :hook (python-mode . lsp)
     :commands lsp)
+#+END_SRC
+** Clear the python inferior output buffer
+#+BEGIN_SRC emacs-lisp :results silent
+  (defun my-clear ()
+    (interactive)
+    (let ((comint-buffer-maximum-size 0))
+      (comint-truncate-buffer)))
+  (add-hook 'python-mode-hook
+	    (lambda ()
+	      (define-key evil-normal-state-local-map
+			  (kbd "o") 'evil-org-open-below)
+			  (kbd "O") 'evil-org-open-above))
+#+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package projectile
+    :ensure t)
+  (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 #+END_SRC
