@@ -3,8 +3,8 @@
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
- (filename . "/data/home/alkhaldieid/repos/org/roam/20220410015519-numpy.org")
- (front-context-string . "a python library")
- (rear-context-string . "\n#+title: numpy\n")
- (position . 83))
+ (filename . "/data/home/alkhaldieid/repos/org/roam/20220609135746-bagging.org")
+ (front-context-string)
+ (rear-context-string . "+title: Bagging\n")
+ (position . 85))
 )
