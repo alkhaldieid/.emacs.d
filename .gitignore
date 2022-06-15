@@ -18,3 +18,4 @@ eshell/
 /url/
 recentf
 transient/*
+company-statistics-cache.el
