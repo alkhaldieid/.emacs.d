@@ -1,2 +1,6 @@
 ((magit-commit nil)
- (magit-dispatch nil))
+ (magit-diff
+  ("--no-ext-diff" "--stat"))
+ (magit-dispatch nil)
+ (magit-gitignore nil)
+ (magit-merge nil))
