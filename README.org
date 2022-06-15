@@ -619,9 +619,10 @@ Things I want flyspell to do automatically:
 The purpose of git gutter is to be able to see uncommitted changes made to a git repo. 
 I need this feature in order to get used to using magit more often and illuminate the need to sync git repos with bash scripts automatically. 
 #+BEGIN_SRC emacs-lisp :results silent
-  (unless (package-installed-p 'git-gutter+)
-      (package-install 'git-gutter+))
-  (global-git-gutter+-mode)
+(use-package git-gutter
+  :ensure t
+  :init
+  (global-git-gutter-mode +1))
 #+END_SRC
 * Marginalia
   Rich Annotations for candidates. 

@@ -18,7 +18,7 @@
  '(org-agenda-files
    '("/data/home/alkhaldieid/repos/csa/paper/paper.org" "/home/alkhaldieid/repos/org/agenda/monthly.org"))
  '(package-selected-packages
-   '(git-gutter+ git-gutter-+ git-gutter-plus evil-nerd-commenter company-statistics company-quickhelp rainbow-mode evil-collection projectile hc-zenburn-theme danneskjold-theme zenburn-theme leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))
+   '(git-gutter git-gutter-+ git-gutter-plus evil-nerd-commenter company-statistics company-quickhelp rainbow-mode evil-collection projectile hc-zenburn-theme danneskjold-theme zenburn-theme leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

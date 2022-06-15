@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("org-capture-last-stored"
+(("y"
+ (filename . "~/repos/csa/code/code.org")
+ (front-context-string . "* Implement Vote")
+ (rear-context-string)
+ (position . 1))
+("org-capture-last-stored"
  (filename . "/data/home/alkhaldieid/repos/org/roam/20220609135746-bagging.org")
  (front-context-string)
  (rear-context-string . "+title: Bagging\n")
