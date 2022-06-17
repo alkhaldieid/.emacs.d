@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("header 4"
+(("code"
+ (filename . "/data/home/alkhaldieid/repos/csa/code/code.org")
+ (front-context-string . "* Implement Vote")
+ (rear-context-string)
+ (position . 1))
+("header 4"
  (filename . "/data/home/alkhaldieid/repos/csa/paper/ieee/header.tex")
  (front-context-string . "\\documentclass{i")
  (rear-context-string)

@@ -468,7 +468,9 @@ Things I want flyspell to do automatically:
 * [#C] Writing Workflow extras
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package olivetti
-    :ensure t)
+    :ensure t
+    :init
+    (olivetti-set-width 120))
 #+END_SRC
 * [#C] Org extras
 ** evil-org
@@ -516,6 +518,7 @@ Things I want flyspell to do automatically:
    #+BEGIN_SRC emacs-lisp :results silent
      (add-hook 'org-mode-hook 'org-indent-mode)
      (add-hook 'org-mode-hook 'evil-org-mode)
+     (add-hook 'org-mode-hook 'olivetti-mode)
    #+END_SRC
 * Misc less important comfy stuff
 ** try
@@ -523,8 +526,6 @@ Things I want flyspell to do automatically:
      (use-package try
        :ensure t)
    #+end_src
-
-   #+RESULTS:
 ** yasnippet configs
    Yasnippets make it easy to insert most commenly typed code snippets.
  #+BEGIN_SRC emacs-lisp
@@ -579,7 +580,6 @@ Things I want flyspell to do automatically:
   (set-scroll-bar-mode nil)
   (use-package leuven-theme
     :ensure t)
-
 #+END_SRC
 ** Org-babel
 #+BEGIN_SRC emacs-lisp :results silent
@@ -624,7 +624,8 @@ I need this feature in order to get used to using magit more often and illuminat
   :init
   (global-git-gutter-mode +1))
 #+END_SRC
-* Marginalia
+* Completions extra
+** Marginalia
   Rich Annotations for candidates. 
   The ivy window in the minubuffer is too small for this to be useful. 
   Needs to increase the window size
@@ -634,6 +635,13 @@ I need this feature in order to get used to using magit more often and illuminat
       :config
       (marginalia-mode))
   #+END_SRC
+** Ivy Extension
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package ivy-posframe
+    :ensure t
+    :init
+    (ivy-posframe-mode t))
+#+END_SRC
 
 * company mode
   #+BEGIN_SRC emacs-lisp :results silent
@@ -686,10 +694,13 @@ The configuration of lsp is found here  https://emacs-lsp.github.io/lsp-mode/pag
 ** Python mode hooks
 #+BEGIN_SRC emacs-lisp :results silent
   (add-hook 'python-mode-hook
-	    (lambda ()
-	      (define-key evil-normal-state-local-map
-			  (kbd "o") 'evil-org-open-below)
-			  (kbd "O") 'evil-org-open-above))
+            (lambda ()
+              (define-key evil-normal-state-local-map
+                          (kbd "o") 'evil-org-open-below)
+                          (kbd "O") 'evil-org-open-above))
+  (add-hook 'python-mode-hook 'display-line-numbers-mode)
+  (add-hook 'python-mode-hook 'olivetti-mode)
+
 #+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp :results silent
