@@ -241,7 +241,6 @@ Replicate the undo/redo functionality in vim.
      "t" 'modus-themes-toggle
      )
  #+END_SRC
- 
 **** bookmarked files 
  #+BEGIN_SRC emacs-lisp
 
@@ -289,7 +288,6 @@ Replicate the undo/redo functionality in vim.
      ;; yasnippet
      "yn"  'yas-new-snippet
      "yf"  'yas-visit-snippet-file
-
      )
      #+END_SRC
 
@@ -408,7 +406,7 @@ installed them through melpa
 #+END_SRC
 ** [#A] LaTeX export classes
 *** init
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :results silent
       (require 'ox-latex)
       (unless (boundp 'org-latex-classes)
 	(setq org-latex-classes nil))
@@ -435,14 +433,14 @@ installed them through melpa
                          ("\\subsection{%s}" . "\\subsection*{%s}")))
       #+end_src
 *** LaTex export process
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :results silent
       (setq org-latex-pdf-process (list
 	 "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
     #+END_SRC 
 
     #+RESULTS:
     | latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f |
-
+    
 ** [#A] Translation and Synonyms at point
 translation, synonyms and other useful tools needed for writing efficiency. 
 
