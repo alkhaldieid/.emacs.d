@@ -2,16 +2,21 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("4 paper"
+(("june"
+ (filename . "~/repos/org/roam/20220112231524-june_2022.org")
+ (front-context-string)
+ (rear-context-string . "tle: June 2022\n\n")
+ (position . 88))
+("4 paper"
  (filename . "/data/home/alkhaldieid/repos/csa/paper/paper.org")
  (front-context-string . "#+TITLE: Ensembl")
  (rear-context-string)
  (position . 1))
 ("code"
- (filename . "/data/home/alkhaldieid/repos/csa/code/code.org")
- (front-context-string . "* Implement Vote")
+ (filename . "~/repos/csa/paper/paper.org")
+ (front-context-string . " Code           ")
  (rear-context-string)
- (position . 1))
+ (position . 14266))
 ("header 4"
  (filename . "/data/home/alkhaldieid/repos/csa/paper/ieee/header.tex")
  (front-context-string . "\\documentclass{i")

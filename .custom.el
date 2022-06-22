@@ -20,7 +20,7 @@
  '(ivy-posframe-mode t nil (ivy-posframe))
  '(ivy-posframe-width 120)
  '(org-agenda-files
-   '("/data/home/alkhaldieid/repos/csa/paper/paper.org" "/home/alkhaldieid/repos/org/agenda/monthly.org"))
+   '("~/repos/csa/paper/paper.org" "/data/home/alkhaldieid/repos/csa/paper/paper.org" "/home/alkhaldieid/repos/org/agenda/monthly.org"))
  '(package-selected-packages
    '(ivy-posframe git-gutter git-gutter-+ git-gutter-plus evil-nerd-commenter company-statistics company-quickhelp rainbow-mode evil-collection projectile hc-zenburn-theme danneskjold-theme zenburn-theme leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel)))
 (custom-set-faces

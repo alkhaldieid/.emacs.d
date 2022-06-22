@@ -135,7 +135,7 @@ Replicate the undo/redo functionality in vim.
      "<SPC> " 'counsel-M-x
      "fs" 'save-buffer
      "ff" 'counsel-find-file
-     "fr" 'ranger
+     "fr" 'recentf-open-files
      "fS" 'bookmark-set
      "fj" 'bookmark-jump
      ;; frames
@@ -467,8 +467,8 @@ Things I want flyspell to do automatically:
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package olivetti
     :ensure t
-    :init
-    (olivetti-set-width 120))
+    :config
+    (olivetti-set-width 82))
 #+END_SRC
 * [#C] Org extras
 ** evil-org
@@ -574,7 +574,7 @@ Things I want flyspell to do automatically:
 #+END_SRC
 ** Themes and fonts
 #+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'modus-vivendi)
+  (load-theme 'modus-operandi)
   (set-scroll-bar-mode nil)
   (use-package leuven-theme
     :ensure t)
@@ -705,6 +705,15 @@ The configuration of lsp is found here  https://emacs-lsp.github.io/lsp-mode/pag
   (use-package projectile
     :ensure t)
   (define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+#+END_SRC
+* File Management
+The purpose of this section is to make accessing files more efficient and fast.
+** recentf customization
+#+BEGIN_SRC emacs-lisp :results silent
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 25)
+  (setq recentf-max-saved-items 25)
+  (add-hook 'recentf-dialog-mode (lambda () (evil-normal-state 1)))
 #+END_SRC
 * Useful funcs
 ** Bionic Reading
