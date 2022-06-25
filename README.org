@@ -235,9 +235,13 @@ Replicate the undo/redo functionality in vim.
      "ir" 'org-ref-insert-link
      "in" 'org-roam-node-insert
 
-     ;; org-agenda
+     ;; apps
      "aa" 'org-agenda
+     "ae" 'mu4e
+     ;; orgmode
+
      "op" 'org-pomodoro
+     "oe" 'org-set-effort
      "t" 'modus-themes-toggle
      )
  #+END_SRC
@@ -295,7 +299,6 @@ Replicate the undo/redo functionality in vim.
 
 **** orgmode leader map
  #+BEGIN_SRC emacs-lisp :results silent
-
    (evil-leader/set-key-for-mode 'org-mode
      "e" 'my/org-set-effort-in-pomodoros
      "s" 'org-toggle-narrow-to-subtree)
@@ -714,6 +717,55 @@ The purpose of this section is to make accessing files more efficient and fast.
   (setq recentf-max-menu-items 25)
   (setq recentf-max-saved-items 25)
   (add-hook 'recentf-dialog-mode (lambda () (evil-normal-state 1)))
+#+END_SRC
+* DONE Email
+Steps for configuring the mu4e:
+1. install mbsync, and mu
+2. make a mail directory
+3. run mu init and mu index
+4. configure ~/.mbsyncrc
+5. configure mu4e
+The below configs will get 
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package mu4e
+    :ensure nil
+    :config
+    ;; This is set to 't' to avoid mail syncing issues when using mbsync
+    (setq mu4e-change-filenames-when-moving t)
+    ;; Refresh mail using isync every 10 minutes
+    (setq mu4e-update-interval (* 10 60))
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-maildir "~/Mail")
+    (setq mu4e-drafts-folder "/Drafts")
+    (setq mu4e-sent-folder   "/Sent Items")
+    (setq mu4e-refile-folder "/Archive")
+    (setq mu4e-trash-folder  "/Trash")
+    (setq mu4e-maildir-shortcuts
+        '(("/Inbox"             . ?i)
+          ("/Sent Items" . ?s)
+          ("/Trash"     . ?t)
+          ("/Archive"     . ?a)
+          ("/Drafts"    . ?d)))
+  ;; these variables will allow you to send email but the email address has to be changed from host@user and an annoying prompt will ask for user and password
+    (setq smtpmail-smtp-server "smtp.office365.com"
+          smtpmail-smtp-service 587
+          smtpmail-stream-type 'nil)
+  ;; to get the mail address right
+    (setq user-mail-address "ealkhal@rockets.utoledo.edu"
+          user-full-name "Eid ALkhaldi")
+  ;; to get rid of the prompt
+    (setq message-send-mail-function 'smtpmail-send-it))
+  ;; always open email in a vertical window
+  (setq mu4e-split-view 'vertical
+        mu4e-headers-visible-columns 110)
+
+#+END_SRC
+* Vim everywhere
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package evil-collection
+    :ensure t)
+  (with-eval-after-load 'calendar (evil-collection-calendar-setup))
+  (with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
 #+END_SRC
 * Useful funcs
 ** Bionic Reading
