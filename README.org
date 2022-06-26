@@ -766,6 +766,7 @@ The below configs will get
     :ensure t)
   (with-eval-after-load 'calendar (evil-collection-calendar-setup))
   (with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
+  (evil-collection-package-menu-setup)
 #+END_SRC
 * Useful funcs
 ** Bionic Reading
