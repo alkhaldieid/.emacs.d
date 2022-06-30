@@ -87,6 +87,20 @@ Replicate the undo/redo functionality in vim.
      (setq ivy-use-virtual-buffers t)
      (setq enable-recursive-minibuffers t)
    #+END_SRC
+*** ivy actions
+#+BEGIN_SRC emacs-lisp :results silent
+(defun ivy-yank-action (x)
+  (kill-new x))
+
+(defun ivy-copy-to-buffer-action (x)
+  (with-ivy-window
+    (insert x)))
+
+(ivy-set-actions
+ t
+ '(("i" ivy-copy-to-buffer-action "insert")
+   ("y" ivy-yank-action "yank")))
+#+END_SRC
 
 ** Which-key
  #+BEGIN_SRC emacs-lisp
@@ -118,186 +132,188 @@ Replicate the undo/redo functionality in vim.
  #+END_SRC
 
 ** Evil Leader Keybindings
-**** Leader
-     Install the evil-leader, enable it globally and set the leader key
- #+BEGIN_SRC emacs-lisp :results silent
-   (use-package evil-leader
-     :ensure t)
-   (global-evil-leader-mode)
-   (evil-leader/set-leader "<SPC>")
- #+END_SRC
-**** Global leader map
-     :LOGBOOK:
-     CLOCK: [2022-04-02 Sat 22:55]
-     :END:
- #+BEGIN_SRC emacs-lisp :results silent
-   (evil-leader/set-key
-     "<SPC> " 'counsel-M-x
-     "fs" 'save-buffer
-     "ff" 'counsel-find-file
-     "fr" 'recentf-open-files
-     "fS" 'bookmark-set
-     "fj" 'bookmark-jump
-     ;; frames
-     "Fd" 'delete-frame
-     "Fn" 'make-frame
-     ;; buffers
-     ;; "bb" 'switch-to-buffer
-     "bb" 'ivy-switch-buffer
-     "bd" 'kill-buffer
-     "bp" 'previous-buffer
-     "bn" 'next-buffer
-     ;; windows
-     "wl" 'evil-window-right
-     "wL" 'evil-window-move-far-right
-     "wh" 'evil-window-left
-     "wH" 'evil-window-move-far-left
-     "wk" 'evil-window-up
-     "wj" 'evil-window-down
-     "wd" 'evil-window-delete
-     "wv" 'evil-window-vsplit
-     "ws" 'evil-window-split
-     "wm" 'delete-other-windows
+*** In Progress Set evil-leader keybindings for projectile using space p
+#+BEGIN_SRC emacs-lisp :results silent
+  (evil-leader/set-key
+    "pp" 'projectile-switch-open-project
+    "pf" 'projectile-find-file
+    "pd" 'projectile-find-dir
+    "pg" 'projectile-grep
+    )
+#+END_SRC
+*** Leader
+    Install the evil-leader, enable it globally and set the leader key
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package evil-leader
+    :ensure t)
+  (global-evil-leader-mode)
+  (evil-leader/set-leader "<SPC>")
+#+END_SRC
+*** Global leader map
+    :LOGBOOK:
+    CLOCK: [2022-04-02 Sat 22:55]
+    :END:
+#+BEGIN_SRC emacs-lisp :results silent
+  (evil-leader/set-key
+    "<SPC> " 'counsel-M-x
+    "fs" 'save-buffer
+    "ff" 'counsel-find-file
+    "fr" 'recentf-open-files
+    "fS" 'bookmark-set
+    "fj" 'bookmark-jump
 
-     ;; workspaces
-     "lw1" 'eyebrowse-switch-to-window-config-1
-     "lw2" 'eyebrowse-switch-to-window-config-2
-     "lw3" 'eyebrowse-switch-to-window-config-3
-     "lw4" 'eyebrowse-switch-to-window-config-4
-     "lw5" 'eyebrowse-switch-to-window-config-5
-     "lw6" 'eyebrowse-switch-to-window-config-6
-     "lw7" 'eyebrowse-switch-to-window-config-7
-     "lw8" 'eyebrowse-switch-to-window-config-8
-     "lw9" 'eyebrowse-switch-to-window-config-9
+    ;; frames
+    "Fd" 'delete-frame
+    "Fn" 'make-frame
 
-     ;; evil-nerd-commenter
-     "ci" 'evilnc-comment-or-uncomment-lines
-     "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
-     "cc" 'evilnc-copy-and-comment-lines
-     "cp" 'evilnc-comment-or-uncomment-paragraphs
-     "cr" 'comment-or-uncomment-region
-     "cv" 'evilnc-toggle-invert-comment-line-by-line
-     "."  'evilnc-copy-and-comment-operator
-     ";;" 'evilnc-comment-operator ; if you prefer backslash key
+    ;; buffers
+    ;; "bb" 'switch-to-buffer
+    "bb" 'ivy-switch-buffer
+    "bd" 'kill-buffer
+    "bp" 'previous-buffer
+    "bn" 'next-buffer
 
-     ;; zoom-in and out
-     "=" 'text-scale-increase
-     "-" 'text-scale-decrease
+    ;; windows
+    "wl" 'evil-window-right
+    "wL" 'evil-window-move-far-right
+    "wh" 'evil-window-left
+    "wH" 'evil-window-move-far-left
+    "wk" 'evil-window-up
+    "wj" 'evil-window-down
+    "wd" 'evil-window-delete
+    "wv" 'evil-window-vsplit
+    "ws" 'evil-window-split
+    "wm" 'delete-other-windows
 
-     ;; syn layer  keybindings
-     ;; "ss" 'synonyms
-     ;; "sl" 'synosaurus-lookup
-     ;; "sr" 'synosaurus-choose-and-replace
-     ;; "si" 'synosaurus-choose-and-insert
-     ;; org-recoll keys
-     ;; "p" 'projectile-mode-map
-     ;"pu" 'org-recoll-update-index
-     ;; evil-commentry
-     ;; ";" evil-commentry-line		;
-     ;; bookmarks 
+    ;; workspaces
+    "lw1" 'eyebrowse-switch-to-window-config-1
+    "lw2" 'eyebrowse-switch-to-window-config-2
+    "lw3" 'eyebrowse-switch-to-window-config-3
+    "lw4" 'eyebrowse-switch-to-window-config-4
+    "lw5" 'eyebrowse-switch-to-window-config-5
+    "lw6" 'eyebrowse-switch-to-window-config-6
+    "lw7" 'eyebrowse-switch-to-window-config-7
+    "lw8" 'eyebrowse-switch-to-window-config-8
+    "lw9" 'eyebrowse-switch-to-window-config-9
 
+    ;; evil-nerd-commenter
+    "ci" 'evilnc-comment-or-uncomment-lines
+    "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
+    "cc" 'evilnc-copy-and-comment-lines
+    "cc" 'evilnc-copy-and-comment-lines
+    "cp" 'evilnc-comment-or-uncomment-paragraphs
+    "cr" 'comment-or-uncomment-region
+    "cv" 'evilnc-toggle-invert-comment-line-by-line
 
-     ;; emacs quitting
-     "qs" 'save-buffers-kill-emacs
+    ;; zoom-in and out
+    "=" 'text-scale-increase
+    "-" 'text-scale-decrease
 
-     ;; project compilation
-     "cfcd" 'ae/compile-dwm
+    ;; emacs quitting
+    "qs" 'save-buffers-kill-emacs
 
-     ;; writeroom keybindings
-     "dw" 'olivetti-mode
-     "d=" 'olivetti-expand
-     "d-" 'olivetti-shrink
+    ;; project compilation
+    "cfcd" 'ae/compile-dwm
 
-     ;; org agenda keybindings
+    ;; writeroom keybindings
+    "dw" 'olivetti-mode
+    "d=" 'olivetti-expand
+    "d-" 'olivetti-shrink
 
+    ;; org agenda keybindings
+    "gg" 'magit-status
 
-     "gg" 'magit-status
+    ;; org roam
+    "nl" 'org-roam-buffer-toggle
+    "nf" 'org-roam-node-find
+    ;; "ng" 'org-roam-show-graph
+    ;; "ni" 'org-roam-insert
+    "ni" 'org-roam-node-insert
+    "ns" 'org-roam-db-sync
+    "ngt" 'org-roam-dailies-goto-today
+    "ngT" 'org-roam-dailies-goto-tomorrow
+    "ngy" 'org-roam-dailies-goto-yesterday
+    "ngn" 'org-roam-node-visit
+    "ngd" 'org-roam-dailies-find-date
+    "nct" 'org-roam-dailies-capture-today
+    "ncy" 'org-roam-dailies-capture-yesterday
 
-     ;; org roam
-     "nl" 'org-roam-buffer-toggle
-     "nf" 'org-roam-node-find
-     ;; "ng" 'org-roam-show-graph
-     ;; "ni" 'org-roam-insert
-     "ni" 'org-roam-node-insert
-     "ns" 'org-roam-db-sync
-     "ngt" 'org-roam-dailies-goto-today
-     "ngT" 'org-roam-dailies-goto-tomorrow
-     "ngy" 'org-roam-dailies-goto-yesterday
-     "ngn" 'org-roam-node-visit
-     "ngd" 'org-roam-dailies-find-date
-     "nct" 'org-roam-dailies-capture-today
-     "ncy" 'org-roam-dailies-capture-yesterday
+    ;; org-roam-bibtex
+    "na" 'orb-note-actions
 
-     ;; org-roam-bibtex
-     "na" 'orb-note-actions
+    ;; insert commands
+    "ir" 'org-ref-insert-link
+    "in" 'org-roam-node-insert
 
-     ;; insert commands
-     "ir" 'org-ref-insert-link
-     "in" 'org-roam-node-insert
+    ;; apps
+    "aa" 'org-agenda
+    "ae" 'mu4e
+    ;; orgmode
 
-     ;; apps
-     "aa" 'org-agenda
-     "ae" 'mu4e
-     ;; orgmode
+    "op" 'org-pomodoro
+    "oe" 'org-set-effort
+    "t" 'modus-themes-toggle
+    ;; help funcs
+    "hf" 'describe-function
+    "hk" 'describe-key
+    "hv" 'describe-variable
+    "hm" 'describe-mode
+    "hb" 'describe-bindings
+    )
+#+END_SRC
+*** bookmarked files 
+#+BEGIN_SRC emacs-lisp
 
-     "op" 'org-pomodoro
-     "oe" 'org-set-effort
-     "t" 'modus-themes-toggle
-     )
- #+END_SRC
-**** bookmarked files 
- #+BEGIN_SRC emacs-lisp
+  (evil-leader/set-key
+    ;; work files
+    "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
+    "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
+    "ow3" '(lambda() (interactive) (find-file "~/Dropbox/third/paper.org"))
+    "ow4" '(lambda() (interactive) (find-file "~/Dropbox/four/paper.org"))
+    ;; "owpp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
+    "owpp" '(lambda() (interactive) (find-file "~/repos/writings/proposal/paper/second_draft/paper.org"))
+    "owps" '(lambda() (interactive) (find-file "~/Dropbox/proposal/presentation/lab/beamer.org"))
+    "owc" '(lambda() (interactive) (find-file "~/repos/cv/cv.tex"))
+    "owa" '(lambda() (interactive) (find-file
+			     "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
+    "owd" '(lambda() (interactive) (find-file
+			     "/home/alkhaldieid/Dropbox/dissertation/dissertation.org"))
 
-   (evil-leader/set-key
-     ;; work files
-     "ow1" '(lambda() (interactive) (find-file "~/Dropbox/finalV/first/ijcst.tex"))
-     "ow2" '(lambda() (interactive) (find-file "~/Dropbox/second_final/paper.org"))
-     "ow3" '(lambda() (interactive) (find-file "~/Dropbox/third/paper.org"))
-     "ow4" '(lambda() (interactive) (find-file "~/Dropbox/four/paper.org"))
-     ;; "owpp" '(lambda() (interactive) (find-file "~/Dropbox/proposal/myproposal/Proposal and Thesis/lab/uthesis12/paper1.org"))
-     "owpp" '(lambda() (interactive) (find-file "~/repos/writings/proposal/paper/second_draft/paper.org"))
-     "owps" '(lambda() (interactive) (find-file "~/Dropbox/proposal/presentation/lab/beamer.org"))
-     "owc" '(lambda() (interactive) (find-file "~/repos/cv/cv.tex"))
-     "owa" '(lambda() (interactive) (find-file
-				     "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
-     "owd" '(lambda() (interactive) (find-file
-				     "/home/alkhaldieid/Dropbox/dissertation/dissertation.org"))
+    "owlp" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/proposalheader.tex"))
+    "owla" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/abstract.tex"))
+    "owb1" '(lambda() (interactive) (find-file "~/work/mend/library.bib"))
+    "owb2" '(lambda() (interactive) (find-file "~/work/res/cited_lib.bib"))
 
-     "owlp" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/proposalheader.tex"))
-     "owla" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/abstract.tex"))
-     "owb1" '(lambda() (interactive) (find-file "~/work/mend/library.bib"))
-     "owb2" '(lambda() (interactive) (find-file "~/work/res/cited_lib.bib"))
+    "ocv" '(lambda() (interactive) (find-file "~/repos/cv/org/cv.org"))
+    "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
+    "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
+    "oat" '(lambda() (interactive) (find-file "~/repos/org/agenda/TODOs.org"))
+    "oam" '(lambda() (interactive) (find-file "~/repos/org/agenda/monthly.org"))
+    "oay" '(lambda() (interactive) (find-file "~/repos/org/agenda/yearly.org"))
+    "oar" '(lambda() (interactive) (find-file "~/repos/org/agenda/research.org"))
 
-     "ocv" '(lambda() (interactive) (find-file "~/repos/cv/org/cv.org"))
-     "ooo" '(lambda() (interactive) (find-file "~/Dropbox/org/notes/org-mode.org"))
-     "ool" '(lambda() (interactive) (find-file "~/repos/shared/layers.org"))
-     "oat" '(lambda() (interactive) (find-file "~/repos/org/agenda/TODOs.org"))
-     "oam" '(lambda() (interactive) (find-file "~/repos/org/agenda/monthly.org"))
-     "oay" '(lambda() (interactive) (find-file "~/repos/org/agenda/yearly.org"))
-     "oar" '(lambda() (interactive) (find-file "~/repos/org/agenda/research.org"))
+    ;; cf files
+    "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/README.org"))
+    "cfo" '(lambda() (interactive) (find-file "~/.ihsec/myb/README.org"))
+    "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
+    "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
+    "cfz" '(lambda() (interactive) (find-file "~/.config/zsh/.zshrc"))
+    "cfp" '(lambda() (interactive) (find-file "~/.profile"))
+    "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
+    "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
+    "cfd" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
+    "cfk" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
+    "cfk" '(lambda() (interactive) (find-file "~/.config/kitty/kitty.conf"))
 
-     ;; cf files
-     "cfe" '(lambda() (interactive) (find-file "~/.emacs.d/README.org"))
-     "cfo" '(lambda() (interactive) (find-file "~/.ihsec/myb/README.org"))
-     "cfi" '(lambda() (interactive) (find-file "~/.config/i3/config"))
-     "cfa" '(lambda() (interactive) (find-file "~/.config/aliasrc"))
-     "cfz" '(lambda() (interactive) (find-file "~/.config/zsh/.zshrc"))
-     "cfp" '(lambda() (interactive) (find-file "~/.profile"))
-     "cfd" '(lambda() (interactive) (find-file "~/.config/directories"))
-     "cfm" '(lambda() (interactive) (find-file "~/.emacs.d/myinit.org"))
-     "cfd" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
-     "cfk" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
-     "cfk" '(lambda() (interactive) (find-file "~/.config/kitty/kitty.conf"))
+    ;; yasnippet
+    "yn"  'yas-new-snippet
+    "yf"  'yas-visit-snippet-file
+    )
+    #+END_SRC
 
-     ;; yasnippet
-     "yn"  'yas-new-snippet
-     "yf"  'yas-visit-snippet-file
-     )
-     #+END_SRC
+#+RESULTS:
 
- #+RESULTS:
-
-**** orgmode leader map
+*** orgmode leader map
  #+BEGIN_SRC emacs-lisp :results silent
    (evil-leader/set-key-for-mode 'org-mode
      "e" 'my/org-set-effort-in-pomodoros
@@ -467,11 +483,18 @@ Things I want flyspell to do automatically:
   (add-hook 'org-mode-hook 'flyspell-mode)
 #+END_SRC
 * [#C] Writing Workflow extras
+** Center the text
 #+BEGIN_SRC emacs-lisp :results silent
-  (use-package olivetti
+  (use-package visual-fill-column
     :ensure t
     :config
-    (olivetti-set-width 82))
+    (visual-fill-column-mode -1))
+  (add-hook 'org-mode-hook 'visual-fill-column-mode)
+#+END_SRC
+** Academic phrases 
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package academic-phrases
+    :ensure nil)
 #+END_SRC
 * [#C] Org extras
 ** evil-org
@@ -764,44 +787,8 @@ The below configs will get
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package evil-collection
     :ensure t)
-  (with-eval-after-load 'calendar (evil-collection-calendar-setup))
-  (with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
-  (evil-collection-package-menu-setup)
-#+END_SRC
-* Useful funcs
-** Bionic Reading
-source http://xahlee.info/emacs/emacs/elisp_bionic_reading.html
-#+BEGIN_SRC emacs-lisp :results silent
-(defvar infu-bionic-reading-face nil "a face for `infu-bionic-reading-region'.")
-
-(setq infu-bionic-reading-face 'bold)
-;; try
-;; 'bold
-;; 'error
-;; 'warning
-;; 'highlight
-;; or any value of M-x list-faces-display
-
-(defun infu-bionic-reading-buffer ()
-  "Bold the first few chars of every word in current buffer.
-Version 2022-05-21"
-  (interactive)
-  (infu-bionic-reading-region (point-min) (point-max)))
-
-(defun infu-bionic-reading-region (Begin End)
-  "Bold the first few chars of every word in region.
-Version 2022-05-21"
-  (interactive "r")
-  (let (xBounds xWordBegin xWordEnd  )
-    (save-restriction
-      (narrow-to-region Begin End)
-      (goto-char (point-min))
-      (while (forward-word)
-        ;; bold the first half of the word to the left of cursor
-        (setq xBounds (bounds-of-thing-at-point 'word))
-        (setq xWordBegin (car xBounds))
-        (setq xWordEnd (cdr xBounds))
-        (setq xBoldEndPos (+ xWordBegin (1+ (/ (- xWordEnd xWordBegin) 2))))
-        (put-text-property xWordBegin xBoldEndPos
-                           'font-lock-face infu-bionic-reading-face)))))
+  ;;(with-eval-after-load 'calendar (evil-collection-calendar-setup))
+  ;;(with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
+  ;;(evil-collection-package-menu-setup)
+  (evil-collection-init)
 #+END_SRC
