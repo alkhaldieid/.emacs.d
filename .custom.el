@@ -10,6 +10,7 @@
  '(custom-safe-themes
    '("a37d20710ab581792b7c9f8a075fcbb775d4ffa6c8bce9137c84951b1b453016" "738c4838957c1884dfacbb6f4f783c54e87c4a6b31c336d6279fc1c2b2ee56c5" "2eb6dd78a83cdecc2ea783a2640f4c316f41e223353d4a32fe936113e8a2ddbf" "9040edb21d65cef8a4a4763944304c1a6655e85aabb6e164db6d5ba4fc494a04" "0ed3d96a506b89c1029a1ed904b11b5adcebeb2e0c16098c99c0ad95cb124729" "b6c43bb2aea78890cf6bd4a970e6e0277d2daf0075272817ea8bb53f9c6a7f0a" "aba75724c5d4d0ec0de949694bce5ce6416c132bb031d4e7ac1c4f2dbdd3d580" "67f0f440afa2e68d9d00219b5a56308761af45832fb60769d2b2fd36e3fead45" default))
  '(evil-undo-system 'undo-tree)
+ '(evil-want-keybinding nil)
  '(fill-column 80)
  '(global-company-mode t)
  '(ignored-local-variable-values

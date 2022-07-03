@@ -30,13 +30,18 @@ Can't function without vim motion keys. So, Evil mode and evil stuff have to be 
 *** Evil Mode
     Install and enable evil-mode 
    #+BEGIN_SRC emacs-lisp :results silent
-     ;; Download Evil
-     (unless (package-installed-p 'evil)
-       (package-install 'evil))
-
-     ;; Enable Evil
-     (require 'evil)
-     (evil-mode 1)
+     (use-package evil
+       :init
+       (progn
+         (setq evil-undo-system 'undo-tree)
+         ;; `evil-collection' assumes `evil-want-keybinding' is set to
+         ;; `nil' before loading `evil' and `evil-collection'
+         ;; @see https://github.com/emacs-evil/evil-collection#installation
+         (setq evil-want-keybinding nil)
+         )
+       :config
+       (progn
+         (evil-mode 1)))
    #+END_SRC
 
 *** Undo
@@ -88,7 +93,7 @@ Replicate the undo/redo functionality in vim.
      (setq enable-recursive-minibuffers t)
    #+END_SRC
 *** ivy actions
-#+BEGIN_SRC emacs-lisp :results silent
+#+BEGIN_SRC emacs-lisp :results silent :tangle nil
 (defun ivy-yank-action (x)
   (kill-new x))
 
@@ -598,13 +603,6 @@ Things I want flyspell to do automatically:
 (setq org-return-follows-link  t)
 
 #+END_SRC
-** Themes and fonts
-#+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'modus-operandi)
-  (set-scroll-bar-mode nil)
-  (use-package leuven-theme
-    :ensure t)
-#+END_SRC
 ** Org-babel
 #+BEGIN_SRC emacs-lisp :results silent
   (unless (package-installed-p 'ob-ipython)
@@ -615,6 +613,13 @@ Things I want flyspell to do automatically:
    '((python . t)
      (ipython . t)
      (lisp . t)))
+#+END_SRC
+* Theme
+#+BEGIN_SRC emacs-lisp :results silent
+  (load-theme 'modus-operandi)
+  (set-scroll-bar-mode nil)
+  (use-package leuven-theme
+    :ensure t)
 #+END_SRC
 * openwith
 #+BEGIN_SRC emacs-lisp :results silent
@@ -786,9 +791,8 @@ The below configs will get
 * Vim everywhere
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package evil-collection
-    :ensure t)
-  ;;(with-eval-after-load 'calendar (evil-collection-calendar-setup))
-  ;;(with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
-  ;;(evil-collection-package-menu-setup)
-  (evil-collection-init)
+      :after evil
+      :ensure t
+      :config
+      (evil-collection-init))
 #+END_SRC
