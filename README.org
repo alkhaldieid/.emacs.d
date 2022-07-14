@@ -614,6 +614,9 @@ Things I want flyspell to do automatically:
      (ipython . t)
      (lisp . t)))
 #+END_SRC
+** initial buffer
+#+BEGIN_SRC emacs-lisp :results silent
+#+END_SRC
 * Theme
 #+BEGIN_SRC emacs-lisp :results silent
   (load-theme 'modus-operandi)
