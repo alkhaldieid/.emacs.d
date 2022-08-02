@@ -177,6 +177,8 @@ Replicate the undo/redo functionality in vim.
     "bd" 'kill-buffer
     "bp" 'previous-buffer
     "bn" 'next-buffer
+    "bi" 'ibuffer
+
 
     ;; windows
     "wl" 'evil-window-right
@@ -191,15 +193,15 @@ Replicate the undo/redo functionality in vim.
     "wm" 'delete-other-windows
 
     ;; workspaces
-    "lw1" 'eyebrowse-switch-to-window-config-1
-    "lw2" 'eyebrowse-switch-to-window-config-2
-    "lw3" 'eyebrowse-switch-to-window-config-3
-    "lw4" 'eyebrowse-switch-to-window-config-4
-    "lw5" 'eyebrowse-switch-to-window-config-5
-    "lw6" 'eyebrowse-switch-to-window-config-6
-    "lw7" 'eyebrowse-switch-to-window-config-7
-    "lw8" 'eyebrowse-switch-to-window-config-8
-    "lw9" 'eyebrowse-switch-to-window-config-9
+    "1" 'eyebrowse-switch-to-window-config-1
+    "2" 'eyebrowse-switch-to-window-config-2
+    "3" 'eyebrowse-switch-to-window-config-3
+    "4" 'eyebrowse-switch-to-window-config-4
+    "5" 'eyebrowse-switch-to-window-config-5
+    "6" 'eyebrowse-switch-to-window-config-6
+    "7" 'eyebrowse-switch-to-window-config-7
+    "8" 'eyebrowse-switch-to-window-config-8
+    "9" 'eyebrowse-switch-to-window-config-9
 
     ;; evil-nerd-commenter
     "ci" 'evilnc-comment-or-uncomment-lines
@@ -253,6 +255,8 @@ Replicate the undo/redo functionality in vim.
     ;; apps
     "aa" 'org-agenda
     "ae" 'mu4e
+    "aw" 'eww
+
     ;; orgmode
 
     "op" 'org-pomodoro
@@ -757,6 +761,14 @@ Steps for configuring the mu4e:
 4. configure ~/.mbsyncrc
 5. configure mu4e
 The below configs will get 
+first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54992][emacs]] 
+
+#+BEGIN_SRC emacs-lisp :results silent
+;; Add mu4e to the load-path:
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package mu4e
     :ensure nil
@@ -799,3 +811,17 @@ The below configs will get
       :config
       (evil-collection-init))
 #+END_SRC
+
+* Evil Surround
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+* EMMS
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package ivy-emms
+    :ensure t)
+#+END_SRC
+

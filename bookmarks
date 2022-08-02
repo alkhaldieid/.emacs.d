@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("june"
+(("scaleable"
+ (filename . "/data/home/alkhaldieid/repos/org/roam/20220730050644-scalable.org")
+ (front-context-string)
+ (rear-context-string . "title: scalable\n")
+ (position . 86)
+ (last-modified 25319 11613 964599 154000))
+("june"
  (filename . "~/repos/org/roam/20220112231524-june_2022.org")
  (front-context-string)
  (rear-context-string . "tle: June 2022\n\n")
@@ -38,8 +44,9 @@
  (rear-context-string)
  (position . 1))
 ("org-capture-last-stored"
- (filename . "/data/home/alkhaldieid/repos/org/roam/20220709013243-hakerrank.org")
+ (filename . "/data/home/alkhaldieid/repos/org/roam/20220730050644-scalable.org")
  (front-context-string)
- (rear-context-string . "itle: hakerrank\n")
- (position . 87))
+ (rear-context-string . "title: scalable\n")
+ (position . 86)
+ (last-modified 25316 62630 735129 566000))
 )
