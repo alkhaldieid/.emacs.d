@@ -44,14 +44,14 @@ Can't function without vim motion keys. So, Evil mode and evil stuff have to be 
          (evil-mode 1)))
    #+END_SRC
 
-*** Undo
+*** Undo                                                           :global:
 Replicate the undo/redo functionality in vim. 
    #+BEGIN_SRC emacs-lisp :results silent
      (use-package undo-tree
-	 :ensure t)
-     (global-undo-tree-mode)
+         :ensure t)
+     (global-undo-tree-mode 1)
    #+END_SRC
-** Global Visual Line Mode
+** Global Visual Line Mode                                          :global:
    #+begin_src emacs-lisp :results silent
      (global-visual-line-mode t)
    #+end_src
@@ -72,25 +72,27 @@ Replicate the undo/redo functionality in vim.
      :ensure t
      :bind
      (("M-y" . counsel-yank-pop)
-	 :map ivy-minibuffer-map
-	 ("M-y" . ivy-next-line)))
+         :map ivy-minibuffer-map
+         ("M-y" . ivy-next-line)))
 
      (use-package swiper
      :ensure t
      :bind (("C-s" . swiper-isearch)
-	     ("C-r" . swiper-isearch)
-	     ("C-c C-r" . ivy-resume)
-	     ("M-x" . counsel-M-x)
-	     ("C-x C-f" . counsel-find-file))
+             ("C-r" . swiper-isearch)
+             ("C-c C-r" . ivy-resume)
+             ("M-x" . counsel-M-x)
+             ("C-x C-f" . counsel-find-file))
      :config
      (progn
-	 (ivy-mode 1)
-	 (setq ivy-use-virtual-buffers t)
-	 (setq ivy-display-style 'fancy)
-	 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-	 ))
+         (ivy-mode 1)
+         (setq ivy-use-virtual-buffers t)
+         (setq ivy-display-style 'fancy)
+         (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+         ))
      (setq ivy-use-virtual-buffers t)
      (setq enable-recursive-minibuffers t)
+
+     (setq ivy-height 100)
    #+END_SRC
 *** ivy actions
 #+BEGIN_SRC emacs-lisp :results silent :tangle nil
@@ -146,7 +148,7 @@ Replicate the undo/redo functionality in vim.
     "pg" 'projectile-grep
     )
 #+END_SRC
-*** Leader
+*** Leader                                                         :global:
     Install the evil-leader, enable it globally and set the leader key
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package evil-leader
@@ -155,9 +157,6 @@ Replicate the undo/redo functionality in vim.
   (evil-leader/set-leader "<SPC>")
 #+END_SRC
 *** Global leader map
-    :LOGBOOK:
-    CLOCK: [2022-04-02 Sat 22:55]
-    :END:
 #+BEGIN_SRC emacs-lisp :results silent
   (evil-leader/set-key
     "<SPC> " 'counsel-M-x
@@ -251,6 +250,8 @@ Replicate the undo/redo functionality in vim.
     ;; insert commands
     "ir" 'org-ref-insert-link
     "in" 'org-roam-node-insert
+    "ip" 'academic-phrases
+    "is" 'academic-phrases-by-section
 
     ;; apps
     "aa" 'org-agenda
@@ -337,12 +338,12 @@ Replicate the undo/redo functionality in vim.
      "s" 'org-toggle-narrow-to-subtree)
    (defun my/org-set-effort-in-pomodoros (n)
      (interactive "nHow many pomodoros: ")
-     (let ((mins-per-pomodoro 50))
+     (let ((mins-per-pomodoro 25))
        (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
  #+END_SRC
 * [#A] Writing Workflow
 There are several things that I need in my writing workflow.
-** DONE A reliable bibliographies management system. > org-ref
+** DONE A reliable bibliographies management system. > org-ref 
 ** DONE A reliable note taking system that binds the notes files to the pdfs automatically. > org-roam
 ** DONE Reliable org-latex-export and \LaTeX settings
 ** DONE translation and synonyms finding at point
@@ -440,43 +441,6 @@ installed them through melpa
 
   (setq deft-directory "~/repos/org/roam/")
 #+END_SRC
-** [#A] LaTeX export classes
-*** init
-    #+begin_src emacs-lisp :results silent
-      (require 'ox-latex)
-      (unless (boundp 'org-latex-classes)
-	(setq org-latex-classes nil))
-    #+end_src
-
-    #+RESULTS:
-
-*** latex classes
-      #+begin_src emacs-lisp :results silent
-        (add-to-list 'org-latex-classes
-                       '("draft"
-                         "\\documentclass[12pt]{report}"
-                         ("\\chapter{%s}" . "\\chapter*{%s}")
-                         ("\\section{%s}" . "\\section*{%s}")
-                         ("\\subsection{%s}" . "\\subsection*{%s}"))
-                       '("lukecv"
-                         "\documentclass[letterpaper,%twocolumn,10pt]{article}"))
-
-        (add-to-list 'org-latex-classes
-                       '("ieeeaccess"
-                         "\\documentclass{ieeeaccess}"
-                         ("\\chapter{%s}" . "\\chapter*{%s}")
-                         ("\\section{%s}" . "\\section*{%s}")
-                         ("\\subsection{%s}" . "\\subsection*{%s}")))
-      #+end_src
-*** LaTex export process
-    #+BEGIN_SRC emacs-lisp :results silent
-      (setq org-latex-pdf-process (list
-	 "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
-    #+END_SRC 
-
-    #+RESULTS:
-    | latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f |
-    
 ** [#A] Translation and Synonyms at point
 translation, synonyms and other useful tools needed for writing efficiency. 
 
@@ -507,6 +471,7 @@ Things I want flyspell to do automatically:
     :config
     (visual-fill-column-mode -1))
   (add-hook 'org-mode-hook 'visual-fill-column-mode)
+  ;(setq 'fill-column 120)
 #+END_SRC
 ** Academic phrases 
 #+BEGIN_SRC emacs-lisp :results silent
@@ -543,7 +508,7 @@ Things I want flyspell to do automatically:
 
      (setq org-todo-keyword-faces
 	 (quote (("TODO" :foreground "red" :weight bold)
-		 ("NEXT" :foreground "blue" :weight bold)
+		 ("NEXT" :foreground "purple" :weight bold)
 		 ("In Progress" :foreground "magenta" :weight bold)
 		 ("EMAIL" :foreground "red" :weight bold)
 		 ("MEETING" :foreground "red" :weight bold)
@@ -561,6 +526,11 @@ Things I want flyspell to do automatically:
      (add-hook 'org-mode-hook 'evil-org-mode)
      (add-hook 'org-mode-hook 'olivetti-mode)
    #+END_SRC
+** orgmode settings 
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq org-hide-emphasis-markers t)
+  (setq initial-major-mode 'org-mode)
+#+END_SRC
 * Misc less important comfy stuff
 ** try
    #+begin_src emacs-lisp
@@ -631,7 +601,7 @@ Things I want flyspell to do automatically:
 #+END_SRC
 * Themes
 #+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'ef-deuteranopia-dark)
+  (load-theme 'ef-day)
   (set-scroll-bar-mode nil)
   (use-package leuven-theme
     :ensure t)
@@ -642,23 +612,6 @@ Things I want flyspell to do automatically:
   (menu-bar-mode 0)
   (tool-bar-mode 0)
 #+END_SRC
-* openwith
-#+BEGIN_SRC emacs-lisp :results silent
-  (use-package openwith :ensure t)
-
-  (openwith-mode t)
-
-  (setq openwith-associations '(("\\.pdf\\'" "evince" (file))
-                                ("\\.mp4\\'" "mpv" (file))
-                                ("\\.amr\\'" "mpv" (file))
-                                ("\\.mkv\\'" "mpv" (file))
-                                ("\\.webm\\'" "mpv" (file))
-                                ("\\.html\\'" "brave" (file))
-                                ("\\.png\\'" "sxiv" (file))
-                                ("\\.svg\\'" "sxiv" (file))
-                                ))
-#+END_SRC
-
 * Version Control
 ** Magit
 #+BEGIN_SRC emacs-lisp :results silent
@@ -833,9 +786,76 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
     :config
     (global-evil-surround-mode 1))
 #+END_SRC
-* EMMS
+* smartparen-mode
 #+BEGIN_SRC emacs-lisp :results silent
-  (use-package ivy-emms
-    :ensure t)
-#+END_SRC
 
+  (use-package smartparens
+    :ensure t)
+
+  (require 'smartparens-config)
+  (smartparens-global-mode 1)
+#+END_SRC
+* Bibtex configs
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq bibtex-completion-pdf-open-function (lambda (fpath) (call-process "evince" nil 0 nil fpath)))
+#+END_SRC
+* LaTex
+** AUCTex
+#+BEGIN_SRC emacs-lisp :results silent :tangle nil
+  (use-package auctex
+    :ensure t
+    :defer t)
+#+END_SRC
+** [#A] LaTeX export classes
+*** init
+    #+begin_src emacs-lisp :results silent
+      (require 'ox-latex)
+      (unless (boundp 'org-latex-classes)
+	(setq org-latex-classes nil))
+    #+end_src
+
+    #+RESULTS:
+
+*** latex classes
+      #+begin_src emacs-lisp :results silent
+        (add-to-list 'org-latex-classes
+                       '("draft"
+                         "\\documentclass[12pt]{report}"
+                         ("\\chapter{%s}" . "\\chapter*{%s}")
+                         ("\\section{%s}" . "\\section*{%s}")
+                         ("\\subsection{%s}" . "\\subsection*{%s}"))
+                       '("lukecv"
+                         "\documentclass[letterpaper,%twocolumn,10pt]{article}"))
+
+        (add-to-list 'org-latex-classes
+                       '("ieeeaccess"
+                         "\\documentclass{ieeeaccess}"
+                         ("\\chapter{%s}" . "\\chapter*{%s}")
+                         ("\\section{%s}" . "\\section*{%s}")
+                         ("\\subsection{%s}" . "\\subsection*{%s}")))
+      #+end_src
+*** LaTex export process
+    #+BEGIN_SRC emacs-lisp :results silent
+      (setq org-latex-pdf-process (list
+	 "latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f"))
+    #+END_SRC 
+
+    #+RESULTS:
+    | latexmk -pdflatex='lualatex -shell-escape -interaction nonstopmode' -pdf -f  %f |
+* Openwith
+#+BEGIN_SRC emacs-lisp :results silent
+(use-package openwith :ensure t)
+
+(openwith-mode t)
+
+(setq openwith-associations '(("\\.pdf\\'" "evince" (file))
+                              ("\\.mp4\\'" "mpv" (file))
+                              ("\\.amr\\'" "mpv" (file))
+                              ("\\.mkv\\'" "mpv" (file))
+                              ("\\.webm\\'" "mpv" (file))
+                              ("\\.html\\'" "brave" (file))
+                              ("\\.png\\'" "sxiv" (file))
+                              ("\\.svg\\'" "sxiv" (file))
+                              ))
+
+#+END_SRC

@@ -44,9 +44,9 @@
  (rear-context-string)
  (position . 1))
 ("org-capture-last-stored"
- (filename . "/data/home/alkhaldieid/repos/org/roam/20220730050644-scalable.org")
+ (filename . "/data/home/alkhaldieid/repos/org/roam/20221012120221-invasive_ducral_carcinoma.org")
  (front-context-string)
- (rear-context-string . "title: scalable\n")
- (position . 86)
- (last-modified 25316 62630 735129 566000))
+ (rear-context-string . "ucral carcinoma\n")
+ (position . 103)
+ (last-modified 25414 58639 779023 305000))
 )

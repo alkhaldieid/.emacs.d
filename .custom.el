@@ -14,6 +14,7 @@
  '(evil-want-keybinding nil)
  '(fill-column 80)
  '(global-company-mode t)
+ '(helm-minibuffer-history-key "M-p")
  '(ignored-local-variable-values
    '((org-tag-alist . classes)
      (org-latex-hyperref-template)
@@ -22,13 +23,21 @@
  '(ivy-posframe-height 20)
  '(ivy-posframe-mode t nil (ivy-posframe))
  '(ivy-posframe-width 120)
+ '(line-number-mode t)
  '(org-agenda-files
    '("/home/alkhaldieid/repos/org/agenda/salah.org" "/home/alkhaldieid/repos/writings/paper3/resubmit/resubmission/resubmission_plan.org" "/home/alkhaldieid/repos/csa/paper/paper.org" "/home/alkhaldieid/repos/org/agenda/monthly.org"))
+ '(org-file-apps
+   '((auto-mode . emacs)
+     (directory . emacs)
+     ("\\.mm\\'" . default)
+     ("\\.x?html?\\'" . default)
+     ("\\.pdf\\'" . system)))
  '(package-selected-packages
-   '(orderless ef-themes ranger google-translate solaire-mode vscode-dark-plus-theme vterm ivy-emms command-log-mode evil-surround twittering-mode visual-fill-column academic-phrases ivy-pass ytdl org-present evil-collections ivy-posframe git-gutter git-gutter-+ git-gutter-plus evil-nerd-commenter company-statistics company-quickhelp rainbow-mode evil-collection projectile hc-zenburn-theme danneskjold-theme zenburn-theme leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit openwith olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel))
+   '(openwith helm latex-preview-pane org-pomodoro smartparens orderless ef-themes ranger google-translate solaire-mode vscode-dark-plus-theme vterm ivy-emms command-log-mode evil-surround twittering-mode visual-fill-column academic-phrases ivy-pass ytdl org-present evil-collections ivy-posframe git-gutter git-gutter-+ git-gutter-plus evil-nerd-commenter company-statistics company-quickhelp rainbow-mode evil-collection projectile hc-zenburn-theme danneskjold-theme zenburn-theme leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft company marginalia magit olivetti org-superstar yasnippet try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc evil-org bibtex-completion org-roam which-key use-package undo-tree eyebrowse evil-leader counsel))
  '(smtpmail-smtp-server "email.utoledo.edu")
  '(smtpmail-smtp-service 25)
- '(visual-fill-column-center-text t))
+ '(visual-fill-column-center-text t)
+ '(which-key-frame-max-height 80))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

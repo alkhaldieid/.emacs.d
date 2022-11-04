@@ -9,3 +9,7 @@
  t
  '(("i" ivy-copy-to-buffer-action "insert")
    ("y" ivy-yank-action "yank")))
+
+(use-package auctex
+  :ensure t
+  :defer t)
