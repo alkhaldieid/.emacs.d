@@ -601,7 +601,7 @@ Things I want flyspell to do automatically:
 #+END_SRC
 * Themes
 #+BEGIN_SRC emacs-lisp :results silent
-  (load-theme 'ef-day)
+
   (set-scroll-bar-mode nil)
   (use-package leuven-theme
     :ensure t)
@@ -854,8 +854,8 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
                               ("\\.mkv\\'" "mpv" (file))
                               ("\\.webm\\'" "mpv" (file))
                               ("\\.html\\'" "brave" (file))
-                              ("\\.png\\'" "sxiv" (file))
-                              ("\\.svg\\'" "sxiv" (file))
+;                              ("\\.png\\'" "sxiv" (file))
+;                              ("\\.svg\\'" "sxiv" (file))
                               ))
 
 #+END_SRC
