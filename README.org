@@ -287,8 +287,11 @@ Replicate the undo/redo functionality in vim.
     "owc" '(lambda() (interactive) (find-file "~/repos/cv/cv.tex"))
     "owa" '(lambda() (interactive) (find-file
                              "/home/alkhaldieid/Dropbox/LaTex/abstract.tex"))
+    ;; "owd" '(lambda() (interactive) (find-file
+    ;;                          "/home/alkhaldieid/Dropbox/dissertation/dissertation.org"))
+    ;; "
     "owd" '(lambda() (interactive) (find-file
-                             "/home/alkhaldieid/Dropbox/dissertation/dissertation.org"))
+                             "/home/alkhaldieid/repos/writings/dissertation/body.org"))
 
     "owlp" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/proposalheader.tex"))
     "owla" '(lambda() (interactive) (find-file "~/Dropbox/LaTex/abstract.tex"))
@@ -531,6 +534,22 @@ Things I want flyspell to do automatically:
   (setq org-hide-emphasis-markers t)
   (setq initial-major-mode 'org-mode)
 #+END_SRC
+** org-screenshot
+#+BEGIN_SRC emacs-lisp :results silent
+(defun my-org-screenshot ()
+"Take a screenshot into a time stamped unique-named file in the
+same directory as the org-buffer and insert a link to this file."
+(interactive)
+(setq filename
+        (concat
+        (make-temp-name
+        (concat (buffer-file-name)
+                "_"
+                (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+(call-process "import" nil nil nil filename)
+(insert (concat "[[" filename "]]"))
+(org-display-inline-images))
+#+END_SRC
 * Misc less important comfy stuff
 ** try
    #+begin_src emacs-lisp
@@ -548,6 +567,9 @@ Things I want flyspell to do automatically:
 ** line numbers
 #+BEGIN_SRC emacs-lisp :results silent
   (setq display-line-numbers-type 'relative)
+  (setq display-line-numbers 1)
+  (global-display-fill-column-indicator-mode)
+  (global-display-line-numbers-mode)
 #+END_SRC
 ** rainbow-mode
 #+BEGIN_SRC emacs-lisp :results silent
@@ -859,3 +881,4 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
                               ))
 
 #+END_SRC
+* 
