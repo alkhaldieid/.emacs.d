@@ -1,6 +1,8 @@
 #+STARTUP: overview
-#+TITLE: My dotemacs
-My Personal Emacs configs for note-taking workflow, coding, managing daily agenda, composing documents, presentations in latex, managing bibtex files, emails and much much more. 
+#+TITLE: PhD Emacs
+
+This rich-featured and minimal Emacs configuration is ideal for PhD students who are working on their dissertation and papers. 
+This is my Personal Emacs configs for note-taking workflow, coding, managing daily agenda, composing documents, presentations in latex, managing bibtex files, emails and much much more. 
 * [#A] Minimal System Wide Configurations
 ** Package Manager
     Setup the packages managers 
@@ -784,7 +786,7 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
           smtpmail-stream-type 'nil)
   ;; to get the mail address right
     (setq user-mail-address "ealkhal@rockets.utoledo.edu"
-          user-full-name "Eid ALkhaldi")
+          user-full-name "Eid Alkhaldi")
   ;; to get rid of the prompt
     (setq message-send-mail-function 'smtpmail-send-it))
   ;; always open email in a vertical window
