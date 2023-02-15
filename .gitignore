@@ -21,3 +21,5 @@ transient/*
 company-statistics-cache.el
 network-security.data
 private
+bookmarks
+.org-id-locations
