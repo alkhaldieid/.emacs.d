@@ -308,6 +308,7 @@ Replicate the undo/redo functionality in vim.
     "oay" '(lambda() (interactive) (find-file "~/repos/org/agenda/yearly.org"))
     "oar" '(lambda() (interactive) (find-file "~/repos/org/agenda/research.org"))
     "oas" '(lambda() (interactive) (find-file "~/repos/org/agenda/salah.org"))
+    "oaj" '(lambda() (interactive) (find-file "~/repos/org/agenda/jobs.org"))
 
     ;; op
     "uh" 'hs-hide-all
@@ -883,4 +884,3 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
                               ))
 
 #+END_SRC
-* 
