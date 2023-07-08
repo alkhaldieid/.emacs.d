@@ -192,6 +192,7 @@ Replicate the undo/redo functionality in vim.
     "wv" 'evil-window-vsplit
     "ws" 'evil-window-split
     "wm" 'delete-other-windows
+    "w=" 'evil-window-increase-width
 
     ;; workspaces
     "1" 'eyebrowse-switch-to-window-config-1
@@ -328,6 +329,7 @@ Replicate the undo/redo functionality in vim.
     "cfd" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
     "cfk" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
     "cfk" '(lambda() (interactive) (find-file "~/.config/kitty/kitty.conf"))
+    "cfr" '(lambda() (interactive) (find-file "~/.config/ranger/rc.conf"))
 
     ;; yasnippet
     "yn"  'yas-new-snippet
@@ -884,3 +886,12 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
                               ))
 
 #+END_SRC
+* COMMENT Trash settings
+Make emacs use a trash can instead of permanent deletion
+#+BEGIN_SRC emacs-lisp :results silent
+  (setq delete-by-moving-to-trash t)
+  (setq system-trash-exclude-matches '("#[^/]+#$" ".*~$" "\\.emacs\\.desktop.*"))
+  (setq system-trash-exclude-paths '("/tmp"))
+  (setq trash-directory "/home/alkhaldieid/Trash")
+#+END_SRC
+
