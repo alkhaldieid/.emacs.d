@@ -10,8 +10,6 @@ org-roam.db
 undo-tree/*
 auto-save-list/
 backups/
-elpa/
-elpy/
 eshell/
 .lsp-session-v1
 /anaconda-mode/
