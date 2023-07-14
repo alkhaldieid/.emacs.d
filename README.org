@@ -3,6 +3,7 @@
 
 This rich-featured and minimal Emacs configuration is ideal for PhD students who are working on their dissertation and papers. 
 This is my Personal Emacs configs for note-taking workflow, coding, managing daily agenda, composing documents, presentations in latex, managing bibtex files, emails and much much more. 
+
 * [#A] Minimal System Wide Configurations
 ** Package Manager
     Setup the packages managers 
@@ -670,7 +671,7 @@ I need this feature in order to get used to using magit more often and illuminat
   (use-package ivy-posframe
     :ensure t
     :init
-    (ivy-posframe-mode t))
+    (ivy-posframe-mode 0))
 #+END_SRC
 
 * company mode
