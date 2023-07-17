@@ -60,7 +60,7 @@ Replicate the undo/redo functionality in vim.
    #+end_src
 ** Completion 
 *** Ivy for navigation (alternative to helm) + swiper + Counsel
-   #+BEGIN_SRC emacs-lisp :results silent
+   #+BEGIN_SRC emacs-lisp :results silent :tangle nil
      (use-package ivy
        :ensure t
        :diminish (ivy-mode)
@@ -162,9 +162,9 @@ Replicate the undo/redo functionality in vim.
 *** Global leader map
 #+BEGIN_SRC emacs-lisp :results silent
   (evil-leader/set-key
-    "<SPC> " 'counsel-M-x
+    "<SPC> " 'execute-extended-command
     "fs" 'save-buffer
-    "ff" 'counsel-find-file
+    "ff" 'find-file
     "fr" 'recentf-open-files
     "fS" 'bookmark-set
     "fj" 'bookmark-jump
@@ -312,6 +312,12 @@ Replicate the undo/redo functionality in vim.
     "oas" '(lambda() (interactive) (find-file "~/repos/org/agenda/salah.org"))
     "oaj" '(lambda() (interactive) (find-file "~/repos/org/agenda/jobs.org"))
 
+    ;; org-agenda keybindings
+    "ac" 'consult-org-agenda
+    "ar" 'org-remove-file
+    "aa" 'org-agenda-file-to-front
+
+
     ;; op
     "uh" 'hs-hide-all
     "us" 'hs-show-all
@@ -331,6 +337,10 @@ Replicate the undo/redo functionality in vim.
     "cfk" '(lambda() (interactive) (find-file "~/.local/src/dwm/config.h"))
     "cfk" '(lambda() (interactive) (find-file "~/.config/kitty/kitty.conf"))
     "cfr" '(lambda() (interactive) (find-file "~/.config/ranger/rc.conf"))
+
+    ;; consult commands
+    "ct" 'consult-theme
+
 
     ;; yasnippet
     "yn"  'yas-new-snippet
@@ -580,8 +590,9 @@ same directory as the org-buffer and insert a link to this file."
 ** rainbow-mode
 #+BEGIN_SRC emacs-lisp :results silent
   (use-package rainbow-mode
-    :ensure t)
-  (rainbow-mode 1)
+    :ensure t
+    :config
+    (rainbow-mode 1))
 #+END_SRC
 * Editor Related Configurations
 ** auto-save and backup files
@@ -627,19 +638,6 @@ same directory as the org-buffer and insert a link to this file."
 ** initial buffer
 #+BEGIN_SRC emacs-lisp :results silent
 #+END_SRC
-* Themes
-#+BEGIN_SRC emacs-lisp :results silent
-
-  (set-scroll-bar-mode nil)
-  (use-package leuven-theme
-    :ensure t)
-
-  (use-package ef-themes
-    :ensure t)
-
-  (menu-bar-mode 0)
-  (tool-bar-mode 0)
-#+END_SRC
 * Version Control
 ** Magit
 #+BEGIN_SRC emacs-lisp :results silent
@@ -660,14 +658,14 @@ I need this feature in order to get used to using magit more often and illuminat
   Rich Annotations for candidates. 
   The ivy window in the minubuffer is too small for this to be useful. 
   Needs to increase the window size
-  #+BEGIN_SRC emacs-lisp :results silent
+  #+BEGIN_SRC emacs-lisp :results silent :tangle nil
     (use-package marginalia
       :ensure t
       :config
       (marginalia-mode))
   #+END_SRC
 ** Ivy Extension
-#+BEGIN_SRC emacs-lisp :results silent
+#+BEGIN_SRC emacs-lisp :results silent :tangle nil
   (use-package ivy-posframe
     :ensure t
     :init
@@ -748,7 +746,7 @@ The purpose of this section is to make accessing files more efficient and fast.
   (setq recentf-max-saved-items 25)
   (add-hook 'recentf-dialog-mode (lambda () (evil-normal-state 1)))
 #+END_SRC
-* DONE Email
+* Email
 Steps for configuring the mu4e:
 1. install mbsync, and mu
 2. make a mail directory
@@ -799,7 +797,7 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
 
 #+END_SRC
 * Vim everywhere
-#+BEGIN_SRC emacs-lisp :results silent
+#+BEGIN_SRC emacs-lisp :results silent :tangle nil
   (use-package evil-collection
       :after evil
       :ensure t
@@ -818,10 +816,9 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
 #+BEGIN_SRC emacs-lisp :results silent
 
   (use-package smartparens
-    :ensure t)
-
-  (require 'smartparens-config)
-  (smartparens-global-mode 1)
+    :ensure t
+    :config
+    (smartparens-global-mode 1))
 #+END_SRC
 * Bibtex configs
 #+BEGIN_SRC emacs-lisp :results silent
@@ -887,7 +884,7 @@ first we need to require mu4e as noted in [[id:a2d2abd5-5f62-4b8a-bdde-1e34bbe54
                               ))
 
 #+END_SRC
-* COMMENT Trash settings
+* Trash settings
 Make emacs use a trash can instead of permanent deletion
 #+BEGIN_SRC emacs-lisp :results silent
   (setq delete-by-moving-to-trash t)
@@ -896,3 +893,79 @@ Make emacs use a trash can instead of permanent deletion
   (setq trash-directory "/home/alkhaldieid/Trash")
 #+END_SRC
 
+* Vertico + consult + orderless + Marginalia + Embark
+** Vertico installation
+#+BEGIN_SRC emacs-lisp :results silent
+  ;; Enable vertico
+  (use-package vertico
+    :init
+    (vertico-mode)
+    (vertico-mouse-mode)
+
+    ;; Different scroll margin
+    ;; (setq vertico-scroll-margin 0)
+
+    ;; Show more candidates
+    (setq vertico-count 10)
+
+    ;; Grow and shrink the Vertico minibuffer
+    (setq vertico-resize t)
+
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    ;; (setq vertico-cycle t)
+    :bind (:map vertico-map
+		("RET" . vertico-directory-enter)
+		("DEL" . vertico-directory-delete-char)
+		("M-DEL" . vertico-directory-delete-word)
+		("M-q" . 'vertico-quick-insert)
+		("C-q" . 'vertico-quick-exit))
+
+
+    ;; Tidy shadowed file names
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+  
+#+END_SRC
+** Marginalia
+  Rich Annotations for candidates. 
+  #+BEGIN_SRC emacs-lisp :results silent
+    (use-package marginalia
+      :config
+      (marginalia-mode))
+  #+END_SRC
+** Orderless
+#+BEGIN_SRC emacs-lisp :results silent
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+#+END_SRC
+** Consult 
+#+BEGIN_SRC emacs-lisp :results silent
+(use-package consult)
+#+END_SRC
+* Appearance
+** Options
+#+BEGIN_SRC emacs-lisp :results silent
+  (set-scroll-bar-mode nil)
+  (menu-bar-mode 0)
+  (tool-bar-mode 0)
+#+END_SRC
+
+** Themes
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package leuven-theme)
+  (use-package ef-themes)
+  (load-theme 'ef-day t)
+#+END_SRC
+
+** org-superstar
+#+BEGIN_SRC emacs-lisp :results silent
+  (use-package org-superstar
+  :config 
+  (add-hook 'org-mode-hook (lambda ()  (org-superstar-mode 1))))
+#+END_SRC
