@@ -8,7 +8,8 @@
  '(ansi-color-names-vector
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(custom-safe-themes
-   '("578db0ce196a4c849aa995a0dd32d5fe85da59a1ec303614aa40a28bf9ad8b99"
+   '("21055a064d6d673f666baaed35a69519841134829982cbbb76960575f43424db"
+     "578db0ce196a4c849aa995a0dd32d5fe85da59a1ec303614aa40a28bf9ad8b99"
      "83afe95f30785201eb9e189bf507b0f38076a436804c987c52830214ac025906"
      "eb93ba33f178940853271e32f889ad56e5cfece616cc14e776429cb02870bd26"
      "42f5c59e0b2aabac84a661586a939d8c459f658fae72887b46a8496389ef6b7e"
@@ -68,28 +69,28 @@
  '(ivy-posframe-mode t nil (ivy-posframe))
  '(ivy-posframe-width 120)
  '(org-agenda-files
-   '("~/repos/org/agenda/jobs.org"
+   '("~/repos/org/roam/daily/2023-07-18.org"
+     "/home/alkhaldieid/repos/org/agenda/jobs.org"
      "/home/alkhaldieid/repos/org/roam/daily/2023-07-16.org"))
  '(org-file-apps
    '((auto-mode . emacs) (directory . emacs) ("\\.mm\\'" . default)
      ("\\.x?html?\\'" . default) ("\\.pdf\\'" . system)))
  '(package-selected-packages
-   '(embark-consult embark consult vertico ivy-hydra ivy-hedra fzf openwith helm
-		    latex-preview-pane org-pomodoro smartparens orderless
-		    ef-themes ranger google-translate solaire-mode
-		    vscode-dark-plus-theme vterm ivy-emms command-log-mode
-		    evil-surround twittering-mode visual-fill-column
-		    academic-phrases ivy-pass ytdl org-present evil-collections
-		    ivy-posframe git-gutter git-gutter-+ git-gutter-plus
-		    evil-nerd-commenter company-statistics company-quickhelp
-		    rainbow-mode evil-collection projectile hc-zenburn-theme
-		    danneskjold-theme zenburn-theme leuven-theme ample-theme
-		    conda flyspell-correct-ivy elpy lsp-mode jupyter
-		    major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft
-		    company marginalia magit olivetti org-superstar yasnippet
-		    try mw-thesaurus ivy-bibtex org-ref hydra avy htmlize
-		    citeproc evil-org bibtex-completion org-roam which-key
-		    use-package undo-tree eyebrowse evil-leader counsel))
+   '(ayu-theme embark-consult embark consult vertico ivy-hydra ivy-hedra fzf
+	       openwith helm latex-preview-pane org-pomodoro smartparens
+	       orderless ef-themes ranger google-translate solaire-mode
+	       vscode-dark-plus-theme vterm ivy-emms command-log-mode
+	       evil-surround twittering-mode visual-fill-column academic-phrases
+	       ivy-pass ytdl org-present evil-collections ivy-posframe
+	       git-gutter git-gutter-+ git-gutter-plus evil-nerd-commenter
+	       company-statistics company-quickhelp rainbow-mode evil-collection
+	       projectile hc-zenburn-theme danneskjold-theme zenburn-theme
+	       leuven-theme ample-theme conda flyspell-correct-ivy elpy lsp-mode
+	       jupyter major-mode-hydra pyvenv ob-ipython org-roam-bibtex deft
+	       company marginalia magit olivetti org-superstar yasnippet try
+	       mw-thesaurus ivy-bibtex org-ref hydra avy htmlize citeproc
+	       evil-org bibtex-completion org-roam which-key use-package
+	       undo-tree eyebrowse evil-leader counsel))
  '(smtpmail-smtp-server "email.utoledo.edu")
  '(smtpmail-smtp-service 25)
  '(tool-bar-mode nil)
@@ -100,4 +101,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Source Code Pro" :foundry "ADBO" :slant normal :weight normal :height 120 :width normal)))))
+ )

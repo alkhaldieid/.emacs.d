@@ -46,6 +46,11 @@
  '(("i" ivy-copy-to-buffer-action "insert")
    ("y" ivy-yank-action "yank")))
 
+(setq display-line-numbers-type 'relative)
+(setq display-line-numbers 1)
+(global-display-fill-column-indicator-mode)
+(global-display-line-numbers-mode)
+
 (use-package marginalia
   :ensure t
   :config
